@@ -5,6 +5,11 @@
  * For more detailed information on multi-project builds, please refer to https://docs.gradle.org/9.3.0/userguide/multi_project_builds.html in the Gradle documentation.
  */
 
+// Source - https://stackoverflow.com/a
+// Posted by VultureMF
+// Retrieved 2026-01-19, License - CC BY-SA 4.0
+
+
 plugins {
     // Apply the foojay-resolver plugin to allow automatic download of JDKs
     id("org.gradle.toolchains.foojay-resolver-convention") version "1.0.0"
