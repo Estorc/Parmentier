@@ -20,7 +20,7 @@ public class Level {
                     int value = Character.getNumericValue(lines[i].charAt(j));
                     array[i] = array[i] == null ? new Node[lines[i].length()] : array[i];
                     if (value > 0) {
-                        array[i][j] = new Node(i, j, value);
+                        array[i][j] = new Node(j, i, value);
                         if (lastNode != null) {
                             lastNode.addBridgeTo(array[i][j]);
                         }
@@ -70,11 +70,8 @@ public class Level {
             for (Node node : row) {
                 if (node != null) {
                     System.out.print(node.getValue() + " ");
-                    if (node.getBridge(Bridge.Direction.HORIZONTAL) != null) {
-                        System.out.print("H" + node.getBridge(Bridge.Direction.HORIZONTAL).getLength() + " ");
-                    }
-                    if (node.getBridge(Bridge.Direction.VERTICAL) != null) {
-                        System.out.print("V" + node.getBridge(Bridge.Direction.VERTICAL).getLength() + " ");
+                    for (Bridge bridge : node.getBridges()) {
+                        System.out.print("[" + (bridge.getDirection() == Bridge.Direction.HORIZONTAL ? "H" : "V") + ":" + bridge.getLength() + "] ");
                     }
                 }
             }

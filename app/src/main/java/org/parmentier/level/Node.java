@@ -1,16 +1,17 @@
 package org.parmentier.level;
 
 import org.parmentier.level.Bridge;
+import java.util.ArrayList;
 
 public class Node {
     private int value;
     private int[] position;
-    private Bridge[] bridge;
+    private ArrayList<Bridge> bridge;
     
     public Node(int x, int y, int value) {
         this.position = new int[]{x, y};
         this.value = value;
-        this.bridge = new Bridge[4];
+        this.bridge = new ArrayList<>();
     }
 
     public int getValue() {
@@ -18,25 +19,26 @@ public class Node {
     }
 
     public void addBridgeTo(Node other) {
-        int xDiff = other.position[0] - this.position[0];
-        int yDiff = other.position[1] - this.position[1];
-
-        if (xDiff == 0 && yDiff > 0) {
-            bridge[Bridge.Direction.HORIZONTAL] = new Bridge(yDiff - 1, Bridge.Direction.HORIZONTAL);
-        } else if (xDiff == 0 && yDiff < 0) {
-            bridge[Bridge.Direction.HORIZONTAL] = new Bridge(-yDiff - 1, Bridge.Direction.HORIZONTAL);
-        } else if (yDiff == 0 && xDiff > 0) {
-            bridge[Bridge.Direction.VERTICAL] = new Bridge(xDiff - 1, Bridge.Direction.VERTICAL);
-        } else if (yDiff == 0 && xDiff < 0) {
-            bridge[Bridge.Direction.VERTICAL] = new Bridge(-xDiff - 1, Bridge.Direction.VERTICAL);
-        }
+        bridge.add(new Bridge(this, other));
     }
 
     public int[] getPosition() {
         return position;
     }
 
-    public Bridge getBridge(int direction) {
-        return bridge[direction];
+    public ArrayList<Bridge> getBridges() {
+        return bridge;
+    }
+
+    public Bridge getBridge(Node from, Node to) {
+        int xDiff = to.position[0] - from.position[0];
+        int yDiff = to.position[1] - from.position[1];
+
+        if (xDiff == 0 && yDiff != 0) {
+            return bridge.get(Bridge.Direction.HORIZONTAL);
+        } else if (yDiff == 0 && xDiff != 0) {
+            return bridge.get(Bridge.Direction.VERTICAL);
+        }
+        return null;
     }
 }
