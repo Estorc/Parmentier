@@ -3,15 +3,13 @@ package org.parmentier.level;
 public class Bridge {
 
     public static class Direction {
-        public static final int VERTICAL = 0;
-        public static final int HORIZONTAL = 1;
+        public static final int TOP = 0;
+        public static final int RIGHT = 1;
+        public static final int BOTTOM = 2;
+        public static final int LEFT = 3;
     }
 
-    public static class State {
-        public static final int NONE = 0;
-        public static final int SINGLE = 1;
-        public static final int DOUBLE = 2;
-    }
+    public final static int MAX_STATE = 3;
 
     private int length;
     private int direction;
@@ -19,7 +17,7 @@ public class Bridge {
     private Node from;
     private Node to;
 
-    public Bridge(Node from, Node to) {
+    public Bridge(Node from, Node to, int direction) {
         this.from = from;
         this.to = to;
 
@@ -28,13 +26,21 @@ public class Bridge {
         int length = xLength + yLength - 1;
         if (xLength > 0) {
             this.length = xLength - 1;
-            this.direction = Direction.HORIZONTAL;
         } else {
             this.length = yLength - 1;
-            this.direction = Direction.VERTICAL;
         }
+
+        this.direction = direction;
         
-        this.state = State.NONE;
+        this.state = 0;
+    }
+
+    public Node getFrom() {
+        return from;
+    }
+
+    public Node getTo() {
+        return to;
     }
 
     public int getLength() {
@@ -54,12 +60,6 @@ public class Bridge {
     }
 
     public void toggleState() {
-        if (state == State.NONE) {
-            state = State.SINGLE;
-        } else if (state == State.SINGLE) {
-            state = State.DOUBLE;
-        } else {
-            state = State.NONE;
-        }
+        this.state = (this.state + 1) % MAX_STATE;
     }
 }

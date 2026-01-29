@@ -71,7 +71,7 @@ public class Level {
                 if (node != null) {
                     System.out.print(node.getValue() + " ");
                     for (Bridge bridge : node.getBridges()) {
-                        System.out.print("[" + (bridge.getDirection() == Bridge.Direction.HORIZONTAL ? "H" : "V") + ":" + bridge.getLength() + "] ");
+                        System.out.print("[" + (bridge.getDirection() == Bridge.Direction.RIGHT ? "H" : "V") + ":" + bridge.getLength() + "] ");
                     }
                 }
             }
