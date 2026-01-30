@@ -19,6 +19,10 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import java.util.ArrayList;
 import java.util.List;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.util.Duration;
+
 
 public class Parmentier extends Application {
 
@@ -29,6 +33,10 @@ public class Parmentier extends Application {
     private int bridgeSize = 0;
     private Node selectedNode = null;
     private GridPane gridpane;
+    private Timeline stopwatch;
+    private int elapsedSeconds = 0;
+    private Label stopwatchLabel;
+
 
     public static void main(String[] args) {
         launch(args);
@@ -218,6 +226,23 @@ public class Parmentier extends Application {
         }
     }
 
+    private void startStopwatch() {
+        stopwatchLabel = new Label("Temps écoulé: 00:00");
+        stopwatchLabel.setTextFill(Color.GRAY);
+        stopwatchLabel.setStyle("-fx-font-size: 14px; -fx-font-weight: bold;");
+
+        stopwatch = new Timeline(
+            new KeyFrame(Duration.seconds(1), e -> {
+                elapsedSeconds++;
+                int minutes = elapsedSeconds / 60;
+                int seconds = elapsedSeconds % 60;
+                stopwatchLabel.setText(String.format("Temps écoulé: %02d:%02d", minutes, seconds));
+            })
+        );
+        stopwatch.setCycleCount(Timeline.INDEFINITE);
+        stopwatch.play();
+    }
+
     @Override
     public void start(Stage primaryStage) {
 
@@ -226,7 +251,7 @@ public class Parmentier extends Application {
         this.activeBridges = new ArrayList<>();
 
         final int WIDTH = 300;
-        final int HEIGHT = 250;
+        final int HEIGHT = 300;
 
         Level level = new Level("level1.txt");
 
@@ -234,12 +259,14 @@ public class Parmentier extends Application {
 
         StackPane root = new StackPane();
         this.gridpane = new GridPane();
-        //Center the gridpane
         gridpane.setAlignment(javafx.geometry.Pos.CENTER);
-
-
-
+       
+        startStopwatch();
+        StackPane.setAlignment(stopwatchLabel, javafx.geometry.Pos.TOP_CENTER);
+        
+        root.getChildren().add(stopwatchLabel);
         root.getChildren().add(gridpane);
+
 
         for (int i = 0; i < level.getWidth(); i++) {
             for (int j = 0; j < level.getHeight(); j++) {
@@ -273,7 +300,7 @@ public class Parmentier extends Application {
             tryConnectClosest(event.getSceneX(), event.getSceneY(), false);
         });
 
-        primaryStage.setTitle("Hello World!");
+        primaryStage.setTitle("Parmentier");
 
 
         primaryStage.setScene(new Scene(root, WIDTH, HEIGHT));
