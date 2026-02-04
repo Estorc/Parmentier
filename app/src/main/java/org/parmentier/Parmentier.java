@@ -13,6 +13,7 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.scene.shape.Line;
+import javafx.scene.text.Font;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -22,6 +23,7 @@ import java.util.List;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.util.Duration;
+import javafx.scene.layout.VBox;
 
 
 public class Parmentier extends Application {
@@ -246,64 +248,78 @@ public class Parmentier extends Application {
     @Override
     public void start(Stage primaryStage) {
 
-        this.bridgePanes = new ArrayList<>();
-        this.nodes = new ArrayList<>();
-        this.activeBridges = new ArrayList<>();
+        // this.bridgePanes = new ArrayList<>();
+        // this.nodes = new ArrayList<>();
+        // this.activeBridges = new ArrayList<>();
 
         final int WIDTH = 300;
         final int HEIGHT = 300;
 
-        Level level = new Level("level1.txt");
+        // Level level = new Level("level1.txt");
 
-        level.printLevel();
+        //level.printLevel();
 
         StackPane root = new StackPane();
-        this.gridpane = new GridPane();
-        gridpane.setAlignment(javafx.geometry.Pos.CENTER);
-       
-        startStopwatch();
-        StackPane.setAlignment(stopwatchLabel, javafx.geometry.Pos.TOP_CENTER);
+
+        VBox layout = new VBox();
+        VBox buttonBox = new VBox();
         
-        root.getChildren().add(stopwatchLabel);
-        root.getChildren().add(gridpane);
+        layout.setSpacing(20);
+        layout.setAlignment(javafx.geometry.Pos.TOP_CENTER);
+        Button jouer = new Button("Jouer");
+        Label titleLabel = new Label("Parmentier");
+        titleLabel.getStyleClass().add("title-label");
+        jouer.getStyleClass().add("button");
+
+        buttonBox.getChildren().add(jouer);
+        buttonBox.setAlignment(javafx.geometry.Pos.CENTER);
+        layout.getChildren().add(titleLabel);
+        layout.getChildren().add(buttonBox);
+        root.getChildren().add(layout);
+        //this.gridpane = new GridPane();
+        //gridpane.setAlignment(javafx.geometry.Pos.CENTER);
+        
+        //startStopwatch();
+        //StackPane.setAlignment(stopwatchLabel, javafx.geometry.Pos.TOP_CENTER);
+        //
+        //root.getChildren().add(stopwatchLabel);
+        //root.getChildren().add(gridpane);
+        //for (int i = 0; i < level.getWidth(); i++) {
+        //    for (int j = 0; j < level.getHeight(); j++) {
+        //        if (level.getNodeAt(i, j) != null) {
+        //            Node node = level.getNodeAt(i, j);
+        //            Circle circle = new Circle(16, Color.LIGHTGRAY);
+        //            circle.setStroke(Color.BLACK);
+        //            circle.setFill(Color.WHITE);
+        //            Label label = new Label(Integer.toString(node.getValue()));
+        //            label.setMaxSize(32, 32);
+        //            label.setAlignment(javafx.geometry.Pos.CENTER);
+        //            node.setCircle(circle);
+        //            // use 2x2 cells for each button
+        //            gridpane.add(circle, j, i);
+        //            gridpane.add(label, j, i);
+        //            //gridpane.add(btn, j, i);
+        //            this.nodes.add(node);
+        //        }
+        //    }
+        //}
+
+        //refresh();
 
 
-        for (int i = 0; i < level.getWidth(); i++) {
-            for (int j = 0; j < level.getHeight(); j++) {
-                if (level.getNodeAt(i, j) != null) {
-                    Node node = level.getNodeAt(i, j);
-                    Circle circle = new Circle(16, Color.LIGHTGRAY);
-                    circle.setStroke(Color.BLACK);
-                    circle.setFill(Color.WHITE);
-                    Label label = new Label(Integer.toString(node.getValue()));
-                    label.setMaxSize(32, 32);
-                    label.setAlignment(javafx.geometry.Pos.CENTER);
-                    node.setCircle(circle);
-                    // use 2x2 cells for each button
-                    gridpane.add(circle, j, i);
-                    gridpane.add(label, j, i);
-                    //gridpane.add(btn, j, i);
-                    this.nodes.add(node);
-                }
-            }
-        }
+        //root.setOnMouseMoved(e -> {
+        //    tryConnectClosest(e.getSceneX(), e.getSceneY(), true);
+        //});
 
-        refresh();
-
-
-        root.setOnMouseMoved(e -> {
-            tryConnectClosest(e.getSceneX(), e.getSceneY(), true);
-        });
-
-
-        root.setOnMouseClicked(event -> {
-            tryConnectClosest(event.getSceneX(), event.getSceneY(), false);
-        });
-
+        //root.setOnMouseClicked(event -> {
+        //    tryConnectClosest(event.getSceneX(), event.getSceneY(), false);
+        //});
+        
         primaryStage.setTitle("Parmentier");
 
-
-        primaryStage.setScene(new Scene(root, WIDTH, HEIGHT));
+        Scene scene = new Scene(root, WIDTH, HEIGHT);
+        scene.getStylesheets().add(getClass().getResource("/app.css").toExternalForm());
+        primaryStage.setScene(scene);
         primaryStage.show();
     }
 }
