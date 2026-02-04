@@ -265,17 +265,25 @@ public class Parmentier extends Application {
         VBox buttonBox = new VBox();
         
         layout.setSpacing(20);
+        buttonBox.setSpacing(10);
         layout.setAlignment(javafx.geometry.Pos.TOP_CENTER);
         Button jouer = new Button("Jouer");
+        Button leave = new Button("Quitter");
         Label titleLabel = new Label("Parmentier");
         titleLabel.getStyleClass().add("title-label");
         jouer.getStyleClass().add("button");
+        leave.getStyleClass().add("button");
 
         buttonBox.getChildren().add(jouer);
+        buttonBox.getChildren().add(leave);
         buttonBox.setAlignment(javafx.geometry.Pos.CENTER);
         layout.getChildren().add(titleLabel);
         layout.getChildren().add(buttonBox);
         root.getChildren().add(layout);
+
+        leave.setOnAction(e -> {
+            primaryStage.close();
+        });
         //this.gridpane = new GridPane();
         //gridpane.setAlignment(javafx.geometry.Pos.CENTER);
         
