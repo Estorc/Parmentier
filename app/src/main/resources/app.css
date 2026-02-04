@@ -16,11 +16,17 @@
 
 /* Exemple spécifique pour un bouton */
 .button {
+    -fx-background-color: #3498db; /* Bleu */
+    -fx-text-fill: white;          /* Texte blanc */
+    -fx-font-size: 14px;
+    -fx-padding: 10 20 10 20;      /* Marge interne */
+    -fx-background-radius: 5;
     -fx-font-family: 'Lexend Light';
 }
 
 .title-label {
     -fx-font-family: 'Lexend Medium';
     -fx-font-size: 36px;
+    -fx-padding: 20px;
 }
 

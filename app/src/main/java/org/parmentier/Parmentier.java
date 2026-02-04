@@ -268,13 +268,16 @@ public class Parmentier extends Application {
         buttonBox.setSpacing(10);
         layout.setAlignment(javafx.geometry.Pos.TOP_CENTER);
         Button jouer = new Button("Jouer");
+        Button settings = new Button("Paramètres");
         Button leave = new Button("Quitter");
         Label titleLabel = new Label("Parmentier");
         titleLabel.getStyleClass().add("title-label");
         jouer.getStyleClass().add("button");
+        settings.getStyleClass().add("button");
         leave.getStyleClass().add("button");
 
         buttonBox.getChildren().add(jouer);
+        buttonBox.getChildren().add(settings);
         buttonBox.getChildren().add(leave);
         buttonBox.setAlignment(javafx.geometry.Pos.CENTER);
         layout.getChildren().add(titleLabel);
