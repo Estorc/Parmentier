@@ -34,11 +34,13 @@ public class Game {
     }
 
     public void start(Stage stage) {
-        Canvas canvas = new Canvas(800, 600);
-        GraphicsContext gc = canvas.getGraphicsContext2D();
         final int WIDTH = 300;
         final int HEIGHT = 300;
+        Canvas canvas = new Canvas(WIDTH, HEIGHT);
+        GraphicsContext gc = canvas.getGraphicsContext2D();
         StackPane root = new StackPane(canvas);
+        StackPane uiLayer = new StackPane();
+        root.getChildren().add(uiLayer);
 
         new AnimationTimer() {
             @Override
@@ -51,8 +53,8 @@ public class Game {
                 double deltaTime = (now - lastTime) / 10e8;
                 lastTime = now;
 
-                update(deltaTime, root);
-                render(gc, root);
+                update(deltaTime, uiLayer);
+                render(gc, uiLayer);
             }
         }.start();
 

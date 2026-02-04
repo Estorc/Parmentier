@@ -34,6 +34,7 @@ package org.parmentier.level;
 
 import java.util.ArrayList;
 
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.shape.Circle;
 
 /**
@@ -142,6 +143,10 @@ public class Node {
         return position;
     }
 
+    public int[] getCanvasPosition() {
+        return new int[]{position[0] * 32 + 16, position[1] * 32 + 16};
+    }
+
     /**
      * Gets the list of bridges connected to this node.
      * @return The list of bridges.
@@ -180,6 +185,21 @@ public class Node {
             }
         }
         return null;
+    }
+
+    /**
+     * Draws the node on the provided GraphicsContext at the specified offset.
+     * @param gc The GraphicsContext to draw on.
+     */
+    public void draw(GraphicsContext gc) {
+        int x = getCanvasPosition()[0];
+        int y = getCanvasPosition()[1];
+        gc.setFill(javafx.scene.paint.Color.WHITE);
+        gc.fillOval(x - 16, y - 16, 32, 32);
+        gc.setStroke(javafx.scene.paint.Color.BLACK);
+        gc.strokeOval(x - 16, y - 16, 32, 32);
+        gc.setFill(javafx.scene.paint.Color.BLACK);
+        gc.fillText(Integer.toString(value), x - 4, y + 4);
     }
 
     

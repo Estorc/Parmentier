@@ -20,6 +20,7 @@ import javafx.scene.shape.Line;
 import javafx.util.Duration;
 
 public class Level implements org.parmentier.game.Scene {
+    private int xShift, yShift;
     private boolean initialized = false;
     private Bridge selectedBridge = null;
     private ArrayList<Pane> bridgePanes;
@@ -170,14 +171,14 @@ public class Level implements org.parmentier.game.Scene {
 
     public void tryConnectClosest(double x, double y, boolean preview) {
         List<Node> sortedNodes = nodes.stream().sorted((n1, n2) -> {
-            double d1 = Math.hypot(n1.getCircle().getLayoutX() - x, n1.getCircle().getLayoutY() - y);
-            double d2 = Math.hypot(n2.getCircle().getLayoutX() - x, n2.getCircle().getLayoutY() - y);
+            double d1 = Math.hypot(n1.getCanvasPosition()[0] - x, n1.getCanvasPosition()[1] - y);
+            double d2 = Math.hypot(n2.getCanvasPosition()[0] - x, n2.getCanvasPosition()[1] - y);
             return Double.compare(d1, d2);
         }).toList();
         for (int i = 0; i < Math.min(2, sortedNodes.size()); i++) {
             Node from = sortedNodes.get(i);
-            double dx = from.getCircle().getLayoutX() - x;
-            double dy = from.getCircle().getLayoutY() - y;
+            double dx = from.getCanvasPosition()[0] - x;
+            double dy = from.getCanvasPosition()[1] - y;
             double angle = Math.atan2(dy, dx);
             Bridge bridge;
             if (Math.abs(Math.cos(angle)) > Math.abs(Math.sin(angle))) {
@@ -225,7 +226,12 @@ public class Level implements org.parmentier.game.Scene {
         stopwatch.play();
     }
 
-    public void start(StackPane root) {
+    public void start(StackPane uiLayer) {
+
+        this.xShift = 0;
+        this.yShift = 0;
+
+        uiLayer.getChildren().clear();
 
         this.bridgePanes = new ArrayList<>();
         this.nodes = new ArrayList<>();
@@ -243,8 +249,8 @@ public class Level implements org.parmentier.game.Scene {
         startStopwatch();
         StackPane.setAlignment(stopwatchLabel, javafx.geometry.Pos.TOP_CENTER);
         
-        root.getChildren().add(stopwatchLabel);
-        root.getChildren().add(gridpane);
+        uiLayer.getChildren().add(stopwatchLabel);
+        uiLayer.getChildren().add(gridpane);
 
 
         for (int i = 0; i < level.getWidth(); i++) {
@@ -270,27 +276,41 @@ public class Level implements org.parmentier.game.Scene {
         refresh();
 
 
-        root.setOnMouseMoved(e -> {
-            tryConnectClosest(e.getSceneX(), e.getSceneY(), true);
+        uiLayer.setOnMouseMoved(e -> {
+            tryConnectClosest(e.getSceneX() - xShift + uiLayer.getLayoutX(), e.getSceneY() - yShift + uiLayer.getLayoutY(), true);
         });
 
 
-        root.setOnMouseClicked(event -> {
-            tryConnectClosest(event.getSceneX(), event.getSceneY(), false);
+        uiLayer.setOnMouseClicked(event -> {
+            tryConnectClosest(event.getSceneX() - xShift + uiLayer.getLayoutX(), event.getSceneY() - yShift + uiLayer.getLayoutY(), false);
         });
     }
 
     @Override
-    public void update(double deltaTime, StackPane root) {
+    public void update(double deltaTime, StackPane uiLayer) {
         if (!initialized) {
-            start(root);
+            start(uiLayer);
+            uiLayer.getChildren().clear();
             initialized = true;
         }
     }
 
     @Override
-    public void render(GraphicsContext gc, StackPane root) {
-        // Level-specific render logic goes here
+    public void render(GraphicsContext gc, StackPane uiLayer) {
+        gc.setFill(Color.LIGHTBLUE);
+        gc.fillRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
+        this.xShift = (int) gc.getCanvas().getWidth() / 2 - (gridpane.getColumnCount() * 32) / 2;
+        this.yShift = (int) gc.getCanvas().getHeight() / 2 - (gridpane.getRowCount() * 32) / 2;
+        gc.setTransform(1, 0, 0, 1, xShift, yShift);
+        if (selectedBridge != null) {
+            selectedBridge.draw(gc, true);
+        }
+        for (Bridge bridge : activeBridges) {
+            bridge.draw(gc, false);
+        }
+        for (Node node : nodes) {
+            node.draw(gc);
+        }
     }
     
 }
