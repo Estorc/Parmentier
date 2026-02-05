@@ -33,6 +33,7 @@ package org.parmentier;
 
 import org.parmentier.game.Game;
 import org.parmentier.game.Level;
+import org.parmentier.game.MainMenu;
 
 import javafx.application.Application;
 
@@ -44,7 +45,7 @@ public class Parmentier extends Application {
     @Override
     public void start(javafx.stage.Stage primaryStage) {
         Game game = new Game();
-        game.getSceneManager().pushScene(new Level());
+        game.getSceneManager().pushScene(new MainMenu());
         game.start(primaryStage);
     }
 
