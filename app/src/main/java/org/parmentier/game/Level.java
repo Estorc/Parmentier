@@ -11,79 +11,20 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Label;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.Line;
 import javafx.util.Duration;
 
 public class Level implements org.parmentier.game.Scene {
-    private int xShift, yShift;
-    private boolean initialized = false;
+    private int xShift = 0;
+    private int yShift = 0;
     private Bridge selectedBridge = null;
-    private ArrayList<Pane> bridgePanes;
     private ArrayList<Bridge> activeBridges;
     private ArrayList<Node> nodes;
-    private Node selectedNode = null;
-    private GridPane gridpane;
+    private GridData level;
     private Timeline stopwatch;
     private int elapsedSeconds = 0;
     private Label stopwatchLabel;
-
-    private void traceBridge(Pane linePane, double x, double y, int width, int height, Color color, int strokeWidth) {
-        Line line = new Line(x, y, x + 32 * (width-1), y + 32 * (height-1));
-        line.setStroke(color);
-        line.setStrokeWidth(strokeWidth);
-        linePane.getChildren().add(line);
-    }
-
-    public void drawBridge(Bridge bridge, int cx, int cy, int x, int y, int width, int height) {
-        Pane linePane = new Pane();
-        linePane.setMinSize(32 * width, 32 * height);
-        linePane.setMaxSize(32 * width, 32 * height);
-        if (bridge == selectedBridge) {
-            for (int i = 0; i < (bridge.getState() + 1)%Bridge.MAX_STATE; i++) {
-                int state = (bridge.getState() + 1)%Bridge.MAX_STATE;
-                double tx = x + (((double) (i+1)/(state+1))*2-1)*x;
-                double ty = y + (((double) (i+1)/(state+1))*2-1)*y;
-                traceBridge(linePane, tx, ty, width, height, Color.GRAY, 3);
-            }
-        }
-        if (bridge.getState() != 0) {
-            activeBridges.add(bridge);
-            for (int i = 0; i < bridge.getState(); i++) {
-                int state = bridge.getState();
-                double tx = x + (((double) (i+1)/(state+1))*2-1)*x;
-                double ty = y + (((double) (i+1)/(state+1))*2-1)*y;
-                traceBridge(linePane, tx, ty, width, height, Color.BLACK, 1);
-            }
-        }
-        gridpane.add(linePane, cx, cy, width, height);
-        this.bridgePanes.add(linePane);
-    }
-
-    public void refresh() {
-        for (Pane pane : this.bridgePanes) {
-            gridpane.getChildren().remove(pane);
-        }
-        this.bridgePanes.clear();
-        this.activeBridges.clear();
-        for (Node node : this.nodes) {
-            int x = node.getPosition()[0];
-            int y = node.getPosition()[1];
-            for (Bridge bridge : node.getBridges()) {
-                if (bridge.getFrom() != node) {
-                    continue;
-                }
-                switch (bridge.getDirection()) {
-                    case Bridge.Direction.LEFT, Bridge.Direction.RIGHT -> drawBridge(bridge, x+1, y, 0, 16, bridge.getLength()+1, 1);
-                    case Bridge.Direction.TOP, Bridge.Direction.BOTTOM -> drawBridge(bridge, x, y+1, 16, 0, 1, bridge.getLength()+1);
-                }
-            }
-        }
-    }
 
     public boolean isIntersecting(Node a, Node b, Node c, Node d) {
         float aX = a.getPosition()[0];
@@ -147,26 +88,20 @@ public class Level implements org.parmentier.game.Scene {
         if (preview) {
             if (selectedBridge != bridgeBetween) {
                 selectedBridge = bridgeBetween;
-                refresh();
             }
             return true;
         }
         bridgeBetween.toggleState();
-        refresh();
+        if (bridgeBetween.getState() == 0) {
+            activeBridges.remove(bridgeBetween);
+        } else if (!activeBridges.contains(bridgeBetween)) {
+            activeBridges.add(bridgeBetween);
+        }
         return true;
     }
 
     public boolean tryConnect(Node from, Node to) {
         return tryConnect(from, to, false);
-    }
-
-    public void selectNode(Node node) {
-        if (this.selectedNode != null && this.selectedNode != node) {
-            tryConnect(this.selectedNode, node);
-            this.selectedNode = null;
-        } else {
-            this.selectedNode = node;
-        }
     }
 
     public void tryConnectClosest(double x, double y, boolean preview) {
@@ -226,81 +161,52 @@ public class Level implements org.parmentier.game.Scene {
         stopwatch.play();
     }
 
-    public void start(StackPane uiLayer) {
-
-        this.xShift = 0;
-        this.yShift = 0;
-
-        uiLayer.getChildren().clear();
-
-        this.bridgePanes = new ArrayList<>();
+    @Override
+    public void initialize(StackPane uiLayer) {
         this.nodes = new ArrayList<>();
         this.activeBridges = new ArrayList<>();
 
         
 
-        GridData level = new GridData("level1.txt");
-
-        level.printLevel();
-
-        this.gridpane = new GridPane();
-        gridpane.setAlignment(javafx.geometry.Pos.CENTER);
+        level = new GridData("level1.txt");
        
         startStopwatch();
         StackPane.setAlignment(stopwatchLabel, javafx.geometry.Pos.TOP_CENTER);
         
         uiLayer.getChildren().add(stopwatchLabel);
-        uiLayer.getChildren().add(gridpane);
 
 
         for (int i = 0; i < level.getWidth(); i++) {
             for (int j = 0; j < level.getHeight(); j++) {
                 if (level.getNodeAt(i, j) != null) {
                     Node node = level.getNodeAt(i, j);
-                    Circle circle = new Circle(16, Color.LIGHTGRAY);
-                    circle.setStroke(Color.BLACK);
-                    circle.setFill(Color.WHITE);
-                    Label label = new Label(Integer.toString(node.getValue()));
-                    label.setMaxSize(32, 32);
-                    label.setAlignment(javafx.geometry.Pos.CENTER);
-                    node.setCircle(circle);
-                    // use 2x2 cells for each button
-                    gridpane.add(circle, j, i);
-                    gridpane.add(label, j, i);
-                    //gridpane.add(btn, j, i);
                     this.nodes.add(node);
                 }
             }
         }
 
-        refresh();
-
 
         uiLayer.setOnMouseMoved(e -> {
-            tryConnectClosest(e.getSceneX() - xShift + uiLayer.getLayoutX(), e.getSceneY() - yShift + uiLayer.getLayoutY(), true);
+            tryConnectClosest(e.getX() - xShift, e.getY() - yShift, true);
         });
 
 
-        uiLayer.setOnMouseClicked(event -> {
-            tryConnectClosest(event.getSceneX() - xShift + uiLayer.getLayoutX(), event.getSceneY() - yShift + uiLayer.getLayoutY(), false);
+        uiLayer.setOnMouseClicked(e -> {
+            tryConnectClosest(e.getX() - xShift, e.getY() - yShift, false);
         });
     }
 
     @Override
     public void update(double deltaTime, StackPane uiLayer) {
-        if (!initialized) {
-            start(uiLayer);
-            uiLayer.getChildren().clear();
-            initialized = true;
-        }
+        //
     }
 
     @Override
     public void render(GraphicsContext gc, StackPane uiLayer) {
         gc.setFill(Color.LIGHTBLUE);
         gc.fillRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
-        this.xShift = (int) gc.getCanvas().getWidth() / 2 - (gridpane.getColumnCount() * 32) / 2;
-        this.yShift = (int) gc.getCanvas().getHeight() / 2 - (gridpane.getRowCount() * 32) / 2;
+        this.xShift = (int) gc.getCanvas().getWidth() / 2 - (level.getWidth() * 32) / 2;
+        this.yShift = (int) gc.getCanvas().getHeight() / 2 - (level.getHeight() * 32) / 2;
         gc.setTransform(1, 0, 0, 1, xShift, yShift);
         if (selectedBridge != null) {
             selectedBridge.draw(gc, true);

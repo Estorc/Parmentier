@@ -40,6 +40,8 @@ public class Game {
         GraphicsContext gc = canvas.getGraphicsContext2D();
         StackPane root = new StackPane(canvas);
         StackPane uiLayer = new StackPane();
+        uiLayer.setMaxWidth(HEIGHT);
+        uiLayer.setMaxHeight(HEIGHT);
         root.getChildren().add(uiLayer);
 
         new AnimationTimer() {

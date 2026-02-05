@@ -185,7 +185,9 @@ public class Bridge {
      * @param preview If true, draws the bridge in preview mode (e.g., semi-transparent).
      */
     public void draw(javafx.scene.canvas.GraphicsContext gc, boolean preview) {
+        int renderState = getState();
         if (preview) {
+            renderState = (renderState + 1) % MAX_STATE;
             gc.setGlobalAlpha(0.5);
             gc.setStroke(javafx.scene.paint.Color.GRAY);
             gc.setLineWidth(4);
@@ -197,7 +199,15 @@ public class Bridge {
         int fromY = from.getCanvasPosition()[1];
         int toX = to.getCanvasPosition()[0];
         int toY = to.getCanvasPosition()[1];
-        gc.strokeLine(fromX, fromY, toX, toY);
+        for (int i = 0; i < renderState; i++) {
+            double shift = ((double)(i+0.5)/renderState-0.5) * (16.0);
+            switch (direction) {
+                case Direction.TOP, Direction.BOTTOM ->
+                    gc.strokeLine(fromX + shift, fromY, toX + shift, toY);
+                case Direction.RIGHT, Direction.LEFT ->
+                    gc.strokeLine(fromX, fromY + shift, toX, toY + shift);
+            }
+        }
         if (preview) {
             gc.setGlobalAlpha(1.0);
         }

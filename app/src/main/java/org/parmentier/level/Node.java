@@ -194,6 +194,7 @@ public class Node {
     public void draw(GraphicsContext gc) {
         int x = getCanvasPosition()[0];
         int y = getCanvasPosition()[1];
+        gc.setLineWidth(2);
         gc.setFill(javafx.scene.paint.Color.WHITE);
         gc.fillOval(x - 16, y - 16, 32, 32);
         gc.setStroke(javafx.scene.paint.Color.BLACK);
