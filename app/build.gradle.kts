@@ -35,7 +35,7 @@ java {
 
 javafx {
     version = "21"
-    modules = listOf("javafx.graphics", "javafx.controls", "javafx.base")
+    modules = listOf("javafx.graphics", "javafx.controls", "javafx.base", "javafx.fxml")
 }
 
 application {
