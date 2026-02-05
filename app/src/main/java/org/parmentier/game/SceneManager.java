@@ -10,6 +10,7 @@ public class SceneManager {
     }
 
     public void pushScene(Scene scene) {
+        scenes.clear();
         scenes.add(scene);
     }
 

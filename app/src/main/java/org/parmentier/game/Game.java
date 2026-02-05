@@ -8,15 +8,21 @@ import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 public class Game {
+    private static Game instance;
     private final SceneManager sceneManager;
     private long lastTime = 0;
 
     public Game() {
         this.sceneManager = new SceneManager();
+        instance = this;
     }
 
     public SceneManager getSceneManager() {
         return sceneManager;
+    }
+
+    public static Game getInstance() {
+        return instance;
     }
 
     public void update(double deltaTime, StackPane root) {
