@@ -19,6 +19,8 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.util.Duration;
 
+
+
 public class Level implements org.parmentier.game.Scene {
     private int xShift, yShift;
     private boolean initialized = false;
@@ -30,6 +32,11 @@ public class Level implements org.parmentier.game.Scene {
     private GridPane gridpane;
     private Timeline stopwatch;
     private int elapsedSeconds = 0;
+    private int score = 0;
+    private int timeLowMinutes = 5;
+    private int timeHighMinutes = 30;
+    private float timeCoeffMin = 0.67;
+    private float timeCoeffMax = 1;
     private Label stopwatchLabel;
 
     private void traceBridge(Pane linePane, double x, double y, int width, int height, Color color, int strokeWidth) {
@@ -226,6 +233,29 @@ public class Level implements org.parmentier.game.Scene {
         stopwatch.play();
     }
 
+
+
+    /* This method calcule score with the numbers of bridge at the end of the level and the time used to complete the level */
+    private void calculateScore(){
+       int timeLow = this.timeLowMinutes  * 60;
+       int timeHigh = this.timeHighMinutes * 60;
+
+       double timeBornedShifted = (((elapsedSeconds + timeLow + (Math.abs(elapsedSeconds - timeLow)))/2) + timeHigh - (Math.abs(((elapsedSeconds + timeLow + (Math.abs(elapsedSeconds - timeLow)))/2) - timeHigh))) - timeLow;
+       //OU 
+       timeBornedShifted = Math.min( Math.max(elapsedSeconds, timeLow) , timeHigh) - timeLow;
+       //OU clamp(val, min, max)
+       timeBornedShifted = Math.clamp(elapsedSeconds, timeLow, timeHigh) - timeLow;
+       
+       // We need a value between 0 et 1 to get our final coeff
+       double timeNormalized = timeBornedShifted / (timeHigh - timeLow);
+
+       // The coefficient of time is normalized between our minimal coefficient and our maximal coefficient.
+       double timeCoeff = (timeNormalized - timeCoeffMin) + timeCoeffMax;
+
+       // J'attends que le nombre de ponts attendus soit disponible.
+       //int score = (int)((this.activeBridges.stream().reduce(0, (a,b) -> , combiner) * 1000) * timeCoeff);
+
+    }
     public void start(StackPane uiLayer) {
 
         this.xShift = 0;
