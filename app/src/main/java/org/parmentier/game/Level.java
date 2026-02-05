@@ -26,43 +26,7 @@ public class Level implements org.parmentier.game.Scene {
     private int elapsedSeconds = 0;
     private Label stopwatchLabel;
 
-    public boolean isIntersecting(Node a, Node b, Node c, Node d) {
-        float aX = a.getPosition()[0];
-        float aY = a.getPosition()[1];
-        float bX = b.getPosition()[0];
-        float bY = b.getPosition()[1];
-        float cX = c.getPosition()[0];
-        float cY = c.getPosition()[1];
-        float dX = d.getPosition()[0];
-        float dY = d.getPosition()[1];
-
-        float denominator = ((bX - aX) * (dY - cY)) - ((bY - aY) * (dX - cX));
-        float numerator1  = ((aY - cY) * (dX - cX)) - ((aX - cX) * (dY - cY));
-        float numerator2  = ((aY - cY) * (bX - aX)) - ((aX - cX) * (bY - aY));
-
-        // Collinear case
-        if (denominator == 0 && numerator1 == 0 && numerator2 == 0) {
-            return onSegment(aX, aY, bX, bY, cX, cY) ||
-                onSegment(aX, aY, bX, bY, dX, dY) ||
-                onSegment(cX, cY, dX, dY, aX, aY) ||
-                onSegment(cX, cY, dX, dY, bX, bY);
-        }
-
-        // Parallel but not collinear
-        if (denominator == 0) return false;
-
-        float r = numerator1 / denominator;
-        float s = numerator2 / denominator;
-
-        return (r >= 0 && r <= 1) && (s >= 0 && s <= 1);
-    }
-
-    private boolean onSegment(float ax, float ay, float bx, float by, float px, float py) {
-        return px >= Math.min(ax, bx) && px <= Math.max(ax, bx) &&
-            py >= Math.min(ay, by) && py <= Math.max(ay, by);
-    }
-
-    public boolean tryConnect(Node from, Node to, boolean preview) {
+    public boolean tryConnect(Node from, Node to) {
         // Check if from and to are aligned
         Bridge bridge = from.getBridge(to);
         if (bridge == null) {
@@ -78,42 +42,29 @@ public class Level implements org.parmentier.game.Scene {
                 if (from == fromActive || from == toActive || to == fromActive || to == toActive) {
                     continue;
                 }
-                if (isIntersecting(from, to, fromActive, toActive)) {
+                if (org.parmentier.math.Segment.isIntersecting(from.getPosition(), to.getPosition(), fromActive.getPosition(), toActive.getPosition())) {
                     return false;
                 }
             }
                 
         }
         Bridge bridgeBetween = from.getBridge(to);
-        if (preview) {
-            if (selectedBridge != bridgeBetween) {
-                selectedBridge = bridgeBetween;
-            }
-            return true;
-        }
-        bridgeBetween.toggleState();
-        if (bridgeBetween.getState() == 0) {
-            activeBridges.remove(bridgeBetween);
-        } else if (!activeBridges.contains(bridgeBetween)) {
-            activeBridges.add(bridgeBetween);
+        if (selectedBridge != bridgeBetween) {
+            selectedBridge = bridgeBetween;
         }
         return true;
     }
 
-    public boolean tryConnect(Node from, Node to) {
-        return tryConnect(from, to, false);
-    }
-
-    public void tryConnectClosest(double x, double y, boolean preview) {
+    public void tryConnectClosest(double x, double y) {
         List<Node> sortedNodes = nodes.stream().sorted((n1, n2) -> {
-            double d1 = Math.hypot(n1.getCanvasPosition()[0] - x, n1.getCanvasPosition()[1] - y);
-            double d2 = Math.hypot(n2.getCanvasPosition()[0] - x, n2.getCanvasPosition()[1] - y);
+            double d1 = Math.hypot(n1.getCanvasPosition().getX() - x, n1.getCanvasPosition().getY() - y);
+            double d2 = Math.hypot(n2.getCanvasPosition().getX() - x, n2.getCanvasPosition().getY() - y);
             return Double.compare(d1, d2);
         }).toList();
         for (int i = 0; i < Math.min(2, sortedNodes.size()); i++) {
             Node from = sortedNodes.get(i);
-            double dx = from.getCanvasPosition()[0] - x;
-            double dy = from.getCanvasPosition()[1] - y;
+            double dx = from.getCanvasPosition().getX() - x;
+            double dy = from.getCanvasPosition().getY() - y;
             double angle = Math.atan2(dy, dx);
             Bridge bridge;
             if (Math.abs(Math.cos(angle)) > Math.abs(Math.sin(angle))) {
@@ -138,7 +89,7 @@ public class Level implements org.parmentier.game.Scene {
             } else {
                 closestNode = bridge.getFrom();
             }
-            if (tryConnect(from, closestNode, preview)) {
+            if (tryConnect(from, closestNode)) {
                 break;
             }
         }
@@ -190,12 +141,17 @@ public class Level implements org.parmentier.game.Scene {
 
 
         uiLayer.setOnMouseMoved(e -> {
-            tryConnectClosest(e.getX() - xShift, e.getY() - yShift, true);
+            tryConnectClosest(e.getX() - xShift, e.getY() - yShift);
         });
 
 
         uiLayer.setOnMouseClicked(e -> {
-            tryConnectClosest(e.getX() - xShift, e.getY() - yShift, false);
+            selectedBridge.toggleState();
+            if (selectedBridge.getState() == 0) {
+                activeBridges.remove(selectedBridge);
+            } else if (!activeBridges.contains(selectedBridge)) {
+                activeBridges.add(selectedBridge);
+            }
         });
     }
 

@@ -110,12 +110,12 @@ public class Bridge {
         this.from = from;
         this.to = to;
 
-        int xLength = Math.abs(from.getPosition()[0] - to.getPosition()[0]);
-        int yLength = Math.abs(from.getPosition()[1] - to.getPosition()[1]);
+        long xLength = Math.abs(from.getPosition().getX() - to.getPosition().getX());
+        long yLength = Math.abs(from.getPosition().getY() - to.getPosition().getY());
         if (xLength > 0) {
-            this.length = xLength - 1;
+            this.length = (int) xLength - 1;
         } else {
-            this.length = yLength - 1;
+            this.length = (int) yLength - 1;
         }
 
         this.direction = direction;
@@ -195,10 +195,10 @@ public class Bridge {
             gc.setStroke(javafx.scene.paint.Color.BLACK);
             gc.setLineWidth(2);
         }
-        int fromX = from.getCanvasPosition()[0];
-        int fromY = from.getCanvasPosition()[1];
-        int toX = to.getCanvasPosition()[0];
-        int toY = to.getCanvasPosition()[1];
+        long fromX = from.getCanvasPosition().getX();
+        long fromY = from.getCanvasPosition().getY();
+        long toX = to.getCanvasPosition().getX();
+        long toY = to.getCanvasPosition().getY();
         for (int i = 0; i < renderState; i++) {
             double shift = ((double)(i+0.5)/renderState-0.5) * (16.0);
             switch (direction) {

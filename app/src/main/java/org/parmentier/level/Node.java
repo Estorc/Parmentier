@@ -31,8 +31,9 @@
  ***********************************************************************************/
 
 package org.parmentier.level;
-
 import java.util.ArrayList;
+
+import org.parmentier.math.IVector;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.shape.Circle;
@@ -52,7 +53,7 @@ public class Node {
      * The position of the node in the level grid, represented as an array [x, y].
      * The position is used to identify the node's location within the level.
      */
-    private final int[] position;
+    private final IVector position;
 
     /**
      * The visual representation of the node as a circle.
@@ -73,7 +74,7 @@ public class Node {
      * @param value The value of the node.
      */
     public Node(int x, int y, int value) {
-        this.position = new int[]{x, y};
+        this.position = new IVector(x, y);
         this.value = value;
         this.bridges = new ArrayList<>();
     }
@@ -117,14 +118,14 @@ public class Node {
      */
     public void addBridgeTo(Node other) {
         int direction;
-        if (this.position[0] == other.position[0]) {
-            if (this.position[1] < other.position[1]) {
+        if (this.position.getX() == other.position.getX()) {
+            if (this.position.getY() < other.position.getY()) {
                 direction = Bridge.Direction.BOTTOM;
             } else {
                 direction = Bridge.Direction.TOP;
             }
         } else {
-            if (this.position[0] < other.position[0]) {
+            if (this.position.getX() < other.position.getX()) {
                 direction = Bridge.Direction.RIGHT;
             } else {
                 direction = Bridge.Direction.LEFT;
@@ -139,12 +140,12 @@ public class Node {
      * Gets the position of the node.
      * @return The position of the node as an array [x, y].
      */
-    public int[] getPosition() {
+    public IVector getPosition() {
         return position;
     }
 
-    public int[] getCanvasPosition() {
-        return new int[]{position[0] * 32 + 16, position[1] * 32 + 16};
+    public IVector getCanvasPosition() {
+        return new IVector(position.getX() * 32 + 16, position.getY() * 32 + 16);
     }
 
     /**
@@ -192,8 +193,8 @@ public class Node {
      * @param gc The GraphicsContext to draw on.
      */
     public void draw(GraphicsContext gc) {
-        int x = getCanvasPosition()[0];
-        int y = getCanvasPosition()[1];
+        long x = getCanvasPosition().getX();
+        long y = getCanvasPosition().getY();
         gc.setLineWidth(2);
         gc.setFill(javafx.scene.paint.Color.WHITE);
         gc.fillOval(x - 16, y - 16, 32, 32);

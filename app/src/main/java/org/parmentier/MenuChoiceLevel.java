@@ -27,7 +27,6 @@ public class MenuChoiceLevel extends Menu{
             interfaceLevelChoice.getChildren().add(root);
         } catch (IOException e) {
             System.err.println("Erreur : " + e.getMessage());
-            e.printStackTrace();
         }
     }
 
@@ -43,7 +42,6 @@ public class MenuChoiceLevel extends Menu{
 
     @FXML
     public void manageImageClick(MouseEvent event) {
-        javafx.scene.Node source = (javafx.scene.Node) event.getSource();
         Game.getInstance().getSceneManager().pushScene(new Level());
     }
 

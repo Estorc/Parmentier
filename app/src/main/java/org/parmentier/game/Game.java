@@ -9,8 +9,8 @@ import javafx.stage.Stage;
 
 public class Game {
     private static Game instance;
-    private StackPane uiLayer;
     private final SceneManager sceneManager;
+    private StackPane uiLayer;
     private long lastTime = 0;
 
     public Game() {
