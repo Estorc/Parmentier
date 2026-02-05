@@ -9,6 +9,7 @@ import javafx.stage.Stage;
 
 public class Game {
     private static Game instance;
+    private StackPane uiLayer;
     private final SceneManager sceneManager;
     private long lastTime = 0;
 
@@ -25,17 +26,21 @@ public class Game {
         return instance;
     }
 
-    public void update(double deltaTime, StackPane root) {
+    public void refresh() {
+        if (this.uiLayer != null) sceneManager.activeScene().initialize(uiLayer);
+    }
+
+    public void update(double deltaTime) {
         Scene activeScene = sceneManager.activeScene();
         if (activeScene != null) {
-            activeScene.update(deltaTime, root);
+            activeScene.update(deltaTime, uiLayer);
         }
     }
 
-    public void render(GraphicsContext gc, StackPane root) {
+    public void render(GraphicsContext gc) {
         Scene activeScene = sceneManager.activeScene();
         if (activeScene != null) {
-            activeScene.render(gc, root);
+            activeScene.render(gc, uiLayer);
         }
     }
 
@@ -45,7 +50,7 @@ public class Game {
         Canvas canvas = new Canvas(WIDTH, HEIGHT);
         GraphicsContext gc = canvas.getGraphicsContext2D();
         StackPane root = new StackPane(canvas);
-        StackPane uiLayer = new StackPane();
+        uiLayer = new StackPane();
         uiLayer.setMaxWidth(HEIGHT);
         uiLayer.setMaxHeight(HEIGHT);
         root.getChildren().add(uiLayer);
@@ -61,8 +66,8 @@ public class Game {
                 double deltaTime = (now - lastTime) / 10e8;
                 lastTime = now;
 
-                update(deltaTime, uiLayer);
-                render(gc, uiLayer);
+                update(deltaTime);
+                render(gc);
             }
         }.start();
 
@@ -70,5 +75,6 @@ public class Game {
         stage.setScene(new javafx.scene.Scene(root, WIDTH, HEIGHT));
         stage.setTitle("JavaFX Classic Game Loop");
         stage.show();
+        sceneManager.activeScene().initialize(uiLayer);
     }
 }

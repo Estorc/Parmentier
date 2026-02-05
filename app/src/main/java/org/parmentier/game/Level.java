@@ -163,6 +163,9 @@ public class Level implements org.parmentier.game.Scene {
 
     @Override
     public void initialize(StackPane uiLayer) {
+        System.out.println("Initializing level scene...");
+        uiLayer.getChildren().clear();
+
         this.nodes = new ArrayList<>();
         this.activeBridges = new ArrayList<>();
 

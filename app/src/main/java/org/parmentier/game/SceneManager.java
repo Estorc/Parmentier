@@ -1,24 +1,26 @@
 
 package org.parmentier.game;
-import java.util.Queue;
+import java.util.Stack;
     
 public class SceneManager {
-    Queue<Scene> scenes;
+    Stack<Scene> scenes;
 
     public SceneManager() {
-        this.scenes = new java.util.LinkedList<>();
+        this.scenes = new Stack<>();
     }
 
     public void pushScene(Scene scene) {
-        scenes.clear();
-        scenes.add(scene);
+        this.scenes.push(scene);
+        Game.getInstance().refresh();
     }
 
     public Scene popScene() {
-        return scenes.poll();
+        Scene removedScene = this.scenes.pop();
+        Game.getInstance().refresh();
+        return removedScene;
     }
 
     public Scene activeScene() {
-        return scenes.peek();
+        return this.scenes.peek();
     }
 }

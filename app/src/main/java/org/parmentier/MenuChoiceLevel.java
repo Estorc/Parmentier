@@ -1,21 +1,22 @@
 package org.parmentier;
 
+import java.io.IOException;
+import java.net.URL;
+
 import org.parmentier.game.Game;
 import org.parmentier.game.Level;
-import org.parmentier.game.Scene;
+
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.scene.layout.StackPane;
 import javafx.scene.canvas.GraphicsContext;
-import java.io.IOException;
 import javafx.scene.input.MouseEvent;
-import java.net.URL;
+import javafx.scene.layout.StackPane;
 
 public class MenuChoiceLevel extends Menu{
 
     @Override
-    public void levelScene(StackPane interfaceLevelChoice) {
+    public void initialize(StackPane interfaceLevelChoice) {
         try {
             URL fxmlLocation = getClass().getResource("/SceneBuilderLevel.fxml");
             
@@ -28,6 +29,16 @@ public class MenuChoiceLevel extends Menu{
             System.err.println("Erreur : " + e.getMessage());
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void render(GraphicsContext gc, StackPane uiLayer) {
+        // Rien à dessiner pour le menu de choix de niveau
+    }
+
+    @Override
+    public void update(double deltaTime, StackPane interfaceLevelChoice) {
+        // Aucune mise à jour nécessaire pour le menu de choix de niveau
     }
 
     @FXML

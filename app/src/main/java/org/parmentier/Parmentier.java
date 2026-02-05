@@ -32,7 +32,6 @@
 package org.parmentier;
 
 import org.parmentier.game.Game;
-import org.parmentier.game.Level;
 
 import javafx.application.Application;
 
