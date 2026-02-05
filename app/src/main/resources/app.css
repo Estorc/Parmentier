@@ -30,3 +30,48 @@
     -fx-padding: 20px;
 }
 
+.button-setting {
+    /* Fond transparent ou très clair pour se fondre dans le menu */
+    -fx-background-color: transparent; 
+    
+    /* Couleur du texte (Gris foncé, pas noir pur pour être plus doux) */
+    -fx-text-fill: #2c3e50;
+    
+    /* Ta police (Attention à bien mettre le VRAI nom interne ici) */
+    -fx-font-family: 'Lexend Light'; 
+    -fx-font-size: 16px;
+    
+    /* Alignement à GAUCHE, typique des menus */
+    -fx-alignment: CENTER_LEFT; 
+    
+    /* Espacement : Haut Droite Bas Gauche */
+    -fx-padding: 12 20 12 20; 
+    
+    /* Petite bordure en bas pour séparer les éléments (optionnel) */
+    -fx-border-color: transparent transparent #e0e0e0 transparent;
+    -fx-border-width: 1;
+    
+    /* Forme du curseur */
+    -fx-cursor: hand;
+}
+
+/* Quand la souris passe dessus (Hover) */
+.button-setting:hover {
+    /* On grise légèrement le fond */
+    -fx-background-color: #f8f9fa;
+    
+    /* On ajoute une petite barre colorée à gauche pour le style */
+    -fx-border-color: transparent transparent #e0e0e0 #3498db;
+    -fx-border-width: 1 1 1 4; /* La bordure gauche est plus épaisse (4px) */
+    
+    /* Le texte devient un peu plus foncé */
+    -fx-text-fill: #000000;
+}
+
+/* Quand on clique (Pressed) */
+.button-setting:pressed {
+    -fx-background-color: #ececec;
+    /* Petit effet de décalage vers le bas pour sentir le clic */
+    -fx-translate-y: 1; 
+}
+
