@@ -46,7 +46,6 @@ public class MainMenu implements org.parmentier.game.Scene {
         layout.getChildren().add(buttonBox);
         uiLayer.getChildren().add(layout);
         uiLayer.getStylesheets().add(getClass().getResource("/app.css").toExternalForm());
-        // TODO: Add event for Quitter, Jouer and Paramètres
 
         jouer.setOnMouseClicked( e -> Game.getInstance().getSceneManager().pushScene(new MenuChoiceLevel()));
         settings.setOnMouseClicked( e -> Game.getInstance().getSceneManager().pushScene(new Settings()));
