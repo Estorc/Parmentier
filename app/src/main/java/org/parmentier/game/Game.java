@@ -62,6 +62,16 @@ public class Game {
     private long lastTime = 0;
 
     /**
+     * The width of the game window, set to 300 pixels. 
+     */
+    public static final int WIDTH = 300;
+
+    /**
+     * The height of the game window, set to 300 pixels.
+     */
+    public static final int HEIGHT = 300;
+
+    /**
      * Constructs a new Game instance and initializes the SceneManager. The constructor
      * also sets the singleton instance of the Game class to this newly created instance.
      */
@@ -141,14 +151,15 @@ public class Game {
      * interactions based on the initial scene (e.g., main menu, level selection, or gameplay).
      */
     public void start(Stage stage) {
-        final int WIDTH = 300;
-        final int HEIGHT = 300;
         Canvas canvas = new Canvas(WIDTH, HEIGHT);
         GraphicsContext gc = canvas.getGraphicsContext2D();
         StackPane root = new StackPane(canvas);
         uiLayer = new StackPane();
-        uiLayer.setMaxWidth(HEIGHT);
-        uiLayer.setMaxHeight(HEIGHT);
+        
+        canvas.widthProperty().bind(root.widthProperty());
+        canvas.heightProperty().bind(root.heightProperty());
+        // Center the canvas in the stackpane
+        StackPane.setAlignment(canvas, javafx.geometry.Pos.CENTER);
         root.getChildren().add(uiLayer);
 
         new AnimationTimer() {

@@ -44,6 +44,11 @@ public class Level implements org.parmentier.game.Scene {
      */
     private int yShift = 0;
 
+    /** 
+     * The scale factor applied to the level's rendering, used to scale the level to fit the canvas size.
+     */
+    private double scaleFactor = 1.0;
+
     /**
      * The currently selected bridge, which is highlighted for user interaction.
      */
@@ -219,7 +224,8 @@ public class Level implements org.parmentier.game.Scene {
 
 
         uiLayer.setOnMouseMoved(e -> {
-            tryConnectClosest(e.getX() - xShift, e.getY() - yShift);
+            System.out.println("Mouse moved: " + e.getX()/scaleFactor + ", " + e.getY()/scaleFactor);
+            tryConnectClosest((e.getX() - xShift)/scaleFactor, (e.getY() - yShift)/scaleFactor);
         });
 
 
@@ -257,11 +263,12 @@ public class Level implements org.parmentier.game.Scene {
      */
     @Override
     public void render(GraphicsContext gc, StackPane uiLayer) {
-        gc.setFill(Color.LIGHTBLUE);
-        gc.fillRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
-        this.xShift = (int) gc.getCanvas().getWidth() / 2 - (level.getWidth() * 32) / 2;
-        this.yShift = (int) gc.getCanvas().getHeight() / 2 - (level.getHeight() * 32) / 2;
-        gc.setTransform(1, 0, 0, 1, xShift, yShift);
+        gc.clearRect(-Game.WIDTH, -Game.HEIGHT, Game.WIDTH*3, Game.HEIGHT*3);
+        scaleFactor = gc.getCanvas().getHeight() / Game.HEIGHT;
+        this.xShift = (int) (gc.getCanvas().getWidth() - level.getWidth() * 32 * scaleFactor) / 2;
+        this.yShift = (int) (gc.getCanvas().getHeight() - level.getHeight() * 32 * scaleFactor) / 2;
+
+        gc.setTransform(scaleFactor, 0, 0, scaleFactor, xShift, yShift);
         if (selectedBridge != null) {
             selectedBridge.draw(gc, true);
         }
