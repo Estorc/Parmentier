@@ -5,34 +5,17 @@
  * @author Estorc
  * @version v1.0
  * @package org.parmentier.level
- * @copyright Copyright (c) 2026 Parmentier MIT License.
+ * @copyright Copyright (c) 2026 Parmentier's team GNU GENERAL PUBLIC LICENSE.
  **********************************************************************************/
 /*                             This file is part of
  *                                  Parmentier
  *           (https://github.com/Estorc/Projet-Genie-Logiciel-L3-Parmentier)
- ***********************************************************************************
- * Copyright (c) 2026 Parmentier.
- * This file is licensed under the MIT License.
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
  ***********************************************************************************/
 
 package org.parmentier.level;
-
 import java.util.ArrayList;
+
+import org.parmentier.math.IVector;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.shape.Circle;
@@ -49,10 +32,10 @@ public class Node {
     private final int value;
 
     /**
-     * The position of the node in the level grid, represented as an array [x, y].
+     * The position of the node in the grid, represented as an IVector (x, y).
      * The position is used to identify the node's location within the level.
      */
-    private final int[] position;
+    private final IVector position;
 
     /**
      * The visual representation of the node as a circle.
@@ -73,7 +56,7 @@ public class Node {
      * @param value The value of the node.
      */
     public Node(int x, int y, int value) {
-        this.position = new int[]{x, y};
+        this.position = new IVector(x, y);
         this.value = value;
         this.bridges = new ArrayList<>();
     }
@@ -117,14 +100,14 @@ public class Node {
      */
     public void addBridgeTo(Node other) {
         int direction;
-        if (this.position[0] == other.position[0]) {
-            if (this.position[1] < other.position[1]) {
+        if (this.position.getX() == other.position.getX()) {
+            if (this.position.getY() < other.position.getY()) {
                 direction = Bridge.Direction.BOTTOM;
             } else {
                 direction = Bridge.Direction.TOP;
             }
         } else {
-            if (this.position[0] < other.position[0]) {
+            if (this.position.getX() < other.position.getX()) {
                 direction = Bridge.Direction.RIGHT;
             } else {
                 direction = Bridge.Direction.LEFT;
@@ -139,12 +122,12 @@ public class Node {
      * Gets the position of the node.
      * @return The position of the node as an array [x, y].
      */
-    public int[] getPosition() {
+    public IVector getPosition() {
         return position;
     }
 
-    public int[] getCanvasPosition() {
-        return new int[]{position[0] * 32 + 16, position[1] * 32 + 16};
+    public IVector getCanvasPosition() {
+        return new IVector(position.getX() * 32 + 16, position.getY() * 32 + 16);
     }
 
     /**
@@ -192,8 +175,9 @@ public class Node {
      * @param gc The GraphicsContext to draw on.
      */
     public void draw(GraphicsContext gc) {
-        int x = getCanvasPosition()[0];
-        int y = getCanvasPosition()[1];
+        long x = getCanvasPosition().getX();
+        long y = getCanvasPosition().getY();
+        gc.setLineWidth(2);
         gc.setFill(javafx.scene.paint.Color.WHITE);
         gc.fillOval(x - 16, y - 16, 32, 32);
         gc.setStroke(javafx.scene.paint.Color.BLACK);
