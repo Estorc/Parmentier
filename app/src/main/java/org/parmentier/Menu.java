@@ -12,14 +12,14 @@ public abstract class Menu implements Scene{
     private boolean initialized = false;
 
     @Override
-    public void update(double deltaTime, StackPane interfaceLevelChoice) {
+    public void update(double deltaTime, StackPane menuInterface) {
         if (!initialized) {
-            levelScene(interfaceLevelChoice);
+            levelScene(menuInterface);
             initialized = true;
         }
     }
 
-    public abstract void levelScene(StackPane interfaceLevelChoice);
+    public abstract void levelScene(StackPane menuInterface);
 
     @Override
     public void render(GraphicsContext gc, StackPane uiLayer){
