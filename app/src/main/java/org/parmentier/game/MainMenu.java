@@ -5,6 +5,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import org.parmentier.MenuChoiceLevel;
 
 public class MainMenu implements org.parmentier.game.Scene {
 
@@ -44,8 +45,9 @@ public class MainMenu implements org.parmentier.game.Scene {
         uiLayer.getChildren().add(layout);
         uiLayer.getStylesheets().add(getClass().getResource("/app.css").toExternalForm());
         // TODO: Add event for Quitter, Jouer and Paramètres
-        /*leave.setOnAction(e -> {
-            uiLayer.close();
-        });*/
+
+        jouer.setOnMouseClicked( e -> Game.getInstance().getSceneManager().pushScene(new MenuChoiceLevel()));
+        settings.setOnMouseClicked( e -> Game.getInstance().getSceneManager().pushScene(new Settings()));
+        leave.setOnMouseClicked( e -> System.exit(0));
     }
 }
