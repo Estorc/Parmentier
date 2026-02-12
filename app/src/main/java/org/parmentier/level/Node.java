@@ -18,7 +18,6 @@ import java.util.ArrayList;
 import org.parmentier.math.IVector;
 
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.shape.Circle;
 
 /**
  * Represents a node in the Parmentier puzzle game.
@@ -38,10 +37,9 @@ public class Node {
     private final IVector position;
 
     /**
-     * The visual representation of the node as a circle.
-     * This circle is used in the graphical interface to display the node.
+     * The size of a node.
      */
-    private Circle circle;
+    public static final int SIZE = 64;
 
     /**
      * The list of bridges connected to this node.
@@ -59,22 +57,6 @@ public class Node {
         this.position = new IVector(x, y);
         this.value = value;
         this.bridges = new ArrayList<>();
-    }
-
-    /**
-     * Gets the visual representation of the node as a circle.
-     * @return The circle representing the node.
-     */
-    public Circle getCircle() {
-        return circle;
-    }
-
-    /**
-     * Sets the visual representation of the node as a circle.
-     * @param circle The circle to represent the node.
-     */
-    public void setCircle(Circle circle) {
-        this.circle = circle;
     }
 
     /**
@@ -127,7 +109,7 @@ public class Node {
     }
 
     public IVector getCanvasPosition() {
-        return new IVector(position.getX() * 32 + 16, position.getY() * 32 + 16);
+        return new IVector(position.getX() * SIZE + SIZE/2, position.getY() * SIZE + SIZE/2);
     }
 
     /**
@@ -179,9 +161,9 @@ public class Node {
         long y = getCanvasPosition().getY();
         gc.setLineWidth(2);
         gc.setFill(javafx.scene.paint.Color.WHITE);
-        gc.fillOval(x - 16, y - 16, 32, 32);
+        gc.fillOval(x - SIZE/2, y - SIZE/2, SIZE, SIZE);
         gc.setStroke(javafx.scene.paint.Color.BLACK);
-        gc.strokeOval(x - 16, y - 16, 32, 32);
+        gc.strokeOval(x - SIZE/2, y - SIZE/2, SIZE, SIZE);
         gc.setFill(javafx.scene.paint.Color.BLACK);
         gc.fillText(Integer.toString(value), x - 4, y + 4);
     }

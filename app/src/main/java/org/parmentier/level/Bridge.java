@@ -182,7 +182,7 @@ public class Bridge {
         long toX = to.getCanvasPosition().getX();
         long toY = to.getCanvasPosition().getY();
         for (int i = 0; i < renderState; i++) {
-            double shift = ((double)(i+0.5)/renderState-0.5) * (16.0);
+            double shift = ((double)(i+0.5)/renderState-0.5) * (Node.SIZE/2);
             switch (direction) {
                 case Direction.TOP, Direction.BOTTOM ->
                     gc.strokeLine(fromX + shift, fromY, toX + shift, toY);

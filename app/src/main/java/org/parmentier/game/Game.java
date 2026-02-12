@@ -64,12 +64,12 @@ public class Game {
     /**
      * The width of the game window, set to 300 pixels. 
      */
-    public static final int WIDTH = 300;
+    public static final int WIDTH = 800;
 
     /**
      * The height of the game window, set to 300 pixels.
      */
-    public static final int HEIGHT = 300;
+    public static final int HEIGHT = 600;
 
     /**
      * Constructs a new Game instance and initializes the SceneManager. The constructor
@@ -180,7 +180,7 @@ public class Game {
 
 
         stage.setScene(new javafx.scene.Scene(root, WIDTH, HEIGHT));
-        stage.setTitle("JavaFX Classic Game Loop");
+        stage.setTitle("Parmentier");
         stage.show();
         stage.setOnCloseRequest(event -> {
             System.out.println("Window is closing...");

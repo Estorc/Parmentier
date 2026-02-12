@@ -265,8 +265,8 @@ public class Level implements org.parmentier.game.Scene {
     public void render(GraphicsContext gc, StackPane uiLayer) {
         gc.clearRect(-Game.WIDTH, -Game.HEIGHT, Game.WIDTH*3, Game.HEIGHT*3);
         scaleFactor = gc.getCanvas().getHeight() / Game.HEIGHT;
-        this.xShift = (int) (gc.getCanvas().getWidth() - level.getWidth() * 32 * scaleFactor) / 2;
-        this.yShift = (int) (gc.getCanvas().getHeight() - level.getHeight() * 32 * scaleFactor) / 2;
+        this.xShift = (int) (gc.getCanvas().getWidth() - level.getWidth() * Node.SIZE * scaleFactor) / 2;
+        this.yShift = (int) (gc.getCanvas().getHeight() - level.getHeight() * Node.SIZE * scaleFactor) / 2;
 
         gc.setTransform(scaleFactor, 0, 0, scaleFactor, xShift, yShift);
         if (selectedBridge != null) {
