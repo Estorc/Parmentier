@@ -48,5 +48,7 @@ public class Settings implements org.parmentier.game.Scene {
         layout.getChildren().add(buttonBox);
         uiLayer.getChildren().add(layout);
         uiLayer.getStylesheets().add(getClass().getResource("/app.css").toExternalForm());
+
+        returnButton.setOnMouseClicked( e -> Game.getInstance().getSceneManager().popScene());
     }
 }

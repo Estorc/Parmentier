@@ -22,7 +22,7 @@ public class MainMenu implements org.parmentier.game.Scene {
 
     @Override
     public void initialize(StackPane uiLayer) {
-
+        uiLayer.getChildren().clear();
         VBox layout = new VBox();
         VBox buttonBox = new VBox();
         
