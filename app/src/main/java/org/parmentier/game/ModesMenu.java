@@ -1,0 +1,61 @@
+package org.parmentier.game;
+
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+
+public class ModesMenu implements org.parmentier.game.Scene {
+    private boolean initialized = false;
+
+    @Override
+    public void update(double deltaTime, StackPane uiLayer) {
+        if (!initialized) {
+            start(uiLayer);
+            initialized = true;
+        }
+    }
+
+    @Override
+    public void render(GraphicsContext gc, StackPane uiLayer) {
+        return;
+    }
+
+    public void start(StackPane uiLayer) {
+
+	//Declaration
+        VBox general = new VBox();
+
+	Label title = new Label("Modes de Jeux");
+	
+	VBox btnZone = new VBox();
+
+	Button didacticiel = new Button("Didacticiel");
+	Button niveaux = new Button("niveaux");	
+
+	//Begin
+
+	//Style
+	uiLayer.getStylesheets().add(getClass().getResource("/app.css").toExternalForm());
+        general.setSpacing(20);
+        btnZone.setSpacing(10);
+
+	title.getStyleClass().add("title-label");
+	didacticiel.getStyleClass().add("button");
+        niveaux.getStyleClass().add("button");
+
+        btnZone.setAlignment(javafx.geometry.Pos.CENTER);
+        general.setAlignment(javafx.geometry.Pos.TOP_CENTER);
+
+        btnZone.getChildren().add(didacticiel);
+        btnZone.getChildren().add(niveaux);
+        
+        general.getChildren().add(title);
+        general.getChildren().add(btnZone);
+        uiLayer.getChildren().add(general);
+        
+
+	//End
+    }
+}

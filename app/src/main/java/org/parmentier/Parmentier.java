@@ -354,6 +354,10 @@
 package org.parmentier;
 
 import org.parmentier.game.Game;
+import org.parmentier.game.Level;
+import org.parmentier.game.MainMenu;
+import org.parmentier.game.ModesMenu;
+import org.parmentier.game.Settings;
 
 import javafx.application.Application;
 
