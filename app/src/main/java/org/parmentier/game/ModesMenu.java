@@ -15,9 +15,10 @@ public class ModesMenu implements org.parmentier.game.Scene {
 
     @Override
     public void render(GraphicsContext gc, StackPane uiLayer) {
-        return;
+        //
     }
 
+    @Override
     public void initialize(StackPane uiLayer) {
 
 	//Declaration

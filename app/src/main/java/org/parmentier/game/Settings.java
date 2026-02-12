@@ -7,10 +7,6 @@ import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import org.parmentier.game.Game;
-import org.parmentier.game.MainMenu;
-import org.parmentier.game.SceneManager;
-import org.parmentier.Parmentier;
 
 public class Settings implements org.parmentier.game.Scene {
 
@@ -21,9 +17,10 @@ public class Settings implements org.parmentier.game.Scene {
 
     @Override
     public void render(GraphicsContext gc, StackPane uiLayer) {
-        return;
+        //
     }
 
+    @Override
     public void initialize(StackPane uiLayer) {
         uiLayer.getChildren().clear();
         VBox layout = new VBox();

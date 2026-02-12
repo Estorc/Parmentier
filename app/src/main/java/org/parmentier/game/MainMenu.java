@@ -1,11 +1,12 @@
 package org.parmentier.game;
 
+import org.parmentier.MenuChoiceLevel;
+
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import org.parmentier.MenuChoiceLevel;
 
 public class MainMenu implements org.parmentier.game.Scene {
 
@@ -16,9 +17,10 @@ public class MainMenu implements org.parmentier.game.Scene {
 
     @Override
     public void render(GraphicsContext gc, StackPane uiLayer) {
-        return;
+        //
     }
 
+    @Override
     public void initialize(StackPane uiLayer) {
 
         VBox layout = new VBox();

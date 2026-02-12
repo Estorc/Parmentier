@@ -51,7 +51,7 @@ public class Bridge {
      * The maximum state of a bridge.
      * Each state corresponds to a different visual representation of the bridge.
      */
-    public final static int MAX_STATE = 100;
+    public final static int MAX_STATE = 2;
 
     /**
      * The length of the bridge, representing the number of segments it spans.
