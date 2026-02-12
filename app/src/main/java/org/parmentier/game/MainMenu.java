@@ -7,14 +7,10 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
 public class MainMenu implements org.parmentier.game.Scene {
-    private boolean initialized = false;
 
     @Override
     public void update(double deltaTime, StackPane uiLayer) {
-        if (!initialized) {
-            start(uiLayer);
-            initialized = true;
-        }
+        //
     }
 
     @Override
@@ -22,7 +18,7 @@ public class MainMenu implements org.parmentier.game.Scene {
         return;
     }
 
-    public void start(StackPane uiLayer) {
+    public void initialize(StackPane uiLayer) {
 
         VBox layout = new VBox();
         VBox buttonBox = new VBox();

@@ -13,14 +13,10 @@ import org.parmentier.game.SceneManager;
 import org.parmentier.Parmentier;
 
 public class Settings implements org.parmentier.game.Scene {
-    private boolean initialized = false;
 
     @Override
     public void update(double deltaTime, StackPane uiLayer) {
-        if (!initialized) {
-            start(uiLayer);
-            initialized = true;
-        }
+        //
     }
 
     @Override
@@ -28,7 +24,7 @@ public class Settings implements org.parmentier.game.Scene {
         return;
     }
 
-    public void start(StackPane uiLayer) {
+    public void initialize(StackPane uiLayer) {
 
         VBox layout = new VBox();
         VBox buttonBox = new VBox();
