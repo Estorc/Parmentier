@@ -11,9 +11,55 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import java.io.IOException;
 import java.net.URL;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import java.io.FileReader;
+import java.io.FileWriter;
 
 public class MenuLogin extends Menu {
-    private ObservableList<String> logins = FXCollections.observableArrayList("login1", "login2", "login3", "login4", "login5");
+    private ObservableList<String> logins = FXCollections.observableArrayList();
+    private final String jsonPath = "src/main/resources/userName.json";
+
+    public MenuLogin() {
+        loadLoginsFromJson();
+    }
+   
+    private void loadLoginsFromJson() {
+        try {
+            JSONParser parser = new JSONParser();
+            Object obj = parser.parse(new FileReader(jsonPath));
+            JSONObject jo = (JSONObject) obj;
+            JSONArray players = (JSONArray) jo.get("players");
+
+            for (Object playerObj : players) {
+                JSONObject player = (JSONObject) playerObj;
+                String userName = (String) player.get("userName");
+                logins.add(userName);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+ 
+    private void saveLoginsToJson() {
+        try {
+            JSONArray players = new JSONArray();
+            for (String login : logins) {
+                JSONObject p = new JSONObject();
+                p.put("userName", login);
+                players.add(p);
+            }
+            JSONObject root = new JSONObject();
+            root.put("players", players);
+            try (FileWriter file = new FileWriter(jsonPath)) {
+                file.write(root.toJSONString());
+                file.flush();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     @FXML private TextField searchBar;
     @FXML private ListView<String> listView;
@@ -64,12 +110,13 @@ public class MenuLogin extends Menu {
     private void selection(String select) {
         if (select.startsWith("Créer : ")) {
             String newName = select.replace("Créer : ", "").trim();
-            
             if (!logins.contains(newName)) {
                 logins.add(newName);
+                saveLoginsToJson();
                 searchBar.clear();
             }
         }
+        //ajout redirection menu principal 
         searchBar.clear();
     }
 }
