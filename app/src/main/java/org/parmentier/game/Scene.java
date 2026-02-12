@@ -45,4 +45,9 @@ public interface Scene {
      *                with the canvas rendering.
      */
     void render(GraphicsContext gc, StackPane uiLayer);
+
+    /**
+     * Performs destruction or cleanup operations when the scene is no longer needed.
+     */
+    void destroy();
 }

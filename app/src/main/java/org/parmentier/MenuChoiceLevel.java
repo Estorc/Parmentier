@@ -54,6 +54,14 @@ public class MenuChoiceLevel extends Menu{
     }
 
     /**
+     * Default destructor for the MenuChoiceLevel class. Since there are no specific resources to clean up, this method is left empty.
+     */
+    @Override
+    public void destroy() {
+        //
+    }
+
+    /**
      * Renders the menu for level selection. Since this menu is primarily defined by its FXML layout, there is no custom rendering logic needed in this method.
      * @param gc The GraphicsContext used for rendering.
      * @param uiLayer The StackPane that serves as the UI layer for the menu.

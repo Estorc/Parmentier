@@ -15,7 +15,7 @@
 
 package org.parmentier.level;
 
-import java.io.FileNotFoundException;
+import java.io.IOException;
 
 /**
  * Represents a level in the Parmentier puzzle game.
@@ -34,37 +34,36 @@ public class GridData {
     /**
      * Constructs a Level object by loading the level data from the specified file.
      * 
-     * @param filename The name of the file containing the level data.
+     * @param path The path of the file containing the level data.
      */
-    public GridData(String filename) {
-        levelArray = loadLevelFromFile(filename);
+    public GridData(java.nio.file.Path path) {
+        levelArray = loadLevelFromFile(path);
     }
 
     /**
      * Loads the level data from a text file and constructs the 2D array of nodes.
      * 
-     * @param filename The name of the file containing the level data.
+     * @param path The path of the file containing the level data.
      * @return A 2D array of Node objects representing the level.
      */
-    private Node[][] loadLevelFromFile(String filename) {
+    private Node[][] loadLevelFromFile(java.nio.file.Path path) {
         try {
-            java.nio.file.Path path = java.nio.file.Paths.get(getClass().getClassLoader().getResource(filename).toURI());
             String content = new String(java.nio.file.Files.readAllBytes(path));
-            String[] parts = content.split("-\n"); // separe la sauvegarde des noeuds et des ponts
+            String[] parts = content.split("-\n"); // sépare la sauvegarde des noeuds et des ponts
             String[] node_lines = parts[0].split("\n");
             String[] bridge_lines = parts[1].split("\n");
             Node[][] array = new Node[node_lines.length][];
 
-            // chargement des nodes sauvegardÃ©s et des bridges possibles horizontalement
+            // chargement des nodes sauvegardés et des bridges possibles horizontalement
             for (int i = 0; i < node_lines.length; i++) {
                 Node lastNode = null;
                 for (int j = 0; j < node_lines[i].length(); j++) {
                     int value = Character.getNumericValue(node_lines[i].charAt(j));
                     array[i] = array[i] == null ? new Node[node_lines[i].length()] : array[i];
                     if (value > 0) {
-                        // crÃ©ation de node
+                        // création de node
                         array[i][j] = new Node(j, i, value);
-                        // crÃ©ation de bridge possible
+                        // création de bridge possible
                         if (lastNode != null) {
                             lastNode.addBridgeTo(array[i][j]);
                         }
@@ -102,12 +101,53 @@ public class GridData {
 
 
             return array;
-        } catch (FileNotFoundException e) {
-            System.err.println("Level file not found: " + filename);
+        } catch (IOException e) {
+            System.err.println("Level file not found: " + path);
             return new Node[0][0];
-        } catch (java.io.IOException | java.net.URISyntaxException e) {
-            System.err.println("Error reading level file: " + filename);
-            return new Node[0][0];
+        }
+    }
+
+    public void saveState() {
+        StringBuilder nodeBuilder = new StringBuilder();
+        StringBuilder bridgeBuilder = new StringBuilder();
+        for (Node[] row : levelArray) {
+            for (Node node : row) {
+                if (node != null) {
+                    nodeBuilder.append(node.getValue());
+                    for (int dir = 0; dir < 4; dir++) {
+                        Bridge bridge = node.getBridge(dir);
+                        if (bridge != null) {
+                            bridgeBuilder.append(bridge.getState());
+                        } else {
+                            bridgeBuilder.append('0');
+                        }
+                    }
+                } else {
+                    nodeBuilder.append('0');
+                    bridgeBuilder.append("0000");
+                }
+            }
+            nodeBuilder.append('\n');
+            bridgeBuilder.append('\n');
+        }
+        String saveData = nodeBuilder.toString() + "-\n" + bridgeBuilder.toString();
+        // create save.txt if it doesn't exist
+        java.nio.file.Path path = java.nio.file.Paths.get("save.txt");
+        if (!java.nio.file.Files.exists(path)) {
+            try {
+                java.nio.file.Files.createFile(path);
+            } catch (java.io.IOException e) {
+                System.err.println("Error creating save file: " + e.getMessage());
+                return;
+            }
+        }
+        // save to file
+        try {
+            path = java.nio.file.Paths.get("save.txt");
+            java.nio.file.Files.write(path, saveData.getBytes());
+            System.out.println("Game state saved to save.txt");
+        } catch (java.io.IOException e) {
+            System.err.println("Error saving game state: " + e.getMessage());
         }
     }
 

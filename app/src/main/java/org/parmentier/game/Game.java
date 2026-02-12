@@ -99,7 +99,8 @@ public class Game {
      * such as completing a level or returning to the main menu.
      */
     public void refresh() {
-        if (this.uiLayer != null) sceneManager.activeScene().initialize(uiLayer);
+        if (this.uiLayer != null && !sceneManager.isEmpty())
+            sceneManager.activeScene().initialize(uiLayer);
     }
 
     /**
@@ -110,6 +111,7 @@ public class Game {
      * parameter allows for smooth animations and consistent game behavior regardless of the frame rate.
      */
     public void update(double deltaTime) {
+        if (sceneManager.isEmpty()) return;
         Scene activeScene = sceneManager.activeScene();
         if (activeScene != null) {
             activeScene.update(deltaTime, uiLayer);
@@ -123,6 +125,7 @@ public class Game {
      * such as drawing characters, backgrounds, and UI elements.
      */
     public void render(GraphicsContext gc) {
+        if (sceneManager.isEmpty()) return;
         Scene activeScene = sceneManager.activeScene();
         if (activeScene != null) {
             activeScene.render(gc, uiLayer);
@@ -168,6 +171,10 @@ public class Game {
         stage.setScene(new javafx.scene.Scene(root, WIDTH, HEIGHT));
         stage.setTitle("JavaFX Classic Game Loop");
         stage.show();
+        stage.setOnCloseRequest(event -> {
+            System.out.println("Window is closing...");
+            sceneManager.clearScenes();
+        });
         sceneManager.activeScene().initialize(uiLayer);
     }
 }

@@ -108,7 +108,6 @@ public class Level implements org.parmentier.game.Scene {
             }
                 
         }
-        System.out.println("Connecting " + from.getPosition() + " to " + to.getPosition());
         Bridge bridgeBetween = from.getBridge(to);
         if (selectedBridge != bridgeBetween) {
             selectedBridge = bridgeBetween;
@@ -196,7 +195,9 @@ public class Level implements org.parmentier.game.Scene {
 
         
 
-        level = new GridData("level1.txt");
+        java.nio.file.Path levelPath = java.nio.file.Paths.get("save.txt");
+
+        level = new GridData(levelPath);
        
         startStopwatch();
         StackPane.setAlignment(stopwatchLabel, javafx.geometry.Pos.TOP_CENTER);
@@ -230,6 +231,17 @@ public class Level implements org.parmentier.game.Scene {
                 activeBridges.add(selectedBridge);
             }
         });
+    }
+
+    /**
+     * Auto save and stop the stopwatch when the level scene is destroyed.
+     */
+    @Override
+    public void destroy() {
+        if (stopwatch != null) {
+            stopwatch.stop();
+        }
+        level.saveState();
     }
 
     /**

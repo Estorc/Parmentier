@@ -52,4 +52,12 @@ public class MainMenu implements org.parmentier.game.Scene {
         settings.setOnMouseClicked( e -> Game.getInstance().getSceneManager().pushScene(new Settings()));
         leave.setOnMouseClicked( e -> System.exit(0));
     }
+
+    /**
+     * Default destructor for the MainMenu class. Since there are no specific resources to clean up, this method is left empty.
+     */
+    @Override
+    public void destroy() {
+        //
+    }
 }

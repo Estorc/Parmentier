@@ -49,4 +49,13 @@ public class Settings implements org.parmentier.game.Scene {
         uiLayer.getChildren().add(layout);
         uiLayer.getStylesheets().add(getClass().getResource("/app.css").toExternalForm());
     }
+
+    /**
+     * Default destructor forthe Settings class. Since there are no specific resources to clean up, this method is left empty.
+     */
+    @Override
+    public void destroy() {
+        //
+    }
+
 }

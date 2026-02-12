@@ -55,4 +55,13 @@ public class ModesMenu implements org.parmentier.game.Scene {
 
 	//End
     }
+
+    /**
+     * Default destructor for the ModesMenu class. Since there are no specific resources to clean up, this method is left empty.
+     */
+    @Override
+    public void destroy() {
+        //
+    }
+
 }

@@ -52,6 +52,7 @@ public class SceneManager {
      */
     public Scene popScene() {
         Scene removedScene = this.scenes.pop();
+        removedScene.destroy();
         Game.getInstance().refresh();
         return removedScene;
     }
@@ -62,5 +63,21 @@ public class SceneManager {
      */
     public Scene activeScene() {
         return this.scenes.peek();
+    }
+
+    /**
+     * Checks if the stack of scenes is empty, indicating that there are no active scenes in the game.
+     */
+    public boolean isEmpty() {
+        return this.scenes.isEmpty();
+    }
+
+    /**
+     * Clears all scenes from the stack, effectively resetting the scene management system.
+     */
+    public void clearScenes() {
+        while (!scenes.isEmpty()) {
+            popScene();
+        }
     }
 }
