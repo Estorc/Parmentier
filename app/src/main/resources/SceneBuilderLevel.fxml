@@ -13,24 +13,24 @@
 <children>
       <BorderPane prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <center>
-         <VBox alignment="CENTER" prefHeight="459.0" prefWidth="663.0" BorderPane.alignment="CENTER">
+         <VBox alignment="CENTER" BorderPane.alignment="CENTER">
             <children>
-                  <TitledPane alignment="TOP_LEFT" animated="false" contentDisplay="CENTER" text="Facile" textFill="#0db52e">
+                  <TitledPane animated="false" contentDisplay="CENTER" text="Facile" textFill="#0db52e">
                      <content>
                         <HBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="15.0">
                            <padding>
                               <Insets left="15.0" />
                            </padding>
                            <children>
-                              <Button fx:id="level1" contentDisplay="TEXT_ONLY" graphicTextGap="6.0" mnemonicParsing="false" pickOnBounds="false" text="1" />
-                              <Button fx:id="level2" contentDisplay="TEXT_ONLY" graphicTextGap="6.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" pickOnBounds="false" text="2" />
-                              <Button fx:id="level3" contentDisplay="TEXT_ONLY" graphicTextGap="6.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" pickOnBounds="false" text="3" />
-                              <Button fx:id="level4" contentDisplay="TEXT_ONLY" graphicTextGap="6.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" pickOnBounds="false" text="4" />
+                              <Button fx:id="level1" contentDisplay="TEXT_ONLY" graphicTextGap="6.0" mnemonicParsing="false" onMouseClicked="#manageImageClick" pickOnBounds="false" text="1" />
+                              <Button fx:id="level2" contentDisplay="TEXT_ONLY" graphicTextGap="6.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#manageImageClick" pickOnBounds="false" text="2" />
+                              <Button fx:id="level3" contentDisplay="TEXT_ONLY" graphicTextGap="6.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#manageImageClick" pickOnBounds="false" text="3" />
+                              <Button fx:id="level4" contentDisplay="TEXT_ONLY" graphicTextGap="6.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#manageImageClick" pickOnBounds="false" text="4" />
                            </children>
                         </HBox>
                      </content>
                   </TitledPane>
-                <TitledPane animated="false" prefWidth="100.0" text="Moyen" textFill="#f59014">
+                <TitledPane animated="false" contentDisplay="CENTER" prefWidth="100.0" text="Moyen" textFill="#f59014">
                      <content>
                      <HBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="15.0">
                         <opaqueInsets>
@@ -40,22 +40,22 @@
                            <Insets left="15.0" right="15.0" />
                         </padding>
                            <children>
-                              <Button fx:id="level5" contentDisplay="TOP" mnemonicParsing="false" pickOnBounds="false" text="5" />
-                              <Button fx:id="level6" contentDisplay="TEXT_ONLY" graphicTextGap="6.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" pickOnBounds="false" text="6" />
-                              <Button fx:id="level7" contentDisplay="TEXT_ONLY" graphicTextGap="6.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" pickOnBounds="false" text="7" />
-                              <Button fx:id="level8" contentDisplay="TEXT_ONLY" graphicTextGap="6.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" pickOnBounds="false" text="8" />
+                              <Button fx:id="level5" contentDisplay="TOP" mnemonicParsing="false" onMouseClicked="#manageImageClick" pickOnBounds="false" text="5" />
+                              <Button fx:id="level6" contentDisplay="TEXT_ONLY" graphicTextGap="6.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#manageImageClick" pickOnBounds="false" text="6" />
+                              <Button fx:id="level7" contentDisplay="TEXT_ONLY" graphicTextGap="6.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#manageImageClick" pickOnBounds="false" text="7" />
+                              <Button fx:id="level8" contentDisplay="TEXT_ONLY" graphicTextGap="6.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#manageImageClick" pickOnBounds="false" text="8" />
                            </children>
                      </HBox>
                      </content>
                   </TitledPane>
-                  <TitledPane animated="false" text="Difficile" textFill="RED">
+                  <TitledPane animated="false" contentDisplay="CENTER" text="Difficile" textFill="RED">
                      <content>
                      <HBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="15.0">
                         <children>
-                              <Button fx:id="level9" contentDisplay="TEXT_ONLY" graphicTextGap="6.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" pickOnBounds="false" text="9" />
-                              <Button fx:id="level10" contentDisplay="TEXT_ONLY" graphicTextGap="6.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" pickOnBounds="false" text="10" />
-                              <Button fx:id="level11" contentDisplay="TEXT_ONLY" graphicTextGap="6.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" pickOnBounds="false" text="11" />
-                              <Button fx:id="level12" contentDisplay="TEXT_ONLY" graphicTextGap="6.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" pickOnBounds="false" text="12" />
+                              <Button fx:id="level9" contentDisplay="TEXT_ONLY" graphicTextGap="6.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#manageImageClick" pickOnBounds="false" text="9" />
+                              <Button fx:id="level10" contentDisplay="TEXT_ONLY" graphicTextGap="6.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#manageImageClick" pickOnBounds="false" text="10" />
+                              <Button fx:id="level11" contentDisplay="TEXT_ONLY" graphicTextGap="6.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#manageImageClick" pickOnBounds="false" text="11" />
+                              <Button fx:id="level12" contentDisplay="TEXT_ONLY" graphicTextGap="6.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#manageImageClick" pickOnBounds="false" text="12" />
                         </children>
                         <padding>
                            <Insets left="15.0" />
@@ -63,14 +63,14 @@
                      </HBox>
                      </content>
                   </TitledPane>
-                  <TitledPane animated="false" text="Brutal">
+                  <TitledPane animated="false" contentDisplay="CENTER" prefHeight="200.0" prefWidth="100.0" text="Brutal">
                      <content>
                      <HBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="15.0">
                         <children>
-                              <Button fx:id="level51" contentDisplay="TEXT_ONLY" graphicTextGap="6.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" pickOnBounds="false" text="13" />
-                              <Button fx:id="level52" contentDisplay="TEXT_ONLY" graphicTextGap="6.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" pickOnBounds="false" text="14" />
-                              <Button fx:id="level53" contentDisplay="TEXT_ONLY" graphicTextGap="6.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" pickOnBounds="false" text="15" />
-                              <Button fx:id="level54" contentDisplay="TEXT_ONLY" graphicTextGap="6.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" pickOnBounds="false" text="16" />
+                              <Button fx:id="level51" contentDisplay="TEXT_ONLY" graphicTextGap="6.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#manageImageClick" pickOnBounds="false" text="13" />
+                              <Button fx:id="level52" contentDisplay="TEXT_ONLY" graphicTextGap="6.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#manageImageClick" pickOnBounds="false" text="14" />
+                              <Button fx:id="level53" contentDisplay="TEXT_ONLY" graphicTextGap="6.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#manageImageClick" pickOnBounds="false" text="15" />
+                              <Button fx:id="level54" contentDisplay="TEXT_ONLY" graphicTextGap="6.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#manageImageClick" pickOnBounds="false" text="16" />
                         </children>
                         <padding>
                            <Insets left="15.0" />
