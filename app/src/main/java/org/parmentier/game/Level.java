@@ -209,6 +209,9 @@ public class Level implements org.parmentier.game.Scene {
                 if (level.getNodeAt(i, j) != null) {
                     Node node = level.getNodeAt(i, j);
                     this.nodes.add(node);
+                    if (!node.getBridges().isEmpty()) {
+                        for (Bridge bridge : node.getBridges()) if (bridge.getState() > 0) activeBridges.add(bridge); 
+                    }
                 }
             }
         }
