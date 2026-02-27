@@ -10,13 +10,13 @@
 
 <VBox alignment="CENTER" prefHeight="400.0" prefWidth="350.0" spacing="20.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <Label minHeight="-Infinity" text="Quel est ton nom d'utilisateur ?" textAlignment="CENTER" wrapText="true"></Label>
+      <Label text="Quel est ton nom d'utilisateur ?" styleClass="title-label"></Label>
 
-      <TextField fx:id="searchBar" maxWidth="500.0" prefHeight="35.0" promptText="Entre ton pseudo ici..." VBox.vgrow="NEVER" />
+      <TextField fx:id="searchBar" maxWidth="500.0" prefHeight="35.0" promptText="Entre ton nom d'utilisateur ici..." VBox.vgrow="NEVER" />
 
       <ListView fx:id="listView" maxWidth="500.0" prefHeight="100.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
 
-      <Button fx:id="btnValider" maxWidth="500.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="200.0" style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-background-radius: 10;" text="valider"></Button>
+      <Button fx:id="btnValider" text="valider" styleClass="button" mnemonicParsing="false" />
    </children>
    <padding>
       <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />

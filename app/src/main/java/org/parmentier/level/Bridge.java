@@ -11,29 +11,11 @@
  * @author Estorc
  * @version v1.0
  * @package org.parmentier.level
- * @copyright Copyright (c) 2026 Parmentier MIT License.
+ * @copyright Copyright (c) 2026 Parmentier's team GNU GENERAL PUBLIC LICENSE.
  **********************************************************************************/
 /*                             This file is part of
  *                                  Parmentier
  *           (https://github.com/Estorc/Projet-Genie-Logiciel-L3-Parmentier)
- ***********************************************************************************
- * Copyright (c) 2026 Parmentier.
- * This file is licensed under the MIT License.
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
  ***********************************************************************************/
 
 package org.parmentier.level;
@@ -66,10 +48,10 @@ public class Bridge {
     }
 
     /**
-     * The maximum number of states a bridge can have.
+     * The maximum state of a bridge.
      * Each state corresponds to a different visual representation of the bridge.
      */
-    public final static int MAX_STATE = 3;
+    public final static int MAX_STATE = 2;
 
     /**
      * The length of the bridge, representing the number of segments it spans.
@@ -110,12 +92,12 @@ public class Bridge {
         this.from = from;
         this.to = to;
 
-        int xLength = Math.abs(from.getPosition()[0] - to.getPosition()[0]);
-        int yLength = Math.abs(from.getPosition()[1] - to.getPosition()[1]);
+        long xLength = Math.abs(from.getPosition().getX() - to.getPosition().getX());
+        long yLength = Math.abs(from.getPosition().getY() - to.getPosition().getY());
         if (xLength > 0) {
-            this.length = xLength - 1;
+            this.length = (int) xLength - 1;
         } else {
-            this.length = yLength - 1;
+            this.length = (int) yLength - 1;
         }
 
         this.direction = direction;
@@ -176,7 +158,7 @@ public class Bridge {
      * If the current state is the maximum state, it wraps around to 0.
      */
     public void toggleState() {
-        this.state = (this.state + 1) % MAX_STATE;
+        this.state = (this.state + 1) % (MAX_STATE+1);
     }
 
     /**
@@ -185,7 +167,9 @@ public class Bridge {
      * @param preview If true, draws the bridge in preview mode (e.g., semi-transparent).
      */
     public void draw(javafx.scene.canvas.GraphicsContext gc, boolean preview) {
+        int renderState = getState();
         if (preview) {
+            renderState = (renderState + 1) % (MAX_STATE+1);
             gc.setGlobalAlpha(0.5);
             gc.setStroke(javafx.scene.paint.Color.GRAY);
             gc.setLineWidth(4);
@@ -193,11 +177,19 @@ public class Bridge {
             gc.setStroke(javafx.scene.paint.Color.BLACK);
             gc.setLineWidth(2);
         }
-        int fromX = from.getCanvasPosition()[0];
-        int fromY = from.getCanvasPosition()[1];
-        int toX = to.getCanvasPosition()[0];
-        int toY = to.getCanvasPosition()[1];
-        gc.strokeLine(fromX, fromY, toX, toY);
+        long fromX = from.getCanvasPosition().getX();
+        long fromY = from.getCanvasPosition().getY();
+        long toX = to.getCanvasPosition().getX();
+        long toY = to.getCanvasPosition().getY();
+        for (int i = 0; i < renderState; i++) {
+            double shift = ((double)(i+0.5)/renderState-0.5) * (Node.SIZE/2);
+            switch (direction) {
+                case Direction.TOP, Direction.BOTTOM ->
+                    gc.strokeLine(fromX + shift, fromY, toX + shift, toY);
+                case Direction.RIGHT, Direction.LEFT ->
+                    gc.strokeLine(fromX, fromY + shift, toX, toY + shift);
+            }
+        }
         if (preview) {
             gc.setGlobalAlpha(1.0);
         }

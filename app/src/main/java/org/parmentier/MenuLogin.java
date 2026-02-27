@@ -2,13 +2,14 @@ package org.parmentier;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Button;
+import javafx.scene.canvas.GraphicsContext;
 import java.io.IOException;
 import java.net.URL;
 import org.json.simple.JSONArray;
@@ -16,14 +17,15 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import java.io.FileReader;
 import java.io.FileWriter;
-import javafx.scene.control.Button;
+import org.parmentier.game.Game;
+import org.parmentier.game.MainMenu;
 
 public class MenuLogin extends Menu {
     private ObservableList<String> logins = FXCollections.observableArrayList();
     private final String jsonPath = "src/main/resources/userName.json";
-    private org.parmentier.game.Game game;
+    private Game game;
 
-    public MenuLogin(org.parmentier.game.Game game) {
+    public MenuLogin(Game game) {
         this.game = game;
         loadLoginsFromJson();
     }
@@ -69,12 +71,14 @@ public class MenuLogin extends Menu {
     }
 
     @Override
-    public void levelScene(StackPane interfaceLogin) {
+    public void initialize(StackPane interfaceLogin) {
         try {
             URL fxmlLocation = getClass().getResource("/SceneBuilderMenuLogin.fxml");
             FXMLLoader loader = new FXMLLoader(fxmlLocation);
             loader.setController(this);
             Parent root = loader.load();
+
+            interfaceLogin.getStylesheets().add(getClass().getResource("/app.css").toExternalForm());
 
             listView.setItems(logins);
 
@@ -91,6 +95,21 @@ public class MenuLogin extends Menu {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void update(double deltaTime, StackPane uiLayer) {
+        //
+    }
+
+    @Override
+    public void render(GraphicsContext gc, StackPane uiLayer){
+        //
+    }
+
+    @Override
+    public void destroy() {
+        saveLoginsToJson();
     }
 
     private void FilterOrSuggestCreation(String search) {
@@ -129,7 +148,7 @@ public class MenuLogin extends Menu {
         
         if (selected != null) {
             selection(selected);   
-            this.game.getSceneManager().pushScene(new MenuChoiceLevel());
+            this.game.getSceneManager().pushScene(new MainMenu());
         }
     }
 }

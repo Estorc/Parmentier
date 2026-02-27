@@ -1,28 +1,26 @@
+/** ********************************************************************************
+ * Represents a menu in the Parmentier puzzle game, serving as a base class for different
+ * types of menus such as the main menu, settings menu, and pause menu.
+ ***********************************************************************************
+ * @author Estorc
+ * @version v1.0
+ * @package org.parmentier
+ * @copyright Copyright (c) 2026 Parmentier's team GNU GENERAL PUBLIC LICENSE.
+ **********************************************************************************/
+/*                             This file is part of
+ *                                  Parmentier
+ *           (https://github.com/Estorc/Projet-Genie-Logiciel-L3-Parmentier)
+ ***********************************************************************************/
+
 package org.parmentier;
 
-import org.parmentier.game.Game;
-import org.parmentier.game.Level;
 import org.parmentier.game.Scene;
-import javafx.scene.Parent;
-import javafx.scene.layout.StackPane;
-import javafx.scene.canvas.GraphicsContext;
 
 
+/**
+ * Represents a menu in the Parmentier puzzle game, serving as a base class for different
+ * types of menus such as the main menu, settings menu, and pause menu.
+ */
 public abstract class Menu implements Scene{
-    private boolean initialized = false;
 
-    @Override
-    public void update(double deltaTime, StackPane menuInterface) {
-        if (!initialized) {
-            levelScene(menuInterface);
-            initialized = true;
-        }
-    }
-
-    public abstract void levelScene(StackPane menuInterface);
-
-    @Override
-    public void render(GraphicsContext gc, StackPane uiLayer){
-        
-    }
 }

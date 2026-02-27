@@ -6,34 +6,16 @@
  * @author Estorc
  * @version v1.0
  * @package org.parmentier.level
- * @copyright Copyright (c) 2026 Parmentier MIT License.
+ * @copyright Copyright (c) 2026 Parmentier's team GNU GENERAL PUBLIC LICENSE.
  **********************************************************************************/
 /*                             This file is part of
  *                                  Parmentier
  *           (https://github.com/Estorc/Projet-Genie-Logiciel-L3-Parmentier)
- ***********************************************************************************
- * Copyright (c) 2026 Parmentier.
- * This file is licensed under the MIT License.
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
  ***********************************************************************************/
 
 package org.parmentier.level;
 
-import java.io.FileNotFoundException;
+import java.io.IOException;
 
 /**
  * Represents a level in the Parmentier puzzle game.
@@ -52,32 +34,36 @@ public class GridData {
     /**
      * Constructs a Level object by loading the level data from the specified file.
      * 
-     * @param filename The name of the file containing the level data.
+     * @param path The path of the file containing the level data.
      */
-    public GridData(String filename) {
-        levelArray = loadLevelFromFile(filename);
+    public GridData(java.nio.file.Path path) {
+        levelArray = loadLevelFromFile(path);
     }
 
     /**
      * Loads the level data from a text file and constructs the 2D array of nodes.
      * 
-     * @param filename The name of the file containing the level data.
+     * @param path The path of the file containing the level data.
      * @return A 2D array of Node objects representing the level.
      */
-    private Node[][] loadLevelFromFile(String filename) {
+    private Node[][] loadLevelFromFile(java.nio.file.Path path) {
         try {
-            java.nio.file.Path path = java.nio.file.Paths.get(getClass().getClassLoader().getResource(filename).toURI());
             String content = new String(java.nio.file.Files.readAllBytes(path));
-            String[] lines = content.split("\n");
-            Node[][] array = new Node[lines.length][];
-            
-            for (int i = 0; i < lines.length; i++) {
+            String[] parts = content.split("-\n"); // sépare la sauvegarde des noeuds et des ponts
+            String[] node_lines = parts[0].split("\n");
+            String[] bridge_lines = parts[1].split("\n");
+            Node[][] array = new Node[node_lines.length][];
+
+            // chargement des nodes sauvegardés et des bridges possibles horizontalement
+            for (int i = 0; i < node_lines.length; i++) {
                 Node lastNode = null;
-                for (int j = 0; j < lines[i].length(); j++) {
-                    int value = Character.getNumericValue(lines[i].charAt(j));
-                    array[i] = array[i] == null ? new Node[lines[i].length()] : array[i];
+                for (int j = 0; j < node_lines[i].length(); j++) {
+                    int value = Character.getNumericValue(node_lines[i].charAt(j));
+                    array[i] = array[i] == null ? new Node[node_lines[i].length()] : array[i];
                     if (value > 0) {
+                        // création de node
                         array[i][j] = new Node(j, i, value);
+                        // création de bridge possible
                         if (lastNode != null) {
                             lastNode.addBridgeTo(array[i][j]);
                         }
@@ -86,9 +72,10 @@ public class GridData {
                 }
             }
 
-            for (int j = 0; j < lines[0].length(); j++) {
+            // chargement de tous les bridges possibles verticalement
+            for (int j = 0; j < node_lines[0].length(); j++) {
                 Node lastNode = null;
-                for (int i = 0; i < lines.length; i++) {
+                for (int i = 0; i < node_lines.length; i++) {
                     if (array[i][j] != null) {
                         if (lastNode != null) {
                             lastNode.addBridgeTo(array[i][j]);
@@ -98,13 +85,69 @@ public class GridData {
                 }
             }
 
+            // chargement des bridges sauvegardés
+            for (int i = 0; i < node_lines.length; i ++) {
+                for (int j = 0; j < bridge_lines[i].length(); j+=4)
+                    // FORMAT: HDBG
+                    for(int k = 0; k < 4; k++){
+                        int state = Character.getNumericValue(bridge_lines[i].charAt(j + k)); // state is 0 (no bridge), 1 (one bridge) or 2 (two bridges)
+                        if(state != 0){
+                            Node from = array[i][j / 4];
+                            int dir = k;
+                            from.getBridge(dir).setState(state);
+                        }
+                    }
+            }
+
+
             return array;
-        } catch (FileNotFoundException e) {
-            System.err.println("Level file not found: " + filename);
+        } catch (IOException e) {
+            System.err.println("Level file not found: " + path);
             return new Node[0][0];
-        } catch (java.io.IOException | java.net.URISyntaxException e) {
-            System.err.println("Error reading level file: " + filename);
-            return new Node[0][0];
+        }
+    }
+
+    public void saveState() {
+        StringBuilder nodeBuilder = new StringBuilder();
+        StringBuilder bridgeBuilder = new StringBuilder();
+        for (Node[] row : levelArray) {
+            for (Node node : row) {
+                if (node != null) {
+                    nodeBuilder.append(node.getValue());
+                    for (int dir = 0; dir < 4; dir++) {
+                        Bridge bridge = node.getBridge(dir);
+                        if (bridge != null) {
+                            bridgeBuilder.append(bridge.getState());
+                        } else {
+                            bridgeBuilder.append('0');
+                        }
+                    }
+                } else {
+                    nodeBuilder.append('0');
+                    bridgeBuilder.append("0000");
+                }
+            }
+            nodeBuilder.append('\n');
+            bridgeBuilder.append('\n');
+        }
+        String saveData = nodeBuilder.toString() + "-\n" + bridgeBuilder.toString();
+        // create save.txt if it doesn't exist
+        java.nio.file.Path path = java.nio.file.Paths.get("save.txt");
+        if (!java.nio.file.Files.exists(path)) {
+            try {
+                java.nio.file.Files.createFile(path);
+            } catch (java.io.IOException e) {
+                System.err.println("Error creating save file: " + e.getMessage());
+                return;
+            }
+        }
+        // save to file
+        try {
+            path = java.nio.file.Paths.get("save.txt");
+            java.nio.file.Files.write(path, saveData.getBytes());
+            System.out.println("Game state saved to save.txt");
+        } catch (java.io.IOException e) {
+            System.err.println("Error saving game state: " + e.getMessage());
         }
     }
 
