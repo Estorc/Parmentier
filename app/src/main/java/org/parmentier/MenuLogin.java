@@ -16,14 +16,21 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import java.io.FileReader;
 import java.io.FileWriter;
+import javafx.scene.control.Button;
 
 public class MenuLogin extends Menu {
     private ObservableList<String> logins = FXCollections.observableArrayList();
     private final String jsonPath = "src/main/resources/userName.json";
+    private org.parmentier.game.Game game;
 
-    public MenuLogin() {
+    public MenuLogin(org.parmentier.game.Game game) {
+        this.game = game;
         loadLoginsFromJson();
     }
+
+    @FXML private TextField searchBar;
+    @FXML private ListView<String> listView;
+    @FXML private Button btnValider;
    
     private void loadLoginsFromJson() {
         try {
@@ -61,9 +68,6 @@ public class MenuLogin extends Menu {
         }
     }
 
-    @FXML private TextField searchBar;
-    @FXML private ListView<String> listView;
-
     @Override
     public void levelScene(StackPane interfaceLogin) {
         try {
@@ -78,10 +82,8 @@ public class MenuLogin extends Menu {
                 FilterOrSuggestCreation(newVal);
             });
 
-            listView.getSelectionModel().selectedItemProperty().addListener((observable, oldVal, select) -> {
-                if (select != null) {
-                    selection(select);
-                }
+            btnValider.setOnAction(event -> {
+                handleValidation();
             });
 
             interfaceLogin.getChildren().clear();
@@ -96,7 +98,7 @@ public class MenuLogin extends Menu {
             listView.setItems(logins);
         }
         else {
-            String s = search.toLowerCase();
+            String s = search.toLowerCase().trim();
             ObservableList<String> res = logins.filtered(pseudo -> pseudo.toLowerCase().contains(s));
 
             if (res.isEmpty()) {
@@ -108,15 +110,26 @@ public class MenuLogin extends Menu {
     }
 
     private void selection(String select) {
+        String newName;
+
         if (select.startsWith("Créer : ")) {
-            String newName = select.replace("Créer : ", "").trim();
+            newName = select.replace("Créer : ", "").trim();
             if (!logins.contains(newName)) {
                 logins.add(newName);
                 saveLoginsToJson();
-                searchBar.clear();
             }
+        } else {
+            newName = select;
         }
-        //ajout redirection menu principal 
         searchBar.clear();
+    }
+
+    private void handleValidation() {
+        String selected = listView.getSelectionModel().getSelectedItem();
+        
+        if (selected != null) {
+            selection(selected);   
+            this.game.getSceneManager().pushScene(new MenuChoiceLevel());
+        }
     }
 }
