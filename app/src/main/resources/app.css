@@ -75,3 +75,8 @@
     -fx-translate-y: 1; 
 }
 
+.textUser{
+    -fx-font-family: 'Lexend Light'; 
+    -fx-font-size: 16px;
+    -fx-text-fill: #2c3e50;
+}
