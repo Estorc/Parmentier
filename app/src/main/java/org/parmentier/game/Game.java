@@ -71,6 +71,8 @@ public class Game {
      */
     public static final int HEIGHT = 600;
 
+    private String currentUserName;
+
     /**
      * Constructs a new Game instance and initializes the SceneManager. The constructor
      * also sets the singleton instance of the Game class to this newly created instance.
@@ -187,5 +189,13 @@ public class Game {
             sceneManager.clearScenes();
         });
         sceneManager.activeScene().initialize(uiLayer);
+    }
+
+    public void setCurrentUserName(String name) {
+        this.currentUserName = name;
+    }
+
+    public String getCurrentUserName() {
+        return this.currentUserName;
     }
 }

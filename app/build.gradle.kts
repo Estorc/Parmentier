@@ -24,6 +24,11 @@ dependencies {
 
     // This dependency is used by the application.
     implementation(libs.guava)
+    
+    // dependancy json-simple
+    implementation("com.googlecode.json-simple:json-simple:1.1.1")
+    // dependancy jackson-databind
+    implementation("com.fasterxml.jackson.core:jackson-databind:2.17.1")
 }
 
 // Apply a specific Java toolchain to ease working on different environments.
