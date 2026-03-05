@@ -15,9 +15,9 @@ public class MenuFinNiveau implements org.parmentier.game.Scene {
     private String deltaTime;
     private Integer score;
 
-    public MenuFinNiveau(String time) {
+    public MenuFinNiveau(String time, Integer score) {
         this.deltaTime = time;
-        this.score = 42;
+        this.score = score;
     }
 
     @Override
