@@ -12,26 +12,38 @@
  *           (https://github.com/estorc/projet-genie-logiciel-l3-parmentier)
  ***********************************************************************************/
 
-package org.parmentier.game.hint;
-import java.util.function.Supplier;
+package org.parmentier.hint;
+import org.parmentier.level.GridData;
+import java.util.function.Function;
+
 
 class Hint {
     private String hintText; // The text of the hint
     private Integer hintCost; // Cost in points or other in-game currency
     private Integer weight; // Weight for random selection, higher means more likely to be selected
-    private Supplier<Boolean> condition; // Condition to determine if the hint is available
+    private Boolean enabled; // Whether the hint is currently enabled or not
+    private Function<GridData, Boolean> condition; // Condition to determine if the hint is available
 
-    public Hint(String hintText , Integer hintCost, Integer weight, Supplier<Boolean> condition) {
+    public Hint(String hintText , Integer hintCost, Integer weight, Function<GridData, Boolean> condition) {
         this.hintCost = hintCost;
         this.weight = weight;
         this.condition = condition;
         this.hintText = hintText;
+        this.enabled = true; // By default, hints are enabled
     }
 
 
-    public boolean isAvailable() {
+    public boolean isAvailable(GridData grid) {
         // Logic to check if the hint is available based on the condition
-        return condition == null || condition.get();
+        return condition == null || condition.apply(grid);
+    }
+
+    public void setEnabled(Boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    public Boolean isEnabled() {
+        return enabled;
     }
 
     public Integer getCost() {
