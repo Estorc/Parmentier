@@ -239,7 +239,6 @@ public class Level implements org.parmentier.game.Scene {
 
 
         uiLayer.setOnMouseMoved(e -> {
-            System.out.println("Mouse moved: " + e.getX()/scaleFactor + ", " + e.getY()/scaleFactor);
             tryConnectClosest((e.getX() - xShift)/scaleFactor, (e.getY() - yShift)/scaleFactor);
         });
 
