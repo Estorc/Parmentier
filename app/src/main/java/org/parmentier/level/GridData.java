@@ -16,6 +16,7 @@
 package org.parmentier.level;
 
 import java.io.IOException;
+import java.util.List;
 
 /**
  * Represents a level in the Parmentier puzzle game.
@@ -106,6 +107,13 @@ public class GridData {
             System.err.println("Level file not found: " + path);
             return new Node[0][0];
         }
+    }
+
+    public List<Node> getNodes() {
+        return java.util.Arrays.stream(levelArray)
+            .flatMap(java.util.Arrays::stream)
+            .filter(node -> node != null)
+            .toList();
     }
 
     public void saveState() {
@@ -218,5 +226,21 @@ public class GridData {
      */
     public int getHeight() {
         return levelArray[0].length;
+    }
+
+    public boolean isCorner(Node node) {
+        long x = node.getPosition().getX();
+        long y = node.getPosition().getY();
+        return (x == 0 && y == 0) || (x == 0 && y == getHeight() - 1) || (x == getWidth() - 1 && y == 0) || (x == getWidth() - 1 && y == getHeight() - 1);
+    }
+
+    public boolean isEdge(Node node) {
+        long x = node.getPosition().getX();
+        long y = node.getPosition().getY();
+        return (x == 0 || y == 0 || x == getWidth() - 1 || y == getHeight() - 1) && !isCorner(node);
+    }
+
+    public boolean isCenter(Node node) {
+        return !isEdge(node) && !isCorner(node);
     }
 }
