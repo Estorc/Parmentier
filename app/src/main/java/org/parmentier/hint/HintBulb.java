@@ -46,7 +46,7 @@ public class HintBulb {
                     .filter(node -> grid.isCorner(node) && node.getValue() == Bridge.MAX_STATE * 2) // Only consider islands in corners
                     .anyMatch(node -> {
                         int requiredBridges = node.getValue(); // Get the required number of bridges for this island
-                        int existingBridges = node.getBridges().size(); // Get the number of existing bridges
+                        int existingBridges = node.getBridges().stream().reduce(0, (sum, bridge) -> sum + bridge.getState(), Integer::sum); // Get the total number of existing bridges
                         return existingBridges < requiredBridges; // Check if there are still bridges needed
                     });
                 }),
@@ -57,7 +57,7 @@ public class HintBulb {
                     .filter(node -> grid.isEdge(node) && node.getValue() == Bridge.MAX_STATE * 3) // Only consider islands in corners
                     .anyMatch(node -> {
                         int requiredBridges = node.getValue(); // Get the required number of bridges for this island
-                        int existingBridges = node.getBridges().size(); // Get the number of existing bridges
+                        int existingBridges = node.getBridges().stream().reduce(0, (sum, bridge) -> sum + bridge.getState(), Integer::sum); // Get the number of existing bridges
                         return existingBridges < requiredBridges; // Check if there are still bridges needed
                     });
                 }),
@@ -68,7 +68,7 @@ public class HintBulb {
                     .filter(node -> grid.isCenter(node) && node.getValue() == Bridge.MAX_STATE * 4) // Only consider islands in corners
                     .anyMatch(node -> {
                         int requiredBridges = node.getValue(); // Get the required number of bridges for this island
-                        int existingBridges = node.getBridges().size(); // Get the number of existing bridges
+                        int existingBridges = node.getBridges().stream().reduce(0, (sum, bridge) -> sum + bridge.getState(), Integer::sum); // Get the number of existing bridges
                         return existingBridges < requiredBridges; // Check if there are still bridges needed
                     });
                 })
