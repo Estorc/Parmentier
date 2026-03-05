@@ -27,6 +27,8 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
+import javafx.scene.control.Button;
+import javafx.scene.layout.HBox;
 import javafx.util.Duration;
 
 /**
@@ -84,6 +86,9 @@ public class Level implements org.parmentier.game.Scene {
      * the current elapsed time in minutes and seconds.
      */
     private Label stopwatchLabel;
+
+    private Button checkButton;
+    private Button helpButton;
 
     /**
      * Attempts to connect two nodes with a bridge, checking for valid connections and potential intersections with existing bridges.
@@ -186,6 +191,13 @@ public class Level implements org.parmentier.game.Scene {
         stopwatch.play();
     }
 
+
+    private void helpButton(){
+        helpButton = new Button("Aide");
+        helpButton.getStyleClass().add("button");
+        helpButton.setOnMouseClicked( e -> System.exit(0));
+    }
+
     /**
      * Initializes the level scene by setting up the UI elements, loading the level data, and configuring user interactions.
      * @param uiLayer The StackPane that serves as the UI layer for the level scene.
@@ -205,10 +217,13 @@ public class Level implements org.parmentier.game.Scene {
         level = new GridData(levelPath);
        
         startStopwatch();
+        helpButton();
+
         StackPane.setAlignment(stopwatchLabel, javafx.geometry.Pos.TOP_CENTER);
+        StackPane.setAlignment(helpButton, javafx.geometry.Pos.TOP_RIGHT);
+        uiLayer.getChildren().add(helpButton);
         
         uiLayer.getChildren().add(stopwatchLabel);
-
 
         for (int i = 0; i < level.getWidth(); i++) {
             for (int j = 0; j < level.getHeight(); j++) {
