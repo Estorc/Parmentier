@@ -35,8 +35,8 @@ public class HintBulb {
                     .filter(node -> node.getBridges().size() == 1) // Only consider islands with one neighbor
                     .anyMatch(node -> {
                         int requiredBridges = node.getValue(); // Get the required number of bridges for this island
-                        int existingBridges = node.getBridges().size(); // Get the number of existing
-                        return existingBridges < requiredBridges; // Check if there are still bridges needed
+                        int existingBridges = node.getBridges().getFirst().getState();                        
+                          return existingBridges < requiredBridges; // Check if there are still bridges needed
                     });
             }),
             new Hint("Une île placée dans un coin ne peut avoir que deux voisins." +
@@ -46,7 +46,7 @@ public class HintBulb {
                     .filter(node -> grid.isCorner(node) && node.getValue() == Bridge.MAX_STATE * 2) // Only consider islands in corners
                     .anyMatch(node -> {
                         int requiredBridges = node.getValue(); // Get the required number of bridges for this island
-                        int existingBridges = node.getBridges().size(); // Get the number of existing bridges
+                        int existingBridges = node.getBridges().stream().reduce(0, (sum, bridge) -> sum + bridge.getState(), Integer::sum); // Get the total number of existing bridges
                         return existingBridges < requiredBridges; // Check if there are still bridges needed
                     });
                 }),
@@ -57,7 +57,7 @@ public class HintBulb {
                     .filter(node -> grid.isEdge(node) && node.getValue() == Bridge.MAX_STATE * 3) // Only consider islands in corners
                     .anyMatch(node -> {
                         int requiredBridges = node.getValue(); // Get the required number of bridges for this island
-                        int existingBridges = node.getBridges().size(); // Get the number of existing bridges
+                        int existingBridges = node.getBridges().stream().reduce(0, (sum, bridge) -> sum + bridge.getState(), Integer::sum); // Get the number of existing bridges
                         return existingBridges < requiredBridges; // Check if there are still bridges needed
                     });
                 }),
@@ -68,7 +68,7 @@ public class HintBulb {
                     .filter(node -> grid.isCenter(node) && node.getValue() == Bridge.MAX_STATE * 4) // Only consider islands in corners
                     .anyMatch(node -> {
                         int requiredBridges = node.getValue(); // Get the required number of bridges for this island
-                        int existingBridges = node.getBridges().size(); // Get the number of existing bridges
+                        int existingBridges = node.getBridges().stream().reduce(0, (sum, bridge) -> sum + bridge.getState(), Integer::sum); // Get the number of existing bridges
                         return existingBridges < requiredBridges; // Check if there are still bridges needed
                     });
                 })
@@ -93,6 +93,8 @@ public class HintBulb {
             return null; // No hints available
         }
         Random random = new Random();
+
+        System.out.println("Checking available hints...");
         
         // Calculate the total weight of all available hints
         int totalWeight = hints.stream()
@@ -104,6 +106,8 @@ public class HintBulb {
         if (totalWeight == 0) {
             return null; // No available hints
         }
+
+        System.out.println("Total weight of available hints: " + totalWeight);
 
         // Generate a random number between 0 and totalWeight
         int randomWeight = random.nextInt(totalWeight);

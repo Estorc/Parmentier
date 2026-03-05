@@ -5,8 +5,9 @@
 > Task :app:run
 Welcome to Parmentier!
 Initializing level scene...
+Checking available hints...
 Window is closing...
 Game state saved to save.txt
 
-BUILD SUCCESSFUL in 11s
+BUILD SUCCESSFUL in 18s
 3 actionable tasks: 1 executed, 2 up-to-date
