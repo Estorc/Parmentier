@@ -153,6 +153,17 @@ public class Node {
     }
 
     /**
+     * Checks whether the node's current bridges correspond to the solution
+     */
+    public boolean checkState(){
+        boolean result = true;
+        for (Bridge b : bridges) {
+            result = result && b.checkState(); // every bridge must return true
+        }
+        return result;
+    }
+
+    /**
      * Draws the node on the provided GraphicsContext at the specified offset.
      * @param gc The GraphicsContext to draw on.
      */
