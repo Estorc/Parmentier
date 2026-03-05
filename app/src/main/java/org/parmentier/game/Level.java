@@ -196,6 +196,11 @@ public class Level implements org.parmentier.game.Scene {
         stopwatch.play();
     }
 
+    private String getStopwatchTime() {
+        int minutes = elapsedSeconds / 60;
+        int seconds = elapsedSeconds % 60;
+        return String.format("%02d:%02d", minutes, seconds);
+    }
 
     private void helpButton(){
         helpButton = new Button("Aide");
@@ -279,12 +284,16 @@ public class Level implements org.parmentier.game.Scene {
         uiLayer.getChildren().add(check);
 
         check.setOnMouseClicked(e -> {
-            Game.getInstance().getSceneManager().pushScene(new MenuFinNiveau(getStopwatchTime(), 42));
-            /*if (level.isCompleted()) {
-                Game.getInstance().getSceneManager().pushScene(new MenuFinNiveau());
+            Boolean status = level.checkState();
+            if (status) {
+                Game.getInstance().getSceneManager().pushScene(new MenuFinNiveau(getStopwatchTime(), 42));
             } else {
-                System.out.println("Level not completed yet. Keep trying!");
-            }*/
+                Alert gridStat = new Alert(Alert.AlertType.INFORMATION);
+                gridStat.setTitle("Résultat de la vérification");
+                gridStat.setHeaderText(null);
+                gridStat.setContentText("Le niveau n'est pas encore complété. Continuez à essayer !");
+                gridStat.showAndWait();
+            }
         });
     }
 
