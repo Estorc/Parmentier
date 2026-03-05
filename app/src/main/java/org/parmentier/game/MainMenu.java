@@ -33,16 +33,19 @@ public class MainMenu implements org.parmentier.game.Scene {
         Button settings = new Button("Paramètres");
         Button leave = new Button("Quitter");
         Label titleLabel = new Label("Parmentier");
+        Label currentuser = new Label("Bienvenu " + Game.getInstance().getCurrentUserName());
         titleLabel.getStyleClass().add("title-label");
         jouer.getStyleClass().add("button");
         settings.getStyleClass().add("button");
         leave.getStyleClass().add("button");
+        currentuser.getStyleClass().add("textUser");
 
         buttonBox.getChildren().add(jouer);
         buttonBox.getChildren().add(settings);
         buttonBox.getChildren().add(leave);
         buttonBox.setAlignment(javafx.geometry.Pos.CENTER);
         layout.getChildren().add(titleLabel);
+        layout.getChildren().add(currentuser);
         layout.getChildren().add(buttonBox);
         uiLayer.getChildren().add(layout);
         uiLayer.getStylesheets().add(getClass().getResource("/app.css").toExternalForm());

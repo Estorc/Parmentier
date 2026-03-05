@@ -366,7 +366,7 @@ public class Parmentier extends Application {
     @Override
     public void start(javafx.stage.Stage primaryStage) {
         Game game = new Game();
-        game.getSceneManager().pushScene(new MainMenu());
+        game.getSceneManager().pushScene(new MenuLogin(game));
         game.start(primaryStage);
     }
 
