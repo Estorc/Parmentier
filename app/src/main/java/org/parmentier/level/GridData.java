@@ -90,17 +90,18 @@ public class GridData {
             // chargement des bridges sauvegardés
             for (int i = 0; i < node_lines.length; i ++) {
                 for (int j = 0; j < bridge_lines[i].length(); j+=4)
-                    // FORMAT: HDBG
-                    for(int k = 0; k < 4; k++){
+                    // FORMAT: HAUT-DROIT
+                    for(int k = 0; k < 2; k++){
                         int state = Character.getNumericValue(bridge_lines[i].charAt(j + k)); // state is 0 (no bridge), 1 (one bridge) or 2 (two bridges)
-                        if(state != 0){
-                            Node from = array[i][j / 4];
+                        int solution = Character.getNumericValue(bridge_lines[i].charAt(j + k + 2));
+                        if(state != 0) {
+                            Node from = array[i][j / 2];
                             int dir = k;
                             from.getBridge(dir).setState(state);
+                            from.getBridge(dir).setSolutionState(solution);
                         }
                     }
             }
-
 
             return array;
         } catch (IOException e) {
@@ -115,6 +116,10 @@ public class GridData {
             .filter(node -> node != null)
             .toList();
     }
+
+    /**
+     * TODO: change saveState to correspond to the new loading system
+     */
 
     public void saveState() {
         StringBuilder nodeBuilder = new StringBuilder();
@@ -158,6 +163,23 @@ public class GridData {
         } catch (java.io.IOException e) {
             System.err.println("Error saving game state: " + e.getMessage());
         }
+    }
+
+    /**
+     * Checks if the current state of the level is equal to the saved solution.
+     * 
+     */
+    public boolean checkState() {
+        boolean result = true;
+        for (Node[] row : levelArray) {
+            for (Node node : row) {
+                if (node != null){ 
+                    result = result && node.checkState();
+                }
+            }
+        }
+        System.out.println(result);
+        return result;
     }
 
     /**

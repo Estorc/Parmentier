@@ -19,7 +19,7 @@ import java.util.Random;
 import org.parmentier.level.Bridge;
 import org.parmentier.level.GridData;
 
-class HintBulb {
+public class HintBulb {
     private List<Hint> hints;
     private static HintBulb instance;
     private HintBulb(List<Hint> hints) {
