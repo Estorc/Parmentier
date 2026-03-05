@@ -196,7 +196,6 @@ public class Level implements org.parmentier.game.Scene {
         stopwatch.play();
     }
 
-
     private void helpButton(){
         helpButton = new Button("Aide");
         helpButton.getStyleClass().add("button");
