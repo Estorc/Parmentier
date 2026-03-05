@@ -20,6 +20,8 @@ import java.util.List;
 import org.parmentier.level.Bridge;
 import org.parmentier.level.GridData;
 import org.parmentier.level.Node;
+import org.parmentier.hint.HintBulb;
+import org.parmentier.hint.Hint;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -28,6 +30,9 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
+import javafx.scene.control.Button;
+import javafx.scene.control.Alert;
+import javafx.scene.layout.HBox;
 import javafx.util.Duration;
 
 
@@ -86,6 +91,9 @@ public class Level implements org.parmentier.game.Scene {
      * the current elapsed time in minutes and seconds.
      */
     private Label stopwatchLabel;
+
+    private Button checkButton;
+    private Button helpButton;
 
     /**
      * Attempts to connect two nodes with a bridge, checking for valid connections and potential intersections with existing bridges.
@@ -188,10 +196,32 @@ public class Level implements org.parmentier.game.Scene {
         stopwatch.play();
     }
 
-    public String getStopwatchTime() {
+    private String getStopwatchTime() {
         int minutes = elapsedSeconds / 60;
         int seconds = elapsedSeconds % 60;
         return String.format("%02d:%02d", minutes, seconds);
+    }
+
+    private void helpButton(){
+        helpButton = new Button("Aide");
+        helpButton.getStyleClass().add("button");
+        helpButton.setOnMouseClicked(e -> {
+            HintBulb hintBulb = org.parmentier.hint.HintBulb.get();
+            Hint hint = hintBulb.getRandomHint(level);
+            if (hint != null) {
+                Alert alert = new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.INFORMATION);
+                alert.setTitle("Aide");
+                alert.setHeaderText(null);
+                alert.setContentText(hint.getHintText());
+                alert.showAndWait();
+            } else {
+                Alert alert = new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.INFORMATION);
+                alert.setTitle("Aide");
+                alert.setHeaderText(null);
+                alert.setContentText("Aucune aide disponible.");
+                alert.showAndWait();
+            }
+        });
     }
 
     /**
@@ -213,10 +243,13 @@ public class Level implements org.parmentier.game.Scene {
         level = new GridData(levelPath);
        
         startStopwatch();
+        helpButton();
+
         StackPane.setAlignment(stopwatchLabel, javafx.geometry.Pos.TOP_CENTER);
+        StackPane.setAlignment(helpButton, javafx.geometry.Pos.TOP_RIGHT);
+        uiLayer.getChildren().add(helpButton);
         
         uiLayer.getChildren().add(stopwatchLabel);
-
 
         for (int i = 0; i < level.getWidth(); i++) {
             for (int j = 0; j < level.getHeight(); j++) {
@@ -251,12 +284,16 @@ public class Level implements org.parmentier.game.Scene {
         uiLayer.getChildren().add(check);
 
         check.setOnMouseClicked(e -> {
-            Game.getInstance().getSceneManager().pushScene(new MenuFinNiveau(getStopwatchTime()));
-            /*if (level.isCompleted()) {
-                Game.getInstance().getSceneManager().pushScene(new MenuFinNiveau());
+            Boolean status = level.checkState();
+            if (status) {
+                Game.getInstance().getSceneManager().pushScene(new MenuFinNiveau(getStopwatchTime(), 42));
             } else {
-                System.out.println("Level not completed yet. Keep trying!");
-            }*/
+                Alert gridStat = new Alert(Alert.AlertType.INFORMATION);
+                gridStat.setTitle("Résultat de la vérification");
+                gridStat.setHeaderText(null);
+                gridStat.setContentText("Le niveau n'est pas encore complété. Continuez à essayer !");
+                gridStat.showAndWait();
+            }
         });
     }
 
