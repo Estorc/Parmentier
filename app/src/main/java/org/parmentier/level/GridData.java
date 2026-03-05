@@ -87,19 +87,28 @@ public class GridData {
             }
 
             // chargement des bridges sauvegardés
-            for (int i = 0; i < node_lines.length; i ++) {
-                for (int j = 0; j < bridge_lines[i].length(); j+=4)
-                    // FORMAT: HAUT-DROIT
-                    for(int k = 0; k < 2; k++){
-                        int state = Character.getNumericValue(bridge_lines[i].charAt(j + k)); // state is 0 (no bridge), 1 (one bridge) or 2 (two bridges)
-                        int solution = Character.getNumericValue(bridge_lines[i].charAt(j + k + 2));
-                        if(state != 0) {
-                            Node from = array[i][j / 2];
-                            int dir = k;
-                            from.getBridge(dir).setState(state);
-                            from.getBridge(dir).setSolutionState(solution);
-                        }
+            for (int i = 0; i < node_lines.length; i++) {
+                for (int j = 0; j < bridge_lines[i].length(); j += 4) {
+
+                    int col = j / 4;
+                    Node from = array[i][col];
+                    if (from == null) continue;
+
+                    int upState = Character.getNumericValue(bridge_lines[i].charAt(j));
+                    int upSolution = Character.getNumericValue(bridge_lines[i].charAt(j + 1));
+                    int rightState = Character.getNumericValue(bridge_lines[i].charAt(j + 2));
+                    int rightSolution = Character.getNumericValue(bridge_lines[i].charAt(j + 3));
+
+                    if (upState != 0) {
+                        from.getBridge(0).setState(upState);
+                        from.getBridge(0).setSolutionState(upSolution);
                     }
+
+                    if (rightState != 0) {
+                        from.getBridge(1).setState(rightState);
+                        from.getBridge(1).setSolutionState(rightSolution);
+                    }
+                }
             }
 
             return array;
@@ -109,69 +118,71 @@ public class GridData {
         }
     }
 
-    /**
-     * to do: change saveState to correspond to the new loading system
-     */
-
     public void saveState() {
         StringBuilder nodeBuilder = new StringBuilder();
         StringBuilder bridgeBuilder = new StringBuilder();
-        for (Node[] row : levelArray) {
-            for (Node node : row) {
+
+        for (int i = 0; i < levelArray.length; i++) {
+            for (int j = 0; j < levelArray[i].length; j++) {
+                Node node = levelArray[i][j];
+
                 if (node != null) {
                     nodeBuilder.append(node.getValue());
-                    for (int dir = 0; dir < 4; dir++) {
-                        Bridge bridge = node.getBridge(dir);
-                        if (bridge != null) {
-                            bridgeBuilder.append(bridge.getState());
-                        } else {
-                            bridgeBuilder.append('0');
-                        }
+                    Bridge up = node.getBridge(0);
+                    if (up != null) {
+                        bridgeBuilder.append(up.getState());
+                        bridgeBuilder.append(up.getSolutionState());
+                    } else {
+                        bridgeBuilder.append("00");
                     }
+                    Bridge right = node.getBridge(1);
+                    if (right != null) {
+                        bridgeBuilder.append(right.getState());
+                        bridgeBuilder.append(right.getSolutionState());
+                    } else {
+                        bridgeBuilder.append("00");
+                    }
+
                 } else {
                     nodeBuilder.append('0');
                     bridgeBuilder.append("0000");
                 }
             }
+
             nodeBuilder.append('\n');
             bridgeBuilder.append('\n');
         }
+
         String saveData = nodeBuilder.toString() + "-\n" + bridgeBuilder.toString();
-        // create save.txt if it doesn't exist
         java.nio.file.Path path = java.nio.file.Paths.get("save.txt");
-        if (!java.nio.file.Files.exists(path)) {
-            try {
-                java.nio.file.Files.createFile(path);
-            } catch (java.io.IOException e) {
-                System.err.println("Error creating save file: " + e.getMessage());
-                return;
-            }
-        }
-        // save to file
         try {
-            path = java.nio.file.Paths.get("save.txt");
+            if (!java.nio.file.Files.exists(path)) {
+                java.nio.file.Files.createFile(path);
+            }
             java.nio.file.Files.write(path, saveData.getBytes());
             System.out.println("Game state saved to save.txt");
+
         } catch (java.io.IOException e) {
             System.err.println("Error saving game state: " + e.getMessage());
         }
     }
 
     /**
-     * Checks if the current state of the level is equal to the saved solution.
-     * 
+     * Returns the amount of errors in the current state compared to the solution.
      */
-    public boolean checkState() {
-        boolean result = true;
+    public int checkState() {
+        int errors = 0;
         for (Node[] row : levelArray) {
             for (Node node : row) {
                 if (node != null){ 
-                    result = result && node.checkState();
+                    if (node.checkState() == false){
+                        errors++;
+                    }
                 }
             }
         }
-        System.out.println(result);
-        return result;
+        System.out.println(errors);
+        return errors;
     }
 
     /**

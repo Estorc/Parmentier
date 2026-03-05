@@ -269,6 +269,7 @@ public class Level implements org.parmentier.game.Scene {
             stopwatch.stop();
         }
         level.saveState();
+        level.checkState();
     }
 
     /**
