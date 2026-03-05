@@ -148,6 +148,10 @@ public class MenuLogin extends Menu {
         
         if (selected != null) {
             selection(selected);   
+
+            String finalName = selected.replace("Créer : ", "").trim();
+            this.game.setCurrentUserName(finalName);
+
             this.game.getSceneManager().pushScene(new MainMenu());
         }
     }
