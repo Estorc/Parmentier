@@ -24,10 +24,12 @@ import org.parmentier.level.Node;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
+
 
 /**
  * Represents a level in the Parmentier puzzle game, managing the game state, user interactions,
@@ -186,6 +188,12 @@ public class Level implements org.parmentier.game.Scene {
         stopwatch.play();
     }
 
+    public String getStopwatchTime() {
+        int minutes = elapsedSeconds / 60;
+        int seconds = elapsedSeconds % 60;
+        return String.format("%02d:%02d", minutes, seconds);
+    }
+
     /**
      * Initializes the level scene by setting up the UI elements, loading the level data, and configuring user interactions.
      * @param uiLayer The StackPane that serves as the UI layer for the level scene.
@@ -235,6 +243,20 @@ public class Level implements org.parmentier.game.Scene {
             } else if (!activeBridges.contains(selectedBridge)) {
                 activeBridges.add(selectedBridge);
             }
+        });
+        // My work...
+        Button check = new Button("Check");
+        check.getStyleClass().add("button");
+        StackPane.setAlignment(check, javafx.geometry.Pos.BOTTOM_CENTER);
+        uiLayer.getChildren().add(check);
+
+        check.setOnMouseClicked(e -> {
+            Game.getInstance().getSceneManager().pushScene(new MenuFinNiveau(getStopwatchTime()));
+            /*if (level.isCompleted()) {
+                Game.getInstance().getSceneManager().pushScene(new MenuFinNiveau());
+            } else {
+                System.out.println("Level not completed yet. Keep trying!");
+            }*/
         });
     }
 

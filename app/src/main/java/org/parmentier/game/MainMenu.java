@@ -24,6 +24,7 @@ public class MainMenu implements org.parmentier.game.Scene {
     public void initialize(StackPane uiLayer) {
         uiLayer.getChildren().clear();
         VBox layout = new VBox();
+        layout.getStyleClass().add("cachemisere");
         VBox buttonBox = new VBox();
         
         layout.setSpacing(20);
