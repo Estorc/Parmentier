@@ -17,7 +17,7 @@ import org.parmentier.level.GridData;
 import java.util.function.Function;
 
 
-class Hint {
+public class Hint {
     private String hintText; // The text of the hint
     private Integer hintCost; // Cost in points or other in-game currency
     private Integer weight; // Weight for random selection, higher means more likely to be selected

@@ -20,6 +20,8 @@ import java.util.List;
 import org.parmentier.level.Bridge;
 import org.parmentier.level.GridData;
 import org.parmentier.level.Node;
+import org.parmentier.hint.HintBulb;
+import org.parmentier.hint.Hint;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -28,6 +30,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.control.Button;
+import javafx.scene.control.Alert;
 import javafx.scene.layout.HBox;
 import javafx.util.Duration;
 
@@ -195,7 +198,23 @@ public class Level implements org.parmentier.game.Scene {
     private void helpButton(){
         helpButton = new Button("Aide");
         helpButton.getStyleClass().add("button");
-        helpButton.setOnMouseClicked( e -> System.exit(0));
+        helpButton.setOnMouseClicked(e -> {
+            HintBulb hintBulb = org.parmentier.hint.HintBulb.get();
+            Hint hint = hintBulb.getRandomHint(level);
+            if (hint != null) {
+                Alert alert = new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.INFORMATION);
+                alert.setTitle("Aide");
+                alert.setHeaderText(null);
+                alert.setContentText(hint.getHintText());
+                alert.showAndWait();
+            } else {
+                Alert alert = new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.INFORMATION);
+                alert.setTitle("Aide");
+                alert.setHeaderText(null);
+                alert.setContentText("Aucune aide disponible.");
+                alert.showAndWait();
+            }
+        });
     }
 
     /**
