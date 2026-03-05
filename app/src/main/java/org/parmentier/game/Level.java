@@ -279,7 +279,7 @@ public class Level implements org.parmentier.game.Scene {
         uiLayer.getChildren().add(check);
 
         check.setOnMouseClicked(e -> {
-            Game.getInstance().getSceneManager().pushScene(new MenuFinNiveau(getStopwatchTime(), 42));
+            Game.getInstance().getSceneManager().pushScene(new MenuFinNiveau("", 42));
             /*if (level.isCompleted()) {
                 Game.getInstance().getSceneManager().pushScene(new MenuFinNiveau());
             } else {

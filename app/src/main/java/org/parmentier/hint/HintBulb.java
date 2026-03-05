@@ -35,8 +35,8 @@ public class HintBulb {
                     .filter(node -> node.getBridges().size() == 1) // Only consider islands with one neighbor
                     .anyMatch(node -> {
                         int requiredBridges = node.getValue(); // Get the required number of bridges for this island
-                        int existingBridges = node.getBridges().size(); // Get the number of existing
-                        return existingBridges < requiredBridges; // Check if there are still bridges needed
+                        int existingBridges = node.getBridges().getFirst().getState();                        
+                          return existingBridges < requiredBridges; // Check if there are still bridges needed
                     });
             }),
             new Hint("Une île placée dans un coin ne peut avoir que deux voisins." +
@@ -93,6 +93,8 @@ public class HintBulb {
             return null; // No hints available
         }
         Random random = new Random();
+
+        System.out.println("Checking available hints...");
         
         // Calculate the total weight of all available hints
         int totalWeight = hints.stream()
@@ -104,6 +106,8 @@ public class HintBulb {
         if (totalWeight == 0) {
             return null; // No available hints
         }
+
+        System.out.println("Total weight of available hints: " + totalWeight);
 
         // Generate a random number between 0 and totalWeight
         int randomWeight = random.nextInt(totalWeight);
