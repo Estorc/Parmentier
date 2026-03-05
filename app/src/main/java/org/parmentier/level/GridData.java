@@ -49,6 +49,7 @@ public class GridData {
     private Node[][] loadLevelFromFile(java.nio.file.Path path) {
         try {
             String content = new String(java.nio.file.Files.readAllBytes(path));
+            content = content.replace("\r\n", "\n"); // règle les sauts de lignes sur windows
             String[] parts = content.split("-\n"); // sépare la sauvegarde des noeuds et des ponts
             String[] node_lines = parts[0].split("\n");
             String[] bridge_lines = parts[1].split("\n");
