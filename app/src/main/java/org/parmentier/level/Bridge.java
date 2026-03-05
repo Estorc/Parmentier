@@ -72,6 +72,11 @@ public class Bridge {
     private int state;
 
     /**
+     * The number of states a bridge has in the solution.
+     */
+    public int solution_state;
+
+    /**
      * The starting node of the bridge.
      */
     private final Node from;
@@ -154,11 +159,34 @@ public class Bridge {
     }
 
     /**
+     * Gets the state of the bridge in the solution.
+     * @return The current state of the bridge.
+     */
+    public int getSolutionState() {
+        return solution_state;
+    }
+
+    /**
+     * Sets the state of the bridge in the solution.
+     * @param state The new state of the bridge.
+     */
+    public void setSolutionState(int state) {
+        this.solution_state = state;
+    }
+
+    /**
      * Toggles the state of the bridge to the next state.
      * If the current state is the maximum state, it wraps around to 0.
      */
     public void toggleState() {
         this.state = (this.state + 1) % (MAX_STATE+1);
+    }
+
+    /**
+     * Checks whether the bridge's current state corresponds to its solution state 
+     */
+    public boolean checkState(){
+        return this.solution_state == this.state;
     }
 
     /**

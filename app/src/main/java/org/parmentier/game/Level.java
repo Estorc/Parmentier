@@ -26,6 +26,7 @@ import org.parmentier.hint.Hint;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
@@ -33,6 +34,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Alert;
 import javafx.scene.layout.HBox;
 import javafx.util.Duration;
+
 
 /**
  * Represents a level in the Parmentier puzzle game, managing the game state, user interactions,
@@ -269,6 +271,20 @@ public class Level implements org.parmentier.game.Scene {
             } else if (!activeBridges.contains(selectedBridge)) {
                 activeBridges.add(selectedBridge);
             }
+        });
+        // My work...
+        Button check = new Button("Check");
+        check.getStyleClass().add("button");
+        StackPane.setAlignment(check, javafx.geometry.Pos.BOTTOM_CENTER);
+        uiLayer.getChildren().add(check);
+
+        check.setOnMouseClicked(e -> {
+            Game.getInstance().getSceneManager().pushScene(new MenuFinNiveau(getStopwatchTime(), 42));
+            /*if (level.isCompleted()) {
+                Game.getInstance().getSceneManager().pushScene(new MenuFinNiveau());
+            } else {
+                System.out.println("Level not completed yet. Keep trying!");
+            }*/
         });
     }
 
