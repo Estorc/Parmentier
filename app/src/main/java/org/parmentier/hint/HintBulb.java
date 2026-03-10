@@ -71,6 +71,18 @@ public class HintBulb {
                         int existingBridges = node.getBridges().stream().reduce(0, (sum, bridge) -> sum + bridge.getState(), Integer::sum); // Get the number of existing bridges
                         return existingBridges < requiredBridges; // Check if there are still bridges needed
                     });
+                }),
+
+            new Hint("Une île au centre peut avoir quatre voisins." +
+                "Une île " + Bridge.MAX_STATE * 3 + " doit donc envoyer 1 pont vers chacun de ses 4 voisins et " + Bridge.MAX_STATE +
+                " ponts sur 2 voisins. L’île est alors complète.", 25, 1, (grid) -> {
+                return grid.getNodes().stream()
+                    .filter(node -> grid.isCenter(node) && node.getValue() == Bridge.MAX_STATE * 3) // Only consider islands in corners
+                    .anyMatch(node -> {
+                        int requiredBridges = node.getValue(); // Get the required number of bridges for this island
+                        int existingBridges = node.getBridges().stream().reduce(0, (sum, bridge) -> sum + bridge.getState(), Integer::sum); // Get the number of existing bridges
+                        return existingBridges < requiredBridges; // Check if there are still bridges needed
+                    });
                 })
         ));
     }
