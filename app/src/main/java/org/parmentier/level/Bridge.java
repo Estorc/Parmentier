@@ -108,6 +108,7 @@ public class Bridge {
         this.direction = direction;
         
         this.state = 0;
+        this.solution_state = 0;
     }
 
     /**

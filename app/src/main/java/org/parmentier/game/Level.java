@@ -284,8 +284,8 @@ public class Level implements org.parmentier.game.Scene {
         uiLayer.getChildren().add(check);
 
         check.setOnMouseClicked(e -> {
-            Boolean status = level.checkState();
-            if (status) {
+            int status = level.checkState();
+            if (status == 0) {
                 Game.getInstance().getSceneManager().pushScene(new MenuFinNiveau(getStopwatchTime(), 42));
             } else {
                 Alert gridStat = new Alert(Alert.AlertType.INFORMATION);
@@ -306,6 +306,7 @@ public class Level implements org.parmentier.game.Scene {
             stopwatch.stop();
         }
         level.saveState();
+        level.checkState();
     }
 
     /**
