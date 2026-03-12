@@ -15,6 +15,7 @@
 package org.parmentier.hint;
 import java.util.List;
 import java.util.Random;
+import java.util.ArrayList;
 
 import org.parmentier.level.Bridge;
 import org.parmentier.level.GridData;
@@ -81,6 +82,7 @@ public class HintBulb {
                                 Node neighbor = (from == node) ? to : from;
                                 return neighbor.getValue() == 1;
                             });
+                        if (!hasNeighborWithOne) return false;
 
                         int requiredBridges = node.getValue(); // Get the required number of bridges for this island
                         int existingBridges = node.getBridges().stream().reduce(0, (sum, bridge) -> sum + bridge.getState(), Integer::sum); // Get the number of existing bridges
@@ -100,6 +102,7 @@ public class HintBulb {
                                 Node neighbor = (from == node) ? to : from;
                                 return neighbor.getValue() == 1;
                             });
+                        if (!hasNeighborWithOne) return false;
 
                         int requiredBridges = node.getValue(); // Get the required number of bridges for this island
                         int existingBridges = node.getBridges().stream().reduce(0, (sum, bridge) -> sum + bridge.getState(), Integer::sum); // Get the number of existing bridges
@@ -119,6 +122,7 @@ public class HintBulb {
                                 Node neighbor = (from == node) ? to : from;
                                 return neighbor.getValue() == 1;
                             });
+                        if (!hasNeighborWithOne) return false;
 
                         int requiredBridges = node.getValue(); // Get the required number of bridges for this island
                         int existingBridges = node.getBridges().stream().reduce(0, (sum, bridge) -> sum + bridge.getState(), Integer::sum); // Get the number of existing bridges
@@ -132,6 +136,123 @@ public class HintBulb {
                 return grid.getNodes().stream()
                     .filter(node -> node.getBridges().size() == 3 && node.getValue() == Bridge.MAX_STATE * 2) 
                     .anyMatch(node -> {
+                        long neighborsWithOne = node.getBridges().stream()
+                            .filter(b -> {
+                                Node neighbor = (b.getFrom() == node) ? b.getTo() : b.getFrom();
+                                return neighbor.getValue() == 1;
+                            }).count();
+                        if (neighborsWithOne != 2) return false;
+
+                        int requiredBridges = node.getValue(); // Get the required number of bridges for this island
+                        int existingBridges = node.getBridges().stream().reduce(0, (sum, bridge) -> sum + bridge.getState(), Integer::sum); // Get the number of existing bridges
+                        return existingBridges < requiredBridges; // Check if there are still bridges needed
+                    });
+                }),
+
+            //Special case of 6 in the middle
+            new Hint("Une île " + Bridge.MAX_STATE * 3 + " au centre avec 4 voisins (dont une île 1) doit envoyer au moins 1 pont sur chaque voisin.", 
+                50, 1, (grid) -> {
+                return grid.getNodes().stream()
+                    .filter(node -> grid.isCenter(node) && node.getValue() == Bridge.MAX_STATE * 3) 
+                    .anyMatch(node -> {
+                        boolean hasNeighborWithOne = node.getBridges().stream().anyMatch(bridge -> {
+                                Node from = bridge.getFrom();
+                                Node to = bridge.getTo();
+                                Node neighbor = (from == node) ? to : from;
+                                return neighbor.getValue() == 1;
+                            });
+                        if (!hasNeighborWithOne) return false;
+
+                        int requiredBridges = node.getValue(); // Get the required number of bridges for this island
+                        int existingBridges = node.getBridges().stream().reduce(0, (sum, bridge) -> sum + bridge.getState(), Integer::sum); // Get the number of existing bridges
+                        return existingBridges < requiredBridges; // Check if there are still bridges needed
+                    });
+                }),
+
+            //Isolation of a two-island segment
+            new Hint("Une île " + (Bridge.MAX_STATE -1) + " ne peux pas être relié avec une autre île 1.", 
+                55, 1, (grid) -> {
+                return grid.getNodes().stream()
+                    .filter(node -> node.getValue() == Bridge.MAX_STATE -1) 
+                    .anyMatch(node -> {
+                        boolean hasNeighborWithOne = node.getBridges().stream()
+                            .anyMatch(bridge -> {
+                                Node from = bridge.getFrom();
+                                Node to = bridge.getTo();
+                                Node neighbor = (from == node) ? to : from;
+                                return neighbor.getValue() == 1;
+                            });
+                        if(!hasNeighborWithOne) return false;
+
+                        int requiredBridges = node.getValue(); // Get the required number of bridges for this island
+                        int existingBridges = node.getBridges().stream().reduce(0, (sum, bridge) -> sum + bridge.getState(), Integer::sum); // Get the number of existing bridges
+                        return existingBridges < requiredBridges; // Check if there are still bridges needed
+                    });
+                }),
+
+            new Hint("Une île " + Bridge.MAX_STATE + " ne peux pas être relié avec une autre île " + Bridge.MAX_STATE + ".", 
+                60, 1, (grid) -> {
+                return grid.getNodes().stream()
+                    .filter(node -> node.getValue() == Bridge.MAX_STATE) 
+                    .anyMatch(node -> {
+                        boolean hasNeighborWithTwo = node.getBridges().stream()
+                            .anyMatch(bridge -> {
+                                Node from = bridge.getFrom();
+                                Node to = bridge.getTo();
+                                Node neighbor = (from == node) ? to : from;
+                                return neighbor.getValue() == 2;
+                            });
+                        if(!hasNeighborWithTwo) return false;
+
+                        int requiredBridges = node.getValue(); // Get the required number of bridges for this island
+                        int existingBridges = node.getBridges().stream().reduce(0, (sum, bridge) -> sum + bridge.getState(), Integer::sum); // Get the number of existing bridges
+                        return existingBridges < requiredBridges; // Check if there are still bridges needed
+                    });
+                }),
+
+            //Isolation of a three-island segment
+            new Hint("Une île " + Bridge.MAX_STATE + " avec deux voisins d'indice 1 ne peuvent pas être reliés comme ceci: 1 - 2 - 1.", 
+                65, 1, (grid) -> {
+                return grid.getNodes().stream()
+                    .filter(node -> node.getBridges().size() == 3 && node.getValue() == Bridge.MAX_STATE) 
+                    .anyMatch(node -> {
+                        long neighborsWithOne = node.getBridges().stream()
+                            .filter(b -> {
+                                Node neighbor = (b.getFrom() == node) ? b.getTo() : b.getFrom();
+                                return neighbor.getValue() == 1;
+                            }).count();
+                        if (neighborsWithOne != 2) return false;
+
+                        int requiredBridges = node.getValue(); // Get the required number of bridges for this island
+                        int existingBridges = node.getBridges().stream().reduce(0, (sum, bridge) -> sum + bridge.getState(), Integer::sum); // Get the number of existing bridges
+                        return existingBridges < requiredBridges; // Check if there are still bridges needed
+                    });
+                }),
+
+            //Isolation when a segment connects to an island
+            new Hint("Une île " + Bridge.MAX_STATE + " avec deux voisins d'indice 1 ne peuvent pas être reliés comme ceci: 1 - 2 - 1.", 
+                70, 1, (grid) -> {
+                return grid.getNodes().stream()
+                    .filter(node -> node.getBridges().size() == 3 && node.getValue() == Bridge.MAX_STATE) 
+                    .anyMatch(node -> {
+                        long neighborsWithOne = node.getBridges().stream()
+                            .filter(b -> {
+                                Node neighbor = (b.getFrom() == node) ? b.getTo() : b.getFrom();
+                                return neighbor.getValue() == 1;
+                            }).count();
+                        if (neighborsWithOne != 2) return false;
+
+                        int requiredBridges = node.getValue(); // Get the required number of bridges for this island
+                        int existingBridges = node.getBridges().stream().reduce(0, (sum, bridge) -> sum + bridge.getState(), Integer::sum); // Get the number of existing bridges
+                        return existingBridges < requiredBridges; // Check if there are still bridges needed
+                    });
+                }),
+
+            new Hint("Une île " + (Bridge.MAX_STATE + 1) + " avec un voisin d'indice 1 et un voisin d'indice 2 ne peuvent pas être reliés comme ceci: 1 - 3 - 2 ou 2 - 3 - 1.", 
+                75, 1, (grid) -> {
+                return grid.getNodes().stream()
+                    .filter(node -> node.getBridges().size() == 3 && node.getValue() == Bridge.MAX_STATE) 
+                    .anyMatch(node -> {
                         boolean hasNeighborWithOne = node.getBridges().stream()
                             .anyMatch(bridge -> {
                                 Node from = bridge.getFrom();
@@ -140,13 +261,22 @@ public class HintBulb {
                                 return neighbor.getValue() == 1;
                             });
 
+                        boolean hasNeighborWithTwo = node.getBridges().stream()
+                            .anyMatch(bridge -> {
+                                Node from = bridge.getFrom();
+                                Node to = bridge.getTo();
+                                Node neighbor = (from == node) ? to : from;
+                                return neighbor.getValue() == 2;
+                            });
+                        if(!hasNeighborWithTwo || !hasNeighborWithOne) return false;
+
                         int requiredBridges = node.getValue(); // Get the required number of bridges for this island
                         int existingBridges = node.getBridges().stream().reduce(0, (sum, bridge) -> sum + bridge.getState(), Integer::sum); // Get the number of existing bridges
                         return existingBridges < requiredBridges; // Check if there are still bridges needed
                     });
                 })
 
-            //Special case of 6 in the middle
+            
 
         ));
     }
