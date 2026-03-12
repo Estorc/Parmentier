@@ -109,19 +109,6 @@ public class IVector {
     }
 
     /**
-     * Normalizes this vector, returning a new IVector that has the same direction but a magnitude of 1.
-     * If the magnitude of the vector is zero, a zero vector is returned to avoid division by zero.
-     * @return A new IVector that is the normalized version of this vector.
-     */
-    public IVector normalize() {
-        double mag = magnitude();
-        if (mag == 0) {
-            return new IVector(0, 0);
-        }
-        return new IVector((long)(this.x / mag), (long)(this.y / mag));
-    }
-
-    /**
      * Calculates the angle in radians between this vector and another vector using the dot product and magnitudes of the vectors.
      * @param other The IVector to which the angle is calculated.
      * @return The angle in radians between this vector and the other vector.
