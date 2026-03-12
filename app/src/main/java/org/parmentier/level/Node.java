@@ -164,6 +164,17 @@ public class Node {
     }
 
     /**
+     * Returns the amount of extra bridges connected to this node compared to the solution
+     */
+    public int countErrors(){
+        int errors = 0;
+        for (Bridge b : bridges) {
+            errors = errors + b.countErrors();
+        }
+        return errors;
+    }
+
+    /**
      * Draws the node on the provided GraphicsContext at the specified offset.
      * @param gc The GraphicsContext to draw on.
      */

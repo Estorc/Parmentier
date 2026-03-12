@@ -297,14 +297,22 @@ public class Level implements org.parmentier.game.Scene {
         uiLayer.getChildren().add(check);
 
         check.setOnMouseClicked(e -> {
-            int status = level.checkState();
-            if (status == 0) {
+            boolean status = level.checkState();
+            if (status) {
                 Game.getInstance().getSceneManager().pushScene(new MenuFinNiveau(getStopwatchTime(), 42));
             } else {
                 Alert gridStat = new Alert(Alert.AlertType.INFORMATION);
                 gridStat.setTitle("Résultat de la vérification");
                 gridStat.setHeaderText(null);
-                gridStat.setContentText("Le niveau n'est pas encore complété. Continuez à essayer !");
+
+                // check du nombre d'erreurs
+                String err_msg = "";
+                int err = level.countErrors();
+                if(err > 0)
+                    err_msg = "La grille comporte " + Integer.toString(err) + " erreurs. Continuez à essayer !";
+                else
+                    err_msg = "Vous n'avez fait aucune erreur. Continuez comme ça !";
+                gridStat.setContentText(err_msg);
                 gridStat.showAndWait();
             }
         });

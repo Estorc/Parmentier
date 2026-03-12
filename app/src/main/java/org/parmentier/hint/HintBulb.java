@@ -30,16 +30,10 @@ public class HintBulb {
 
     static private HintBulb create() {
        return new HintBulb(List.of(
-            new Hint("Si une île n’a qu’un seul voisin, alors tous les ponts requis doivent être placés vers ce voisin." +
-                "Une fois ces ponts posés, l’île est complétée et peut être marquée comme terminée.", 10, 5, (grid) -> {
-                return grid.getNodes().stream()
-                    .filter(node -> node.getBridges().size() == 1) // Only consider islands with one neighbor
-                    .anyMatch(node -> {
-                        int requiredBridges = node.getValue(); // Get the required number of bridges for this island
-                        int existingBridges = node.getBridges().getFirst().getState();                        
-                          return existingBridges < requiredBridges; // Check if there are still bridges needed
-                    });
-            }),
+            /*
+             * Starting techniques
+             */
+
             new Hint("Une île placée dans un coin ne peut avoir que deux voisins." +
                 "Comme un lien ne peut contenir au plus que " + Bridge.MAX_STATE + " ponts, une île " + Bridge.MAX_STATE * 2 + " dans un coin doit envoyer deux ponts vers chacun de ses deux voisins." +
                 "L’île est alors complète.", 15, 3, (grid) -> {
@@ -151,6 +145,7 @@ public class HintBulb {
                         return existingBridges < requiredBridges; // Check if there are still bridges needed
                     });
                 })
+
             //Special case of 6 in the middle
 
         ));
