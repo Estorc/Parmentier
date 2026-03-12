@@ -1,0 +1,9 @@
+Gtk-Message: 16:31:44.377: Failed to load module "appmenu-gtk-module"
+Mar 05, 2026 4:31:44 PM javafx.fxml.FXMLLoader$ValueElement processValue
+WARNING: Loading FXML document with JavaFX API of version 25 by JavaFX runtime of version 21
+Mar 05, 2026 4:31:47 PM javafx.fxml.FXMLLoader$ValueElement processValue
+WARNING: Loading FXML document with JavaFX API of version 25 by JavaFX runtime of version 21
+Mar 05, 2026 4:31:57 PM javafx.fxml.FXMLLoader$ValueElement processValue
+WARNING: Loading FXML document with JavaFX API of version 25 by JavaFX runtime of version 21
+Mar 05, 2026 4:31:57 PM javafx.fxml.FXMLLoader$ValueElement processValue
+WARNING: Loading FXML document with JavaFX API of version 25 by JavaFX runtime of version 21
