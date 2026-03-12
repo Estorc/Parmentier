@@ -126,10 +126,6 @@ public class GridData {
             .toList();
     }
 
-    /**
-     * TODO: change saveState to correspond to the new loading system
-     */
-
     public void saveState() {
         StringBuilder nodeBuilder = new StringBuilder();
         StringBuilder bridgeBuilder = new StringBuilder();
@@ -138,6 +134,7 @@ public class GridData {
             for (int j = 0; j < levelArray[i].length; j++) {
                 Node node = levelArray[i][j];
 
+                // 4 bits: up state, up solution, right state, right solution
                 if (node != null) {
                     nodeBuilder.append(node.getValue());
                     Bridge up = node.getBridge(0);
@@ -180,22 +177,37 @@ public class GridData {
     }
 
     /**
-     * Returns the amount of errors in the current state compared to the solution.
+     * Returns whether the current state corresponds to the solution.
      */
-    public int checkState() {
-        int errors = 0;
+    public boolean checkState() {
         for (Node[] row : levelArray) {
             for (Node node : row) {
                 if (node != null){ 
                     if (node.checkState() == false){
-                        errors++;
+                        return false;
                     }
                 }
             }
         }
-        System.out.println(errors);
-        return errors;
+        return true;
     }
+
+    /**
+     * Returns the amount of errors in the current state compared to the solution.
+     */
+    public int countErrors() {
+        int errors = 0;
+        for (Node[] row : levelArray) {
+            for (Node node : row) {
+                if (node != null){ 
+                    errors += node.countErrors();
+                }
+            }
+        }
+        // on divise par 2 car chaque pont en trop est compté deux fois (ses deux noeuds le considérent comme une erreur)
+        return errors / 2;
+    }
+
 
     /**
      * Gets the value of the node at the specified row and column.
