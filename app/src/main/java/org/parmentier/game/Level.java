@@ -205,6 +205,7 @@ public class Level implements org.parmentier.game.Scene {
     private void helpButton(){
         helpButton = new Button("Aide");
         helpButton.getStyleClass().add("button");
+        StackPane.setMargin(helpButton, new javafx.geometry.Insets(10));
         helpButton.setOnMouseClicked(e -> {
             HintBulb hintBulb = org.parmentier.hint.HintBulb.get();
             Hint hint = hintBulb.getRandomHint(level);
