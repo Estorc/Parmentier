@@ -150,7 +150,7 @@ public class HintBulb {
                         int existingBridges = node.getBridges().stream().reduce(0, (sum, bridge) -> sum + bridge.getState(), Integer::sum); // Get the number of existing bridges
                         return existingBridges < requiredBridges; // Check if there are still bridges needed
                     });
-                }),
+                })
 
             //Special case of 6 in the middle
 
