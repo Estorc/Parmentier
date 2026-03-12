@@ -5,9 +5,13 @@ package org.parmentier;
 
 import org.junit.jupiter.api.Test;
 import org.parmentier.math.IVector;
+import org.parmentier.math.Vector;
+import org.parmentier.math.Segment;
+
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
 
 class MathTest {
     @Test void iVectorTest() {
@@ -23,4 +27,24 @@ class MathTest {
         assertEquals(v1, new IVector(1, 3));
     }
     
+    @Test void VectorTest() {
+        Vector v1 = new Vector(1, 3);
+        Vector v2 = new Vector(4, 5);
+        assertEquals(v1.add(v2), new Vector(5, 8));
+        assertEquals(v1.subtract(v2), new Vector(-3, -2));
+        assertEquals(v1.scale(2), new Vector(2, 6));
+        assertEquals(v1.dot(v2), 19);
+        assertEquals(v1.magnitude(), Math.sqrt(10));
+        assertEquals(v1.normalize().magnitude(), 1.0, 1e-9);
+        assertEquals(v1.angleTo(v2), Math.acos(19 / (Math.sqrt(10) * Math.sqrt(41))));
+        assertEquals(v1.toString(), "Vector(1.0, 3.0)");
+        assertEquals(v1, new Vector(1, 3));
+    } 
+
+    @Test void Segment() {
+        Vector start = new Vector(1, 2);
+        Vector end = new Vector(4, 6);
+        assertTrue(Segment.isIntersecting(new Vector(0, 0), new Vector(5, 5), new Vector(0, 5), new Vector(5, 0)));
+        assertFalse(Segment.isIntersecting(new Vector(0, 0), new Vector(5, 5), new Vector(6, 6), new Vector(7, 7)));
+    }
 }
