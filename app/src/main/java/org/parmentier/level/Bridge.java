@@ -191,6 +191,17 @@ public class Bridge {
     }
 
     /**
+     * Returns the difference between the current state and the solution state. Returns 0 if it's negative.
+     */
+    public int countErrors(){
+        int diff = this.state - this.solution_state;
+        if (diff < 0)
+            return 0;
+        else 
+            return diff;
+    }
+
+    /**
      * Draws the bridge on the provided GraphicsContext.
      * @param gc    The GraphicsContext to draw on.
      * @param preview If true, draws the bridge in preview mode (e.g., semi-transparent).
