@@ -1,13 +1,16 @@
-> Task :app:compileJava UP-TO-DATE
+> Task :app:compileJava
 > Task :app:processResources UP-TO-DATE
-> Task :app:classes UP-TO-DATE
+> Task :app:classes
 
 > Task :app:run
 Welcome to Parmentier!
 Initializing level scene...
 Checking available hints...
+Total weight of available hints: 5
+Checking available hints...
 Window is closing...
 Game state saved to save.txt
+9
 
-BUILD SUCCESSFUL in 18s
-3 actionable tasks: 1 executed, 2 up-to-date
+BUILD SUCCESSFUL in 14s
+3 actionable tasks: 2 executed, 1 up-to-date
