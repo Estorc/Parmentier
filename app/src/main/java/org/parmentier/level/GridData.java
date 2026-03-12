@@ -31,6 +31,11 @@ public class GridData {
      * corresponds to a node's value or an empty space.
      */
     final private Node[][] levelArray;
+
+    /**
+     * The name of the level, which can be used for display purposes or to identify the level in a list of levels.
+     */
+    private String name;
     
     /**
      * Constructs a Level object by loading the level data from the specified file.
@@ -49,6 +54,8 @@ public class GridData {
      */
     private Node[][] loadLevelFromFile(java.nio.file.Path path) {
         try {
+            String fileName = path.getFileName().toString();
+            this.name = fileName.substring(0, fileName.lastIndexOf('.')); // extrait
             String content = new String(java.nio.file.Files.readAllBytes(path));
             content = content.replace("\r\n", "\n"); // règle les sauts de lignes sur windows
             String[] parts = content.split("-\n"); // sépare la sauvegarde des noeuds et des ponts
@@ -163,13 +170,23 @@ public class GridData {
         }
 
         String saveData = nodeBuilder.toString() + "-\n" + bridgeBuilder.toString();
-        java.nio.file.Path path = java.nio.file.Paths.get("save.txt");
+        // Create the "saves" directory if it doesn't exists
+        java.nio.file.Path savesDir = java.nio.file.Paths.get("saves");
+        try {
+            if (!java.nio.file.Files.exists(savesDir)) {
+                java.nio.file.Files.createDirectory(savesDir);
+            }
+         } catch (java.io.IOException e) {
+            System.err.println("Error creating saves directory: " + e.getMessage());
+        }
+
+        java.nio.file.Path path = java.nio.file.Paths.get("saves/" + this.name + ".sav");
         try {
             if (!java.nio.file.Files.exists(path)) {
                 java.nio.file.Files.createFile(path);
             }
             java.nio.file.Files.write(path, saveData.getBytes());
-            System.out.println("Game state saved to save.txt");
+            System.out.println("Game state saved to saves/" + this.name + ".sav");
 
         } catch (java.io.IOException e) {
             System.err.println("Error saving game state: " + e.getMessage());

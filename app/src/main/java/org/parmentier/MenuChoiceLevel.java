@@ -87,7 +87,7 @@ public class MenuChoiceLevel extends Menu{
      */
     @FXML
     public void manageImageClick(MouseEvent event) {
-        Game.getInstance().getSceneManager().pushScene(new Level());
+        Game.getInstance().getSceneManager().pushScene(new Level("level1"));
     }
 
 
