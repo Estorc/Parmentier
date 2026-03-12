@@ -95,6 +95,7 @@ public class Level implements org.parmentier.game.Scene {
 
     private Button checkButton;
     private Button helpButton;
+    private Button backButton = new Button("Retour");
 
     public Level(String levelName) {
         // Try loading saved state first, if it fails load the level data from the resource file
@@ -271,8 +272,11 @@ public class Level implements org.parmentier.game.Scene {
 
         StackPane.setAlignment(stopwatchLabel, javafx.geometry.Pos.TOP_CENTER);
         StackPane.setAlignment(helpButton, javafx.geometry.Pos.TOP_RIGHT);
+        StackPane.setAlignment(backButton, javafx.geometry.Pos.BOTTOM_LEFT);
+        backButton.getStyleClass().add("button");
+        backButton.setOnMouseClicked(e -> Game.getInstance().getSceneManager().popScene());
         uiLayer.getChildren().add(helpButton);
-        
+        uiLayer.getChildren().add(backButton);
         uiLayer.getChildren().add(stopwatchLabel);
 
         for (int i = 0; i < level.getWidth(); i++) {
