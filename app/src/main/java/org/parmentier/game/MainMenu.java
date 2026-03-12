@@ -31,17 +31,20 @@ public class MainMenu implements org.parmentier.game.Scene {
         buttonBox.setSpacing(10);
         layout.setAlignment(javafx.geometry.Pos.TOP_CENTER);
         Button jouer = new Button("Jouer");
+        Button tutorial = new Button("Didacticiel");
         Button settings = new Button("Paramètres");
         Button leave = new Button("Quitter");
         Label titleLabel = new Label("Parmentier");
         Label currentuser = new Label("Bienvenu " + Game.getInstance().getCurrentUserName());
         titleLabel.getStyleClass().add("title-label");
         jouer.getStyleClass().add("button");
+        tutorial.getStyleClass().add("button");
         settings.getStyleClass().add("button");
         leave.getStyleClass().add("button");
         currentuser.getStyleClass().add("textUser");
 
         buttonBox.getChildren().add(jouer);
+        buttonBox.getChildren().add(tutorial);
         buttonBox.getChildren().add(settings);
         buttonBox.getChildren().add(leave);
         buttonBox.setAlignment(javafx.geometry.Pos.CENTER);
@@ -54,6 +57,7 @@ public class MainMenu implements org.parmentier.game.Scene {
         jouer.setOnMouseClicked( e -> Game.getInstance().getSceneManager().pushScene(new MenuChoiceLevel()));
         settings.setOnMouseClicked( e -> Game.getInstance().getSceneManager().pushScene(new Settings()));
         leave.setOnMouseClicked( e -> System.exit(0));
+        tutorial.setOnMouseClicked( e -> Game.getInstance().getSceneManager().pushScene(new Level(java.nio.file.Paths.get("didacticiel.txt"))));
     }
 
     /**

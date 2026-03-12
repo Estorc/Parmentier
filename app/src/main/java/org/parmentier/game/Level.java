@@ -76,6 +76,7 @@ public class Level implements org.parmentier.game.Scene {
      */
     private GridData level;
 
+    private java.nio.file.Path levelPath;
     /**
      * The Timeline object used as a stopwatch to track the elapsed time since the level started.
      */
@@ -94,6 +95,13 @@ public class Level implements org.parmentier.game.Scene {
 
     private Button checkButton;
     private Button helpButton;
+
+    public Level() {}
+
+    public Level(java.nio.file.Path levelPath) {
+        System.out.println("Hello from Level constructor!");
+        this.levelPath = levelPath;
+    }
 
     /**
      * Attempts to connect two nodes with a bridge, checking for valid connections and potential intersections with existing bridges.
@@ -231,6 +239,10 @@ public class Level implements org.parmentier.game.Scene {
      */
     @Override
     public void initialize(StackPane uiLayer) {
+        if (levelPath != null) {
+            initialize(uiLayer, levelPath);
+            return;
+        }
         System.out.println("Initializing level scene...");
         uiLayer.getChildren().clear();
 
@@ -301,6 +313,70 @@ public class Level implements org.parmentier.game.Scene {
                 else
                     err_msg = "Vous n'avez fait aucune erreur. Continuez comme ça !";
                 gridStat.setContentText(err_msg);
+                gridStat.showAndWait();
+            }
+        });
+    }
+
+    public void initialize(StackPane uiLayer, java.nio.file.Path levelPath) {
+        System.out.println("Initializing level scene...");
+        uiLayer.getChildren().clear();
+
+        this.nodes = new ArrayList<>();
+        this.activeBridges = new ArrayList<>();
+
+        level = new GridData(levelPath);
+       
+        startStopwatch();
+        helpButton();
+
+        StackPane.setAlignment(stopwatchLabel, javafx.geometry.Pos.TOP_CENTER);
+        StackPane.setAlignment(helpButton, javafx.geometry.Pos.TOP_RIGHT);
+        uiLayer.getChildren().add(helpButton);
+        
+        uiLayer.getChildren().add(stopwatchLabel);
+
+        for (int i = 0; i < level.getWidth(); i++) {
+            for (int j = 0; j < level.getHeight(); j++) {
+                if (level.getNodeAt(i, j) != null) {
+                    Node node = level.getNodeAt(i, j);
+                    this.nodes.add(node);
+                    if (!node.getBridges().isEmpty()) {
+                        for (Bridge bridge : node.getBridges()) if (bridge.getState() > 0) activeBridges.add(bridge); 
+                    }
+                }
+            }
+        }
+
+
+        uiLayer.setOnMouseMoved(e -> {
+            tryConnectClosest((e.getX() - xShift)/scaleFactor, (e.getY() - yShift)/scaleFactor);
+        });
+
+
+        uiLayer.setOnMouseClicked(e -> {
+            selectedBridge.toggleState();
+            if (selectedBridge.getState() == 0) {
+                activeBridges.remove(selectedBridge);
+            } else if (!activeBridges.contains(selectedBridge)) {
+                activeBridges.add(selectedBridge);
+            }
+        });
+        // My work...
+        Button check = new Button("Check");
+        check.getStyleClass().add("button");
+        StackPane.setAlignment(check, javafx.geometry.Pos.BOTTOM_CENTER);
+        uiLayer.getChildren().add(check);
+
+        check.setOnMouseClicked(e -> {
+            int status = level.checkState();
+            if (status == 0) {
+                Game.getInstance().getSceneManager().pushScene(new MenuFinNiveau(getStopwatchTime(), 42));
+            } else {
+                Alert gridStat = new Alert(Alert.AlertType.INFORMATION);
+                gridStat.setTitle("Résultat de la vérification");
+                gridStat.setHeaderText(null);
+                gridStat.setContentText("Le niveau n'est pas encore complété. Continuez à essayer !");
                 gridStat.showAndWait();
             }
         });
