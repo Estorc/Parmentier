@@ -67,10 +67,10 @@
                      <content>
                      <HBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="15.0">
                         <children>
-                              <Button fx:id="level51" contentDisplay="TEXT_ONLY" graphicTextGap="6.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#manageImageClick" pickOnBounds="false" text="13" />
-                              <Button fx:id="level52" contentDisplay="TEXT_ONLY" graphicTextGap="6.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#manageImageClick" pickOnBounds="false" text="14" />
-                              <Button fx:id="level53" contentDisplay="TEXT_ONLY" graphicTextGap="6.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#manageImageClick" pickOnBounds="false" text="15" />
-                              <Button fx:id="level54" contentDisplay="TEXT_ONLY" graphicTextGap="6.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#manageImageClick" pickOnBounds="false" text="16" />
+                              <Button fx:id="level13" contentDisplay="TEXT_ONLY" graphicTextGap="6.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#manageImageClick" pickOnBounds="false" text="13" />
+                              <Button fx:id="level14" contentDisplay="TEXT_ONLY" graphicTextGap="6.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#manageImageClick" pickOnBounds="false" text="14" />
+                              <Button fx:id="level15" contentDisplay="TEXT_ONLY" graphicTextGap="6.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#manageImageClick" pickOnBounds="false" text="15" />
+                              <Button fx:id="level16" contentDisplay="TEXT_ONLY" graphicTextGap="6.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#manageImageClick" pickOnBounds="false" text="16" />
                         </children>
                         <padding>
                            <Insets left="15.0" />
