@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class ParmentierTest {
+class MathTest {
     @Test void iVectorTest() {
         IVector v1 = new IVector(1, 3);
         IVector v2 = new IVector(4, 5);
