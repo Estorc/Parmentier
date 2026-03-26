@@ -42,6 +42,7 @@ import javafx.util.Duration;
  * and rendering of the level.
  */
 public class Level implements org.parmentier.game.Scene {
+    private Label hintLabel;
     /**
      * The horizontal shift applied to the level's rendering, used to center the level on the canvas.
      */
@@ -236,13 +237,13 @@ public class Level implements org.parmentier.game.Scene {
         helpButton.getStyleClass().add("menu-button");
         StackPane.setMargin(helpButton, new javafx.geometry.Insets(10));
 
-        Label hintLabel = new Label();
+        hintLabel = new Label();
         hintLabel.getStyleClass().add("hint-banner");
         hintLabel.setVisible(false);
         hintLabel.setWrapText(true);
-        hintLabel.setMaxWidth(500);
-        StackPane.setAlignment(hintLabel, javafx.geometry.Pos.BOTTOM_CENTER);
-        StackPane.setMargin(hintLabel, new javafx.geometry.Insets(0, 0, 80, 0));
+        hintLabel.setMaxWidth(300);
+        StackPane.setAlignment(hintLabel, javafx.geometry.Pos.CENTER_RIGHT);
+        StackPane.setMargin(hintLabel, new javafx.geometry.Insets(0, 30, 0, 0));
 
         helpButton.setOnMouseClicked(e -> {
             if (hintLabel.isVisible()) {
@@ -265,6 +266,10 @@ public class Level implements org.parmentier.game.Scene {
     public void initialize(StackPane uiLayer) {
         System.out.println("Initializing level scene...");
         uiLayer.getChildren().clear();
+        javafx.scene.canvas.Canvas canvas = Game.getInstance().getCanvas();
+        if (!uiLayer.getChildren().contains(canvas)) {
+            uiLayer.getChildren().add(0, canvas);
+        }
 
         this.nodes = new ArrayList<>();
         this.activeBridges = new ArrayList<>();
@@ -272,15 +277,18 @@ public class Level implements org.parmentier.game.Scene {
        
         startStopwatch();
         helpButton();
+        uiLayer.getChildren().add(hintLabel);
 
         StackPane.setAlignment(stopwatchLabel, javafx.geometry.Pos.TOP_CENTER);
         StackPane.setAlignment(helpButton, javafx.geometry.Pos.TOP_RIGHT);
-        StackPane.setAlignment(backButton, javafx.geometry.Pos.BOTTOM_LEFT);
-        backButton.getStyleClass().add("button");
+        StackPane.setAlignment(backButton, javafx.geometry.Pos.BOTTOM_RIGHT);
+        StackPane.setMargin(backButton, new javafx.geometry.Insets(10));
+        backButton.getStyleClass().add("menu-button");
         backButton.setOnMouseClicked(e -> Game.getInstance().getSceneManager().popScene());
         uiLayer.getChildren().add(helpButton);
         uiLayer.getChildren().add(backButton);
         uiLayer.getChildren().add(stopwatchLabel);
+
 
         for (int i = 0; i < level.getWidth(); i++) {
             for (int j = 0; j < level.getHeight(); j++) {
@@ -308,10 +316,10 @@ public class Level implements org.parmentier.game.Scene {
                 activeBridges.add(selectedBridge);
             }
         });
-        // My work...
         Button check = new Button("Vérifier");
         check.getStyleClass().add("menu-button");
         StackPane.setAlignment(check, javafx.geometry.Pos.BOTTOM_CENTER);
+        StackPane.setMargin(check, new javafx.geometry.Insets(10));
 
         Label checkLabel = new Label();
         checkLabel.getStyleClass().add("hint-banner");
@@ -319,7 +327,7 @@ public class Level implements org.parmentier.game.Scene {
         checkLabel.setWrapText(true);
         checkLabel.setMaxWidth(500);
         StackPane.setAlignment(checkLabel, javafx.geometry.Pos.BOTTOM_CENTER);
-        StackPane.setMargin(checkLabel, new javafx.geometry.Insets(0, 0, 60, 0));
+        StackPane.setMargin(checkLabel, new javafx.geometry.Insets(0, 0, 90, 0));
 
         uiLayer.getChildren().add(checkLabel);
         uiLayer.getChildren().add(check);
@@ -340,6 +348,9 @@ public class Level implements org.parmentier.game.Scene {
                         err_msg = "Vous n'avez fait aucune erreur. Continuez comme ça !";
                     checkLabel.setText(err_msg);
                     checkLabel.setVisible(true);
+                    Timeline hideTimeline = new Timeline(new KeyFrame(Duration.seconds(3), ev -> checkLabel.setVisible(false)));
+                    hideTimeline.setCycleCount(1);
+                    hideTimeline.play();
                 }
             }
         });

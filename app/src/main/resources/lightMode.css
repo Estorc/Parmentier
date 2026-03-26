@@ -13,20 +13,10 @@
     -fx-font-size: 18px;
 }
 
-/* Exemple spécifique pour un bouton */
-.button {
-    -fx-background-color: #3498db;
-    -fx-text-fill: white;
-    -fx-font-size: 14px;
-    -fx-padding: 10 20 10 20;
-    -fx-background-radius: 5;
-    -fx-font-family: 'Lexend Light';
-}
-
-.title-label {
+.title-label{
     -fx-font-family: 'Lexend Medium';
     -fx-font-size: 42px;
-    -fx-padding: 10 0 0 0;
+    -fx-padding: 0 0 10 0;
     -fx-text-fill: black;
 }
 
@@ -34,7 +24,7 @@
     -fx-font-family: 'Lexend Light';
     -fx-font-size: 16px;
     -fx-text-fill: #666666;
-    -fx-padding: 0 0 10 0;
+    -fx-padding: 10 0 0 0;
 }
 
 .menu-button {
@@ -72,6 +62,15 @@
     -fx-fill: black;
 }
 
+/* settings menu*/
+
+.title-label-settings{
+    -fx-font-family: 'Lexend Medium';
+    -fx-font-size: 42px;
+    -fx-padding: 40 0 0 0;
+    -fx-text-fill: black;
+}
+
 .button-setting {
     -fx-background-color: transparent; 
     -fx-text-fill: black;
@@ -84,7 +83,6 @@
     -fx-cursor: hand;
 }
 
-/* Quand la souris passe dessus (Hover) */
 .button-setting:hover {
     -fx-background-color: #f8f9fa;
     -fx-border-color: transparent transparent #e0e0e0 #3498db;
@@ -207,4 +205,21 @@
     -fx-text-fill: white;
     -fx-padding: 12 20 12 20;
     -fx-alignment: CENTER;
+}
+
+/* Nodes */
+.node-circle {
+    -fx-fill: white;
+    -fx-stroke: black;
+    -fx-stroke-width: 2;
+}
+.node-label {
+    -fx-text-fill: black;
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+}
+
+/* Brigdes */
+.bridge{
+     -fx-fill: black;
 }

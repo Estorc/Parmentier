@@ -21,8 +21,7 @@ public class ModesMenu implements org.parmentier.game.Scene {
     @Override
     public void initialize(StackPane uiLayer) {
 
-	//Declaration
-        VBox general = new VBox();
+    VBox general = new VBox();
 
 	Label title = new Label("Modes de Jeux");
 	
@@ -31,10 +30,7 @@ public class ModesMenu implements org.parmentier.game.Scene {
 	Button didacticiel = new Button("Didacticiel");
 	Button niveaux = new Button("niveaux");	
 
-	//Begin
-
-	//Style
-	uiLayer.getStylesheets().add(getClass().getResource("/app.css").toExternalForm());
+	uiLayer.getStylesheets().add(getClass().getResource("/lightMode.css").toExternalForm());
         general.setSpacing(20);
         btnZone.setSpacing(10);
 
@@ -53,7 +49,6 @@ public class ModesMenu implements org.parmentier.game.Scene {
         uiLayer.getChildren().add(general);
         
 
-	//End
     }
 
     /**
