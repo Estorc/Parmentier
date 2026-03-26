@@ -182,7 +182,7 @@ public class Node {
         long x = getCanvasPosition().getX();
         long y = getCanvasPosition().getY();
         gc.setLineWidth(2);
-        gc.setFill(javafx.scene.paint.Color.BLACK);
+        gc.setFill(javafx.scene.paint.Color.WHITE);
         gc.fillOval(x - SIZE/2, y - SIZE/2, SIZE, SIZE);
         gc.setStroke(javafx.scene.paint.Color.BLACK);
         gc.strokeOval(x - SIZE/2, y - SIZE/2, SIZE, SIZE);

@@ -66,7 +66,7 @@
                      </HBox>
                      </content>
                   </TitledPane>
-                  <TitledPane animated="false" contentDisplay="CENTER" prefHeight="200.0" prefWidth="100.0" styleClass="level-titled-pane" text="Brutal">
+                  <TitledPane animated="false" contentDisplay="CENTER" prefHeight="200.0" prefWidth="100.0" styleClass="level-titled-pane" text="Brutal" textFill="#ad18d7">
                      <content>
                      <HBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="15.0">
                         <children>
