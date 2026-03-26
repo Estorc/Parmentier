@@ -37,6 +37,7 @@ public class Hint {
 
     /**
      * Constructs a Hint with the specified text, cost, weight, and condition.
+     * @param briefHintText The brief text of the hint, showed at the first use of the hint.
      * @param hintText The text of the hint to be displayed to the player.
      * @param hintCost The cost of using the hint, which may be deducted from the player's score or in-game currency.
      * @param weight The weight for random selection, where a higher weight increases the likelihood of this hint
@@ -44,10 +45,11 @@ public class Hint {
      * @param condition A function that takes the current grid data as input and returns a boolean indicating whether
      * the hint is available for use based on the current state of the puzzle.
      */
-    public Hint(String hintText , Integer hintCost, Integer weight, Function<GridData, Boolean> condition) {
+    public Hint(String briefHintText, String hintText, Integer hintCost, Integer weight, Function<GridData, Boolean> condition) {
         this.hintCost = hintCost;
         this.weight = weight;
         this.condition = condition;
+        this.hintBriefText = briefHintText;
         this.hintText = hintText;
         this.remainingUses = 2; // By default, hints are enabled
     }
@@ -111,6 +113,6 @@ public class Hint {
      * @return The text of the hint, which provides clues or assistance to the player in solving the puzzle.
      */
     public String getHintText() {
-        return remainingUses == 1 ? hintText : hintBriefText; // Return full hint text if it's the first use, otherwise return brief text
+        return remainingUses == 1 ? hintBriefText : hintText; // Return full hint text if it's the first use, otherwise return brief text
     }
 }
