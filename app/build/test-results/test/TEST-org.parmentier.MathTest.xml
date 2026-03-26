@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="org.parmentier.MathTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2026-03-26T13:08:04.859Z" hostname="MacBook-Air-de-MH.local" time="0.009">
+  <properties/>
+  <testcase name="iVectorTest()" classname="org.parmentier.MathTest" time="0.003"/>
+  <testcase name="Segment()" classname="org.parmentier.MathTest" time="0.0"/>
+  <testcase name="VectorTest()" classname="org.parmentier.MathTest" time="0.003"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
