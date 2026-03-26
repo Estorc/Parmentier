@@ -109,11 +109,16 @@ public class GridData {
 
                     if (upState != 0) {
                         from.getBridge(0).setState(upState);
+                    }
+                    if (upSolution != 0) {
                         from.getBridge(0).setSolutionState(upSolution);
                     }
-
+                    
                     if (rightState != 0) {
                         from.getBridge(1).setState(rightState);
+                    }
+
+                    if (rightSolution != 0) {
                         from.getBridge(1).setSolutionState(rightSolution);
                     }
                 }
@@ -126,17 +131,6 @@ public class GridData {
         }
     }
 
-    /**
-     * Returns a list of all the nodes in the level.
-     * This method iterates through the 2D array of nodes and collects all non-null nodes into a list, which is then returned to the caller.
-     * @return A list of all the nodes in the level.
-     */
-    public List<Node> getNodes() {
-        return java.util.Arrays.stream(levelArray)
-            .flatMap(java.util.Arrays::stream)
-            .filter(node -> node != null)
-            .toList();
-    }
 
     /**
      * Saves the current state of the level to a file.
