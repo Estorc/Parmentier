@@ -205,38 +205,73 @@ public class Level implements org.parmentier.game.Scene {
         stopwatch.play();
     }
 
-<<<<<<< HEAD
-
-
-    /* This method calcule score with the numbers of bridge at the end of the level and the time used to complete the level */
-    private void calculateScore(){
-       int timeLow = this.timeLowMinutes  * 60;
-       int timeHigh = this.timeHighMinutes * 60;
-
-       double timeBornedShifted = (((elapsedSeconds + timeLow + (Math.abs(elapsedSeconds - timeLow)))/2) + timeHigh - (Math.abs(((elapsedSeconds + timeLow + (Math.abs(elapsedSeconds - timeLow)))/2) - timeHigh))) - timeLow;
-       //OU 
-       timeBornedShifted = Math.min( Math.max(elapsedSeconds, timeLow) , timeHigh) - timeLow;
-       //OU clamp(val, min, max)
-       timeBornedShifted = Math.clamp(elapsedSeconds, timeLow, timeHigh) - timeLow;
-       
-       // We need a value between 0 et 1 to get our final coeff
-       double timeNormalized = timeBornedShifted / (timeHigh - timeLow);
-
-       // The coefficient of time is normalized between our minimal coefficient and our maximal coefficient.
-       double timeCoeff = (timeNormalized - timeCoeffMin) + timeCoeffMax;
-
-       // J'attends que le nombre de ponts attendus soit disponible.
-       //int score = (int)((this.activeBridges.stream().reduce(0, (a,b) -> , combiner) * 1000) * timeCoeff);
-
-    }
-    public void start(StackPane uiLayer) {
-=======
     private String getStopwatchTime() {
         int minutes = elapsedSeconds / 60;
         int seconds = elapsedSeconds % 60;
         return String.format("%02d:%02d", minutes, seconds);
     }
->>>>>>> ba4ae3dd9a52655e00e8a017c341bcfe3979483e
+
+
+    private void calculateScore(){
+
+        int timeLow = this.timeLowMinutes * 60;
+
+        int timeHigh = this.timeHighMinutes * 60;
+
+        double timeBornedShifted = (((elapsedSeconds + timeLow + (Math.abs(elapsedSeconds - timeLow)))/2) + timeHigh - (Math.abs(((elapsedSeconds + timeLow + (Math.abs(elapsedSeconds - timeLow)))/2) - timeHigh))) - timeLow;
+
+        //OU
+
+        timeBornedShifted = Math.min( Math.max(elapsedSeconds, timeLow) , timeHigh) - timeLow;
+
+        //OU clamp(val, min, max)
+
+        timeBornedShifted = Math.clamp(elapsedSeconds, timeLow, timeHigh) - timeLow;
+
+        // We need a value between 0 et 1 to get our final coeff
+
+        double timeNormalized = timeBornedShifted / (timeHigh - timeLow);
+
+        // The coefficient of time is normalized between our minimal coefficient and our maximal coefficient.
+
+        double timeCoeff = (timeNormalized - timeCoeffMin) + timeCoeffMax;
+
+        // J'attends que le nombre de ponts attendus soit disponible.
+
+        //int score = (int)((this.activeBridges.stream().reduce(0, (a,b) -> , combiner) * 1000) * timeCoeff);
+
+        
+
+    }
+
+        
+        
+
+    private char calculateNote(){
+
+        char note;
+
+        int scoreMax = 25000;
+
+        double scoreMin = 25000 * timeCoeffMin;
+
+        double etendue = scoreMax - scoreMin;
+
+        if((scoreMax - score) >= (etendue * 0.90)) {note = 'S';}
+
+        else if (scoreMax - score >= (etendue * 0.80)) note = 'A';
+
+        else if (scoreMax - score >= (etendue * 0.70)) note = 'B';
+
+        else if (scoreMax - score >= (etendue * 0.60)) note = 'C';
+
+        else if (scoreMax - score >= etendue* 0.40) note = 'D';
+
+        else note = 'F';
+
+        return note;
+
+    }
 
     private void helpButton(){
         helpButton = new Button("Aide");
