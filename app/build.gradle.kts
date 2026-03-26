@@ -9,6 +9,7 @@ plugins {
     // Apply the application plugin to add support for building a CLI application in Java.
     application
     id("org.openjfx.javafxplugin") version "0.1.0"
+    id("com.gradleup.shadow") version "9.4.0"
 }
 
 repositories {
@@ -16,6 +17,8 @@ repositories {
     mavenCentral()
 }
 
+var javafxVersion = "21"
+var platform = "linux"
 dependencies {
     // Use JUnit Jupiter for testing.
     testImplementation(libs.junit.jupiter)
@@ -29,6 +32,10 @@ dependencies {
     implementation("com.googlecode.json-simple:json-simple:1.1.1")
     // dependancy jackson-databind
     implementation("com.fasterxml.jackson.core:jackson-databind:2.17.1")
+    implementation("org.openjfx:javafx-controls:$javafxVersion:$platform")
+    implementation("org.openjfx:javafx-fxml:$javafxVersion:$platform")
+    implementation("org.openjfx:javafx-graphics:$javafxVersion:$platform")
+    implementation("org.openjfx:javafx-base:$javafxVersion:$platform")
 }
 
 // Apply a specific Java toolchain to ease working on different environments.
@@ -39,13 +46,14 @@ java {
 }
 
 javafx {
-    version = "21"
+    version = "$javafxVersion"
     modules = listOf("javafx.graphics", "javafx.controls", "javafx.base", "javafx.fxml")
 }
 
+var mainClassName = "org.parmentier.Parmentier"
 application {
     // Define the main class for the application.
-    mainClass = "org.parmentier.Parmentier"
+    mainClass = "$mainClassName"
 }
 
 tasks.named<Test>("test") {

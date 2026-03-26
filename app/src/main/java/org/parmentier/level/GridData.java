@@ -16,6 +16,7 @@
 package org.parmentier.level;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 /**
@@ -40,10 +41,12 @@ public class GridData {
     /**
      * Constructs a Level object by loading the level data from the specified file.
      * 
-     * @param path The path of the file containing the level data.
+     * @param fileStream The InputStream of the file containing the level data. The file should be formatted in
+     * a specific way, where the first part contains the node values and the second part contains the bridge states,
+     * separated by a line with a single dash ("-").
      */
-    public GridData(java.nio.file.Path path) {
-        levelArray = loadLevelFromFile(path);
+    public GridData(InputStream fileStream, String fileName) {
+        levelArray = loadLevel(fileStream, fileName);
     }
 
     /**
@@ -53,10 +56,28 @@ public class GridData {
      * @return A 2D array of Node objects representing the level.
      */
     private Node[][] loadLevelFromFile(java.nio.file.Path path) {
+      try {
+            return loadLevel(java.nio.file.Files.newInputStream(path), path.getFileName().toString().replaceFirst("[.][^.]+$", ""));
+        } catch (IOException e) {
+            System.err.println("Level file not found: " + path);
+            return new Node[0][0];
+        }
+    }
+
+    /**
+     * Loads the level data from an InputStream and constructs the 2D array of nodes.
+     *
+     * @param fileStream The InputStream of the file containing the level data. The file should be formatted in
+     * a specific way, where the first part contains the node values and the second part contains the bridge states,
+     * separated by a line with a single dash ("-").
+     * @param fileName The name of the file being loaded, used to set the level's name based on the file name (without extension).
+     *
+     * @return A 2D array of Node objects representing the level.
+     */
+    private Node[][] loadLevel(InputStream fileStream, String fileName) {
         try {
-            String fileName = path.getFileName().toString();
-            this.name = fileName.substring(0, fileName.lastIndexOf('.')); // extrait
-            String content = new String(java.nio.file.Files.readAllBytes(path));
+            this.name = fileName;
+            String content = new String(fileStream.readAllBytes());
             content = content.replace("\r\n", "\n"); // règle les sauts de lignes sur windows
             String[] parts = content.split("-\n"); // sépare la sauvegarde des noeuds et des ponts
             String[] node_lines = parts[0].split("\n");
@@ -126,7 +147,6 @@ public class GridData {
 
             return array;
         } catch (IOException e) {
-            System.err.println("Level file not found: " + path);
             return new Node[0][0];
         }
     }

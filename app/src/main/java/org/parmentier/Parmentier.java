@@ -353,33 +353,15 @@
 
 package org.parmentier;
 
-import org.parmentier.game.Game;
-import org.parmentier.game.MainMenu;
-
-import javafx.application.Application;
-
 /**
  * Main application class for the Parmentier puzzle game.
  */
-public class Parmentier extends Application {
-
-    /**
-     * The main entry point of the Parmentier window.
-     * @brief primaryStage Render context of the window.
-     */
-    @Override
-    public void start(javafx.stage.Stage primaryStage) {
-        Game game = new Game();
-        game.getSceneManager().pushScene(new MenuLogin(game));
-        game.start(primaryStage);
-    }
-
+public class Parmentier {
     /**
      * The main entry point of the Parmentier application.
      * @param args Command-line arguments passed to the application (not used in this implementation).
      */
     public static void main(String[] args) {
-        System.out.println("Welcome to Parmentier!");
-        launch(args);
+      App.main(args); 
     }
 }
