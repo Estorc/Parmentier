@@ -1,3 +1,21 @@
+/** ********************************************************************************
+ * Represents the tutorial scene of the Parmentier game, providing an introduction to the game's mechanics and rules.
+ * This class implements the Scene interface, allowing it to be integrated seamlessly into the game's scene management system.
+ * The tutorial scene features a visually appealing layout with a title, introductory text, and a button to start the tutorial level.
+ * The introductory text provides a comprehensive overview of the Hashiwokakero puzzle, explaining its objectives, rules,
+ * and strategies for solving it. The layout is designed to be user-friendly and engaging, with clear labels and interactive
+ * elements to guide the player through the tutorial experience.
+ ***********************************************************************************
+ * @author Estorc
+ * @version v1.0
+ * @package org.parmentier.game
+ * @copyright Copyright (c) 2026 Parmentier's team GNU GENERAL PUBLIC LICENSE.
+ **********************************************************************************/
+/*                             This file is part of
+ *                                  Parmentier
+ *           (https://github.com/Estorc/Projet-Genie-Logiciel-L3-Parmentier)
+ ***********************************************************************************/
+
 package org.parmentier.game;
 
 import org.parmentier.MenuChoiceLevel;
@@ -13,17 +31,45 @@ import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.TextAlignment;
 
+/**
+ * Represents the tutorial scene of the Parmentier game, providing an introduction to the game's mechanics and rules.
+ * This class implements the Scene interface, allowing it to be integrated seamlessly into the game's scene management system.
+ * The tutorial scene features a visually appealing layout with a title, introductory text, and a button to start the tutorial level.
+ * The introductory text provides a comprehensive overview of the Hashiwokakero puzzle, explaining its objectives, rules,
+ * and strategies for solving it. The layout is designed to be user-friendly and engaging, with clear labels and interactive
+ * elements to guide the player through the tutorial experience.
+ */
 public class Didacticiel implements org.parmentier.game.Scene {
+    
+    /**
+     * Default constructor for the Didacticiel class.
+     * This constructor initializes the tutorial scene, setting up any necessary resources or state.
+     */
     @Override
     public void update(double deltaTime, StackPane uiLayer) {
         //
     }
 
+    /**
+     * Renders the tutorial scene on the canvas, drawing all visual elements based on the current game state.
+     * This method is called at each frame of the game loop to ensure that the scene is visually updated in response to changes
+     * in the game state, user interactions, and animations.
+     * @param gc The GraphicsContext used to draw on the canvas, allowing the scene to render its visual elements such as backgrounds,
+     * nodes, bridges, and other game components.
+     * @param uiLayer The StackPane that serves as the UI layer for the scene, allowing the scene to render or update UI elements in
+     * conjunction with the canvas rendering.
+     */
     @Override
     public void render(GraphicsContext gc, StackPane uiLayer) {
         //
     }
 
+    /**
+     * Initializes the tutorial scene, setting up the user interface elements such as labels and buttons.
+     * This method is called when the scene is first loaded, allowing it to prepare the layout and interactive components for display.
+     * @param uiLayer The StackPane that serves as the UI layer for the scene, allowing the scene to add interactive elements such as
+     * buttons and labels.
+     */
     @Override
     public void initialize(StackPane uiLayer) {
         uiLayer.getChildren().clear();
