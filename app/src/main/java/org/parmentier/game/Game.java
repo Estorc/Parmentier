@@ -193,10 +193,22 @@ public class Game {
         sceneManager.activeScene().initialize(uiLayer);
     }
 
+    /**
+     * Sets the current user's name in the game.
+     * @param name The name of the current user to be set in the game.
+     * This method allows the game to keep track of the current user's name,
+     * which can be used for displaying personalized messages, saving progress, or managing user profiles within the game.
+     */
     public void setCurrentUserName(String name) {
         this.currentUserName = name;
     }
 
+    /**
+     * Gets the current user's name in the game.
+     * @return The name of the current user in the game.
+     * This method allows other parts of the application to access the current user's name, 
+     * which can be useful for displaying personalized messages, saving progress, or managing user profiles within the game.
+     */
     public String getCurrentUserName() {
         return this.currentUserName;
     }

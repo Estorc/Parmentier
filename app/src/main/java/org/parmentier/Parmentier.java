@@ -363,6 +363,10 @@ import javafx.application.Application;
  */
 public class Parmentier extends Application {
 
+    /**
+     * The main entry point of the Parmentier window.
+     * @brief primaryStage Render context of the window.
+     */
     @Override
     public void start(javafx.stage.Stage primaryStage) {
         Game game = new Game();
@@ -370,6 +374,10 @@ public class Parmentier extends Application {
         game.start(primaryStage);
     }
 
+    /**
+     * The main entry point of the Parmentier application.
+     * @param args Command-line arguments passed to the application (not used in this implementation).
+     */
     public static void main(String[] args) {
         System.out.println("Welcome to Parmentier!");
         launch(args);

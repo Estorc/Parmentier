@@ -6,17 +6,16 @@
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
 
-<VBox alignment="CENTER" prefHeight="400.0" prefWidth="350.0" spacing="20.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
+<VBox alignment="CENTER" prefHeight="400.0" prefWidth="350.0" spacing="20.0" styleClass="main-menu-bg" stylesheets="@app.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <Label text="Quel est ton nom d'utilisateur ?" styleClass="title-label"></Label>
+      <Label styleClass="level-title" text="Quel est ton nom d'utilisateur ?" />
 
-      <TextField fx:id="searchBar" maxWidth="500.0" prefHeight="35.0" promptText="Entre ton nom d'utilisateur ici..." VBox.vgrow="NEVER" />
+      <TextField fx:id="searchBar" maxWidth="500.0" prefHeight="40.0" promptText="Entre ton nom d'utilisateur ici..." styleClass="login-textfield" VBox.vgrow="NEVER" />
 
-      <ListView fx:id="listView" maxWidth="500.0" prefHeight="100.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
+      <ListView fx:id="listView" maxWidth="500.0" prefHeight="100.0" prefWidth="200.0" styleClass="login-listview" VBox.vgrow="ALWAYS" />
 
-      <Button fx:id="btnValider" text="valider" styleClass="button" mnemonicParsing="false" />
+      <Button fx:id="btnValider" mnemonicParsing="false" styleClass="menu-button" text="Valider" />
    </children>
    <padding>
       <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />

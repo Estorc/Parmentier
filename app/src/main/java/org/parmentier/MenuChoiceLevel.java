@@ -62,7 +62,8 @@ public class MenuChoiceLevel extends Menu{
     }
 
     /**
-     * Renders the menu for level selection. Since this menu is primarily defined by its FXML layout, there is no custom rendering logic needed in this method.
+     * Renders the menu for level selection.
+     * Since this menu is primarily defined by its FXML layout, there is no custom rendering logic needed in this method.
      * @param gc The GraphicsContext used for rendering.
      * @param uiLayer The StackPane that serves as the UI layer for the menu.
      */
@@ -90,6 +91,9 @@ public class MenuChoiceLevel extends Menu{
         Game.getInstance().getSceneManager().pushScene(new Level(((javafx.scene.Node) event.getSource()).getId()));
     }
 
+    /**
+     * Handles the action of the back button in the level selection menu, allowing the user to return to the previous menu or scene.
+     */
     @FXML
     public void handleBackButton() {
         Game.getInstance().getSceneManager().popScene(); 

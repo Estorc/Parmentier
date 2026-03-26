@@ -1,3 +1,18 @@
+/** ********************************************************************************
+ * Represents the main menu scene of the Parmentier game, providing options for the player to start a new game,
+ * access the tutorial, adjust settings, or exit the application.
+ * The main menu features a visually appealing layout with a logo, title, subtitle, and interactive buttons.
+ ***********************************************************************************
+ * @author Estorc
+ * @version v1.0
+ * @package org.parmentier.game
+ * @copyright Copyright (c) 2026 Parmentier's team GNU GENERAL PUBLIC LICENSE.
+ **********************************************************************************/
+/*                             This file is part of
+ *                                  Parmentier
+ *           (https://github.com/Estorc/Projet-Genie-Logiciel-L3-Parmentier)
+ ***********************************************************************************/
+
 package org.parmentier.game;
 
 import org.parmentier.MenuChoiceLevel;
@@ -13,18 +28,41 @@ import javafx.scene.text.Text;
 import javafx.geometry.Pos;
 import javafx.geometry.Insets;
 
+/**
+ * Represents the main menu scene of the Parmentier game, providing options for the player to start a new game,
+ * access the tutorial, adjust settings, or exit the application.
+ * The main menu features a visually appealing layout with a logo, title, subtitle, and interactive buttons.
+ */
 public class MainMenu implements org.parmentier.game.Scene {
 
+    /**
+     * Default constructor for the MainMenu class.
+     * This constructor initializes the main menu scene, setting up any necessary resources or state.
+     */
     @Override
     public void update(double deltaTime, StackPane uiLayer) {
         //
     }
 
+    /**
+     * Renders the main menu scene on the canvas, drawing all visual elements based on the current game state.
+     * This method is called at each frame of the game loop to ensure that the scene is visually updated in response to changes in the game state,
+     * user interactions, and animations.
+     * @param gc The GraphicsContext used to draw on the canvas, allowing the scene to render its visual elements such as backgrounds,
+     * nodes, bridges, and other game components.
+     * @param uiLayer The StackPane that serves as the UI layer for the scene,
+     * allowing the scene to render or update UI elements in conjunction with the canvas rendering.
+     */
     @Override
     public void render(GraphicsContext gc, StackPane uiLayer) {
         //
     }
 
+    /**
+     * Creates a StackPane containing a circle with a number inside, used for the logo in the main menu.
+     * @param number The number to be displayed inside the circle, representing a node in the Parmentier puzzle game.
+     * @return A StackPane containing the circle and the number, styled according to the main menu's design.
+     */
     private StackPane createCircledNumber(String number) {
         Circle circle = new Circle(22);
         circle.getStyleClass().add("logo-circle");
@@ -34,6 +72,13 @@ public class MainMenu implements org.parmentier.game.Scene {
         return pane;
     }
 
+    /**
+     * Initializes the main menu scene, setting up the UI elements such as the logo, title, subtitle, and buttons for user interaction.
+     * This method is called when the main menu scene is first displayed, allowing it to prepare the necessary UI components and layout
+     * for the player to interact with.
+     * @param uiLayer The StackPane that serves as the UI layer for the scene, allowing the main menu to add interactive elements
+     * such as buttons and labels.
+     */
     @Override
     public void initialize(StackPane uiLayer) {
         uiLayer.getChildren().clear();
@@ -95,7 +140,8 @@ public class MainMenu implements org.parmentier.game.Scene {
     }
 
     /**
-     * Default destructor for the MainMenu class. Since there are no specific resources to clean up, this method is left empty.
+     * Default destructor for the MainMenu class.
+     * Since there are no specific resources to clean up, this method is left empty.
      */
     @Override
     public void destroy() {

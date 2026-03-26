@@ -20,14 +20,34 @@ import org.parmentier.level.Bridge;
 import org.parmentier.level.GridData;
 import org.parmentier.level.Node;
 
+/**
+ * Represents a menu in the Parmentier puzzle game, serving as a base class for different
+ * types of menus such as the main menu, settings menu, and pause menu.
+ */
 public class HintBulb {
+    /** 
+     * List of hints available in the hint bulb.
+     * Each hint is associated with a specific condition that determines when it can be offered to the player
+     */
     private List<Hint> hints;
+
+    /** Instance of the HintBulb */
     private static HintBulb instance;
+
+    /** 
+     * Constructs a HintBulb with the specified list of hints.
+     * @param hints The list of hints to be included in the hint bulb.
+     */
     private HintBulb(List<Hint> hints) {
         this.hints = hints;
     }
 
 
+    /**
+     * Creates and initializes the HintBulb with a predefined set of hints.
+     * Each hint is associated with a specific condition that determines when it can be offered to the player.
+     * @return A new instance of HintBulb initialized with the predefined hints.
+     */
     static private HintBulb create() {
        return new HintBulb(List.of(
             /*
@@ -392,6 +412,11 @@ public class HintBulb {
         ));
     }
 
+    /**
+     * Gets the singleton instance of the HintBulb.
+     * If the instance does not exist, it is created using the create() method.
+     * @return The singleton instance of the HintBulb.
+     */
     static public HintBulb get() {
       if (instance == null) {
           instance = create();
@@ -399,12 +424,23 @@ public class HintBulb {
       return instance;
     }
 
+    /**
+     * Re-enables all hints in the hint bulb, allowing them to be offered to the player again.
+     * This method can be called to reset the state of the hints after they have been used or disabled.
+     */
     public void RenableHints() {
         for (Hint hint : hints) {
             hint.setEnabled(true);
         }
     }
 
+    /**
+     * Gets a random hint from the hint bulb based on the current grid data and the availability of the hints.
+     * The method calculates the total weight of all available hints and selects one randomly based on their weights.
+     * Once a hint is selected, it is disabled to prevent it from being offered again until the hints are re-enabled.
+     * @param gridData The current grid data of the puzzle, which is used to evaluate the availability of the hints based on their conditions.
+     * @return A randomly selected hint that is available based on the current grid data, or null if no hints are available.
+     */
     public Hint getRandomHint(GridData gridData) {
         if (hints.isEmpty()) {
             return null; // No hints available

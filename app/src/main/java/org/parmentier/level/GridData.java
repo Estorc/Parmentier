@@ -126,6 +126,11 @@ public class GridData {
         }
     }
 
+    /**
+     * Returns a list of all the nodes in the level.
+     * This method iterates through the 2D array of nodes and collects all non-null nodes into a list, which is then returned to the caller.
+     * @return A list of all the nodes in the level.
+     */
     public List<Node> getNodes() {
         return java.util.Arrays.stream(levelArray)
             .flatMap(java.util.Arrays::stream)
@@ -133,6 +138,13 @@ public class GridData {
             .toList();
     }
 
+    /**
+     * Saves the current state of the level to a file.
+     * The state includes the value of each node and the state of each bridge.
+     * The state is saved in a text format where the first part contains the node values and the second part contains the bridge states,
+     * separated by a line with a single dash ("-").
+     * The method creates a "saves" directory if it does not exist and saves the state to a file named after the level's name with a ".sav" extension.
+     */
     public void saveState() {
         StringBuilder nodeBuilder = new StringBuilder();
         StringBuilder bridgeBuilder = new StringBuilder();
@@ -294,18 +306,37 @@ public class GridData {
         return levelArray[0].length;
     }
 
+    /**
+     * Determines if the given node is located at a corner of the grid.
+     * A node is considered a corner if it is located at one of the four corners of the grid (top-left, top-right, bottom-left, bottom-right).
+     * @param node The node to check.
+     * @return true if the node is located at a corner of the grid, false otherwise.
+     */
     public boolean isCorner(Node node) {
         long x = node.getPosition().getX();
         long y = node.getPosition().getY();
         return (x == 0 && y == 0) || (x == 0 && y == getHeight() - 1) || (x == getWidth() - 1 && y == 0) || (x == getWidth() - 1 && y == getHeight() - 1);
     }
 
+    /**
+     * Determines if the given node is located at an edge of the grid (but not a corner).
+     * A node is considered an edge if it is located on the outer border of the grid (top row, bottom row, left column, right column)
+     * but is not a corner.
+     * @param node The node to check.
+     * @return true if the node is located at an edge of the grid, false otherwise.
+     */
     public boolean isEdge(Node node) {
         long x = node.getPosition().getX();
         long y = node.getPosition().getY();
         return (x == 0 || y == 0 || x == getWidth() - 1 || y == getHeight() - 1) && !isCorner(node);
     }
 
+    /**
+     * Determines if the given node is located at the center of the grid (not an edge or a corner).
+     * A node is considered a center if it is not located on the outer border of the grid and is not a corner.
+     * @param node The node to check.
+     * @return true if the node is located at the center of the grid, false otherwise.
+     */
     public boolean isCenter(Node node) {
         return !isEdge(node) && !isCorner(node);
     }
