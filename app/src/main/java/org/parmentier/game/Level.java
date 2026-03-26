@@ -95,6 +95,8 @@ public class Level implements org.parmentier.game.Scene {
 
     private Button checkButton;
     private Button helpButton;
+    private Label hintLabel;
+    private Label checkLabel;
 
     public Level() {}
 
@@ -212,23 +214,26 @@ public class Level implements org.parmentier.game.Scene {
 
     private void helpButton(){
         helpButton = new Button("Aide");
-        helpButton.getStyleClass().add("button");
+        helpButton.getStyleClass().add("menu-button");
         StackPane.setMargin(helpButton, new javafx.geometry.Insets(10));
+
+        hintLabel = new Label();
+        hintLabel.getStyleClass().add("hint-banner");
+        hintLabel.setVisible(false);
+        hintLabel.setWrapText(true);
+        hintLabel.setMaxWidth(500);
+        StackPane.setAlignment(hintLabel, javafx.geometry.Pos.BOTTOM_CENTER);
+        StackPane.setMargin(hintLabel, new javafx.geometry.Insets(0, 0, 80, 0));
+
         helpButton.setOnMouseClicked(e -> {
-            HintBulb hintBulb = org.parmentier.hint.HintBulb.get();
-            Hint hint = hintBulb.getRandomHint(level);
-            if (hint != null) {
-                Alert alert = new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.INFORMATION);
-                alert.setTitle("Aide");
-                alert.setHeaderText(null);
-                alert.setContentText(hint.getHintText());
-                alert.showAndWait();
+            if (hintLabel.isVisible()) {
+                hintLabel.setVisible(false);
             } else {
-                Alert alert = new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.INFORMATION);
-                alert.setTitle("Aide");
-                alert.setHeaderText(null);
-                alert.setContentText("Aucune aide disponible.");
-                alert.showAndWait();
+                HintBulb hintBulb = org.parmentier.hint.HintBulb.get();
+                Hint hint = hintBulb.getRandomHint(level);
+                String text = (hint != null) ? hint.getHintText() : "Aucune aide disponible.";
+                hintLabel.setText(text);
+                hintLabel.setVisible(true);
             }
         });
     }
@@ -261,7 +266,7 @@ public class Level implements org.parmentier.game.Scene {
         StackPane.setAlignment(stopwatchLabel, javafx.geometry.Pos.TOP_CENTER);
         StackPane.setAlignment(helpButton, javafx.geometry.Pos.TOP_RIGHT);
         uiLayer.getChildren().add(helpButton);
-        
+        uiLayer.getChildren().add(hintLabel);
         uiLayer.getChildren().add(stopwatchLabel);
 
         for (int i = 0; i < level.getWidth(); i++) {
@@ -291,29 +296,38 @@ public class Level implements org.parmentier.game.Scene {
             }
         });
         // My work...
-        Button check = new Button("Check");
-        check.getStyleClass().add("button");
+        Button check = new Button("Vérifier");
+        check.getStyleClass().add("menu-button");
         StackPane.setAlignment(check, javafx.geometry.Pos.BOTTOM_CENTER);
+
+        checkLabel = new Label();
+        checkLabel.getStyleClass().add("hint-banner");
+        checkLabel.setVisible(false);
+        checkLabel.setWrapText(true);
+        checkLabel.setMaxWidth(500);
+        StackPane.setAlignment(checkLabel, javafx.geometry.Pos.BOTTOM_CENTER);
+        StackPane.setMargin(checkLabel, new javafx.geometry.Insets(0, 0, 60, 0));
+
+        uiLayer.getChildren().add(checkLabel);
         uiLayer.getChildren().add(check);
 
         check.setOnMouseClicked(e -> {
-            boolean status = level.checkState();
-            if (status) {
-                Game.getInstance().getSceneManager().pushScene(new MenuFinNiveau(getStopwatchTime(), 42));
+            if (checkLabel.isVisible()) {
+                checkLabel.setVisible(false);
             } else {
-                Alert gridStat = new Alert(Alert.AlertType.INFORMATION);
-                gridStat.setTitle("Résultat de la vérification");
-                gridStat.setHeaderText(null);
-
-                // check du nombre d'erreurs
-                String err_msg = "";
-                int err = level.countErrors();
-                if(err > 0)
-                    err_msg = "La grille comporte " + Integer.toString(err) + " erreurs. Continuez à essayer !";
-                else
-                    err_msg = "Vous n'avez fait aucune erreur. Continuez comme ça !";
-                gridStat.setContentText(err_msg);
-                gridStat.showAndWait();
+                boolean status = level.checkState();
+                if (status) {
+                    Game.getInstance().getSceneManager().pushScene(new MenuFinNiveau(getStopwatchTime(), 42));
+                } else {
+                    String err_msg;
+                    int err = level.countErrors();
+                    if (err > 0)
+                        err_msg = "La grille comporte " + Integer.toString(err) + " erreurs. Continuez à essayer !";
+                    else
+                        err_msg = "Vous n'avez fait aucune erreur. Continuez comme ça !";
+                    checkLabel.setText(err_msg);
+                    checkLabel.setVisible(true);
+                }
             }
         });
     }
@@ -333,7 +347,7 @@ public class Level implements org.parmentier.game.Scene {
         StackPane.setAlignment(stopwatchLabel, javafx.geometry.Pos.TOP_CENTER);
         StackPane.setAlignment(helpButton, javafx.geometry.Pos.TOP_RIGHT);
         uiLayer.getChildren().add(helpButton);
-        
+        uiLayer.getChildren().add(hintLabel);
         uiLayer.getChildren().add(stopwatchLabel);
 
         for (int i = 0; i < level.getWidth(); i++) {
@@ -364,20 +378,31 @@ public class Level implements org.parmentier.game.Scene {
         });
         // My work...
         Button check = new Button("Check");
-        check.getStyleClass().add("button");
+        check.getStyleClass().add("menu-button");
         StackPane.setAlignment(check, javafx.geometry.Pos.BOTTOM_CENTER);
+
+        checkLabel = new Label();
+        checkLabel.getStyleClass().add("hint-banner");
+        checkLabel.setVisible(false);
+        checkLabel.setWrapText(true);
+        checkLabel.setMaxWidth(500);
+        StackPane.setAlignment(checkLabel, javafx.geometry.Pos.BOTTOM_CENTER);
+        StackPane.setMargin(checkLabel, new javafx.geometry.Insets(0, 0, 60, 0));
+
+        uiLayer.getChildren().add(checkLabel);
         uiLayer.getChildren().add(check);
 
         check.setOnMouseClicked(e -> {
-            int status = level.checkState();
-            if (status == 0) {
-                Game.getInstance().getSceneManager().pushScene(new MenuFinNiveau(getStopwatchTime(), 42));
+            if (checkLabel.isVisible()) {
+                checkLabel.setVisible(false);
             } else {
-                Alert gridStat = new Alert(Alert.AlertType.INFORMATION);
-                gridStat.setTitle("Résultat de la vérification");
-                gridStat.setHeaderText(null);
-                gridStat.setContentText("Le niveau n'est pas encore complété. Continuez à essayer !");
-                gridStat.showAndWait();
+                boolean status = level.checkState();
+                if (status) {
+                    Game.getInstance().getSceneManager().pushScene(new MenuFinNiveau(getStopwatchTime(), 42));
+                } else {
+                    checkLabel.setText("Le niveau n'est pas encore complété. Continuez à essayer !");
+                    checkLabel.setVisible(true);
+                }
             }
         });
     }

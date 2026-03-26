@@ -13,9 +13,8 @@
  ***********************************************************************************/
 
 package org.parmentier.hint;
-import java.util.List;
+import java.util.*;
 import java.util.Random;
-import java.util.ArrayList;
 
 import org.parmentier.level.Bridge;
 import org.parmentier.level.GridData;
@@ -229,25 +228,6 @@ public class HintBulb {
                     });
                 }),
 
-            //Isolation when a segment connects to an island
-            new Hint("Une île " + Bridge.MAX_STATE + " avec deux voisins d'indice 1 ne peuvent pas être reliés comme ceci: 1 - 2 - 1.", 
-                70, 1, (grid) -> {
-                return grid.getNodes().stream()
-                    .filter(node -> node.getBridges().size() == 3 && node.getValue() == Bridge.MAX_STATE) 
-                    .anyMatch(node -> {
-                        long neighborsWithOne = node.getBridges().stream()
-                            .filter(b -> {
-                                Node neighbor = (b.getFrom() == node) ? b.getTo() : b.getFrom();
-                                return neighbor.getValue() == 1;
-                            }).count();
-                        if (neighborsWithOne != 2) return false;
-
-                        int requiredBridges = node.getValue(); // Get the required number of bridges for this island
-                        int existingBridges = node.getBridges().stream().reduce(0, (sum, bridge) -> sum + bridge.getState(), Integer::sum); // Get the number of existing bridges
-                        return existingBridges < requiredBridges; // Check if there are still bridges needed
-                    });
-                }),
-
             new Hint("Une île " + (Bridge.MAX_STATE + 1) + " avec un voisin d'indice 1 et un voisin d'indice 2 ne peuvent pas être reliés comme ceci: 1 - 3 - 2 ou 2 - 3 - 1.", 
                 75, 1, (grid) -> {
                 return grid.getNodes().stream()
@@ -274,9 +254,140 @@ public class HintBulb {
                         int existingBridges = node.getBridges().stream().reduce(0, (sum, bridge) -> sum + bridge.getState(), Integer::sum); // Get the number of existing bridges
                         return existingBridges < requiredBridges; // Check if there are still bridges needed
                     });
-                })
+                }),
 
-            
+            //Isolation when a segment connects to an island
+            new Hint("Un segment d'îles presque complet ne peut pas connecter son dernier pont vers une île si cela isole le segment du reste de la grille.", 
+                80, 6, (grid) -> {
+                List<Node> allNodes = grid.getNodes();
+                int totalNodes = allNodes.size();
+                if (totalNodes <= 2) return false;
+
+                // BFS
+                Map<Node, Set<Node>> componentOf = new HashMap<>();
+                List<Set<Node>> components = new ArrayList<>();
+
+                for (Node start : allNodes) {
+                    if (!componentOf.containsKey(start)){
+                        Set<Node> component = new HashSet<>();
+                        Queue<Node> queue = new LinkedList<>();
+                        queue.add(start);
+                        while (!queue.isEmpty()) {
+                            Node cur = queue.poll();
+                            if (!component.contains(cur)){
+                                component.add(cur);
+                                for (Bridge b : cur.getBridges()) {
+                                    if (b.getState() > 0) {
+                                        Node next = (b.getFrom() == cur) ? b.getTo() : b.getFrom();
+                                        if (!component.contains(next)) queue.add(next);
+                                    }
+                                }
+                            }
+                        }
+                        for (Node n : component) componentOf.put(n, component);
+                        components.add(component);
+                    }
+                }
+
+                // For each component, verify if there is exactly 1 brige missing
+                for (Set<Node> segment : components) {
+                    long segmentMissing = segment.stream()
+                        .mapToLong(n -> n.getValue() - n.getBridges().stream().mapToInt(Bridge::getState).sum())
+                        .sum();
+                    if (segmentMissing != 1) continue;
+
+                    for (Node n : segment) {
+                        int remaining = n.getValue() - n.getBridges().stream().mapToInt(Bridge::getState).sum();
+                        if (remaining != 1) continue;
+
+                        for (Bridge b : n.getBridges()) {
+                            if (b.getState() <= 0){
+                                Node other = (b.getFrom() == n) ? b.getTo() : b.getFrom();
+                                Set<Node> otherComponent = componentOf.get(other);
+
+                                if (otherComponent != segment){
+                                    int otherRemaining = other.getValue() - other.getBridges().stream().mapToInt(Bridge::getState).sum();
+                                    if (otherRemaining > 0){
+                                        long otherMissing = otherComponent.stream()
+                                            .mapToLong(on -> on.getValue() - on.getBridges().stream().mapToInt(Bridge::getState).sum())
+                                            .sum();
+
+                                        if (otherMissing == 1 && segment.size() + otherComponent.size() < totalNodes)return true;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                return false;
+            }),
+
+            // Isolation when a segment connects to another segment
+            new Hint("Deux segments d'îles presque complets ne peuvent pas se connecter entre eux avec leurs deux ponts manquants si cela isolerait le groupe du reste de la grille.",
+                85, 5, (grid) -> {
+                List<Node> allNodes = grid.getNodes();
+                int totalNodes = allNodes.size();
+                if (totalNodes <= 2) return false;
+
+                // BFS
+                Map<Node, Set<Node>> componentOf = new HashMap<>();
+                List<Set<Node>> components = new ArrayList<>();
+
+                for (Node start : allNodes) {
+                    if (!componentOf.containsKey(start)){
+                        Set<Node> component = new HashSet<>();
+                        Queue<Node> queue = new LinkedList<>();
+                        queue.add(start);
+                        while (!queue.isEmpty()) {
+                            Node cur = queue.poll();
+                            if (!component.contains(cur)){
+                                component.add(cur);
+                                for (Bridge b : cur.getBridges()) {
+                                    if (b.getState() > 0) {
+                                        Node next = (b.getFrom() == cur) ? b.getTo() : b.getFrom();
+                                        if (!component.contains(next)) queue.add(next);
+                                    }
+                                }
+                            }
+                        }
+                        for (Node n : component) componentOf.put(n, component);
+                        components.add(component);
+                    }
+                }
+
+                //For each pair of segments, each having exactly 2 missing bridges
+                for (Set<Node> segmentA : components) {
+                    long missingA = segmentA.stream()
+                        .mapToLong(n -> n.getValue() - n.getBridges().stream().mapToInt(Bridge::getState).sum())
+                        .sum();
+                    if (missingA == 2){
+
+                        for (Node nodeA : segmentA) {
+                            int remainingA = nodeA.getValue() - nodeA.getBridges().stream().mapToInt(Bridge::getState).sum();
+                            if (remainingA >= 2){
+                                for (Bridge b : nodeA.getBridges()) {
+                                    if (b.getState() < Bridge.MAX_STATE){
+                                        Node nodeB = (b.getFrom() == nodeA) ? b.getTo() : b.getFrom();
+                                        Set<Node> segmentB = componentOf.get(nodeB);
+                                        if (segmentB != segmentA){
+                                            long missingB = segmentB.stream()
+                                                .mapToLong(n -> n.getValue() - n.getBridges().stream().mapToInt(Bridge::getState).sum())
+                                                .sum();
+                                            if (missingB == 2){
+                                                int remainingB = nodeB.getValue() - nodeB.getBridges().stream().mapToInt(Bridge::getState).sum();
+                                                if (remainingB >= 2){
+                                                    if (segmentA.size() + segmentB.size() < totalNodes)return true;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                return false;
+            })
 
         ));
     }

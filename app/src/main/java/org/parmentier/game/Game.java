@@ -156,6 +156,8 @@ public class Game {
         Canvas canvas = new Canvas(WIDTH, HEIGHT);
         GraphicsContext gc = canvas.getGraphicsContext2D();
         StackPane root = new StackPane(canvas);
+        root.getStyleClass().add("main-menu-bg");
+        root.getStylesheets().add(getClass().getResource("/app.css").toExternalForm());
         uiLayer = new StackPane();
         
         canvas.widthProperty().bind(root.widthProperty());

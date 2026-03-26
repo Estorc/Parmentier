@@ -90,5 +90,10 @@ public class MenuChoiceLevel extends Menu{
         Game.getInstance().getSceneManager().pushScene(new Level());
     }
 
+    @FXML
+    public void handleBackButton() {
+        Game.getInstance().getSceneManager().popScene(); 
+    }
+
 
 }
