@@ -236,7 +236,7 @@ public class Level implements org.parmentier.game.Scene {
         helpButton.getStyleClass().add("menu-button");
         StackPane.setMargin(helpButton, new javafx.geometry.Insets(10));
 
-        hintLabel = new Label();
+        Label hintLabel = new Label();
         hintLabel.getStyleClass().add("hint-banner");
         hintLabel.setVisible(false);
         hintLabel.setWrapText(true);
@@ -313,7 +313,7 @@ public class Level implements org.parmentier.game.Scene {
         check.getStyleClass().add("menu-button");
         StackPane.setAlignment(check, javafx.geometry.Pos.BOTTOM_CENTER);
 
-        checkLabel = new Label();
+        Label checkLabel = new Label();
         checkLabel.getStyleClass().add("hint-banner");
         checkLabel.setVisible(false);
         checkLabel.setWrapText(true);
