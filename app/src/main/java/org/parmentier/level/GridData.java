@@ -16,6 +16,7 @@
 package org.parmentier.level;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 /**
@@ -40,10 +41,12 @@ public class GridData {
     /**
      * Constructs a Level object by loading the level data from the specified file.
      * 
-     * @param path The path of the file containing the level data.
+     * @param fileStream The InputStream of the file containing the level data. The file should be formatted in
+     * a specific way, where the first part contains the node values and the second part contains the bridge states,
+     * separated by a line with a single dash ("-").
      */
-    public GridData(java.nio.file.Path path) {
-        levelArray = loadLevelFromFile(path);
+    public GridData(InputStream fileStream, String fileName) {
+        levelArray = loadLevel(fileStream, fileName);
     }
 
     /**
@@ -53,10 +56,28 @@ public class GridData {
      * @return A 2D array of Node objects representing the level.
      */
     private Node[][] loadLevelFromFile(java.nio.file.Path path) {
+      try {
+            return loadLevel(java.nio.file.Files.newInputStream(path), path.getFileName().toString().replaceFirst("[.][^.]+$", ""));
+        } catch (IOException e) {
+            System.err.println("Level file not found: " + path);
+            return new Node[0][0];
+        }
+    }
+
+    /**
+     * Loads the level data from an InputStream and constructs the 2D array of nodes.
+     *
+     * @param fileStream The InputStream of the file containing the level data. The file should be formatted in
+     * a specific way, where the first part contains the node values and the second part contains the bridge states,
+     * separated by a line with a single dash ("-").
+     * @param fileName The name of the file being loaded, used to set the level's name based on the file name (without extension).
+     *
+     * @return A 2D array of Node objects representing the level.
+     */
+    private Node[][] loadLevel(InputStream fileStream, String fileName) {
         try {
-            String fileName = path.getFileName().toString();
-            this.name = fileName.substring(0, fileName.lastIndexOf('.')); // extrait
-            String content = new String(java.nio.file.Files.readAllBytes(path));
+            this.name = fileName;
+            String content = new String(fileStream.readAllBytes());
             content = content.replace("\r\n", "\n"); // règle les sauts de lignes sur windows
             String[] parts = content.split("-\n"); // sépare la sauvegarde des noeuds et des ponts
             String[] node_lines = parts[0].split("\n");
@@ -109,11 +130,16 @@ public class GridData {
 
                     if (upState != 0) {
                         from.getBridge(0).setState(upState);
+                    }
+                    if (upSolution != 0) {
                         from.getBridge(0).setSolutionState(upSolution);
                     }
-
+                    
                     if (rightState != 0) {
                         from.getBridge(1).setState(rightState);
+                    }
+
+                    if (rightSolution != 0) {
                         from.getBridge(1).setSolutionState(rightSolution);
                     }
                 }
@@ -121,18 +147,18 @@ public class GridData {
 
             return array;
         } catch (IOException e) {
-            System.err.println("Level file not found: " + path);
             return new Node[0][0];
         }
     }
 
-    public List<Node> getNodes() {
-        return java.util.Arrays.stream(levelArray)
-            .flatMap(java.util.Arrays::stream)
-            .filter(node -> node != null)
-            .toList();
-    }
 
+    /**
+     * Saves the current state of the level to a file.
+     * The state includes the value of each node and the state of each bridge.
+     * The state is saved in a text format where the first part contains the node values and the second part contains the bridge states,
+     * separated by a line with a single dash ("-").
+     * The method creates a "saves" directory if it does not exist and saves the state to a file named after the level's name with a ".sav" extension.
+     */
     public void saveState() {
         StringBuilder nodeBuilder = new StringBuilder();
         StringBuilder bridgeBuilder = new StringBuilder();
@@ -191,6 +217,18 @@ public class GridData {
         } catch (java.io.IOException e) {
             System.err.println("Error saving game state: " + e.getMessage());
         }
+    }
+
+    /**
+     * Returns a list of all the nodes in the level.
+     * This method iterates through the 2D array of nodes and collects all non-null nodes into a list, which is then returned to the caller.
+     * @return A list of all the nodes in the level.
+     */
+    public List<Node> getNodes() {
+        return java.util.Arrays.stream(levelArray)
+            .flatMap(java.util.Arrays::stream)
+            .filter(node -> node != null)
+            .toList();
     }
 
     /**
@@ -294,18 +332,37 @@ public class GridData {
         return levelArray[0].length;
     }
 
+    /**
+     * Determines if the given node is located at a corner of the grid.
+     * A node is considered a corner if it is located at one of the four corners of the grid (top-left, top-right, bottom-left, bottom-right).
+     * @param node The node to check.
+     * @return true if the node is located at a corner of the grid, false otherwise.
+     */
     public boolean isCorner(Node node) {
         long x = node.getPosition().getX();
         long y = node.getPosition().getY();
         return (x == 0 && y == 0) || (x == 0 && y == getHeight() - 1) || (x == getWidth() - 1 && y == 0) || (x == getWidth() - 1 && y == getHeight() - 1);
     }
 
+    /**
+     * Determines if the given node is located at an edge of the grid (but not a corner).
+     * A node is considered an edge if it is located on the outer border of the grid (top row, bottom row, left column, right column)
+     * but is not a corner.
+     * @param node The node to check.
+     * @return true if the node is located at an edge of the grid, false otherwise.
+     */
     public boolean isEdge(Node node) {
         long x = node.getPosition().getX();
         long y = node.getPosition().getY();
         return (x == 0 || y == 0 || x == getWidth() - 1 || y == getHeight() - 1) && !isCorner(node);
     }
 
+    /**
+     * Determines if the given node is located at the center of the grid (not an edge or a corner).
+     * A node is considered a center if it is not located on the outer border of the grid and is not a corner.
+     * @param node The node to check.
+     * @return true if the node is located at the center of the grid, false otherwise.
+     */
     public boolean isCenter(Node node) {
         return !isEdge(node) && !isCorner(node);
     }

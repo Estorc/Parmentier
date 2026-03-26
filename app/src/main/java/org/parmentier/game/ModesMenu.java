@@ -1,3 +1,22 @@
+/** ********************************************************************************
+ * Represents the Modes Menu scene in the Parmentier game.
+ * This class is responsible for displaying the different game modes available to the player,
+ * such as the tutorial and levels. It provides a user interface for selecting a game mode and
+ * serves as a central hub for navigating to different parts of the game.
+ * The ModesMenu class implements the Scene interface, allowing it to be integrated seamlessly
+ * into the game's scene management system. It includes methods for updating the scene, rendering
+ * visual elements, initializing the user interface, and destroying the scene when it is no longer needed.
+ ***********************************************************************************
+ * @author Estorc
+ * @version v1.0
+ * @package org.parmentier.game
+ * @copyright Copyright (c) 2026 Parmentier's team GNU GENERAL PUBLIC LICENSE.
+ **********************************************************************************/
+/*                             This file is part of
+ *                                  Parmentier
+ *           (https://github.com/Estorc/Projet-Genie-Logiciel-L3-Parmentier)
+ ***********************************************************************************/
+
 package org.parmentier.game;
 
 import javafx.scene.canvas.GraphicsContext;
@@ -6,6 +25,15 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
+/**
+ * Represents the Modes Menu scene in the Parmentier game.
+ * This class is responsible for displaying the different game modes available to the player,
+ * such as the tutorial and levels. It provides a user interface for selecting a game mode and
+ * serves as a central hub for navigating to different parts of the game.
+ * The ModesMenu class implements the Scene interface, allowing it to be integrated seamlessly
+ * into the game's scene management system. It includes methods for updating the scene, rendering
+ * visual elements, initializing the user interface, and destroying the scene when it is no longer needed.
+ */
 public class ModesMenu implements org.parmentier.game.Scene {
 
     @Override

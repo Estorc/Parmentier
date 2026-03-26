@@ -14,6 +14,7 @@
 
 package org.parmentier.game;
 
+import java.io.InputStream;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
@@ -88,6 +89,12 @@ public class Level implements org.parmentier.game.Scene {
      */
     private int elapsedSeconds = 0;
 
+    private int score = 0;
+    private int timeLowMinutes = 5;
+    private int timeHighMinutes = 30;
+    private double timeCoeffMin = 0.67;
+    private float timeCoeffMax = 1;
+
     /**
      * The label used to display the elapsed time on the UI. This label is updated by the stopwatch Timeline to show
      * the current elapsed time in minutes and seconds.
@@ -102,11 +109,13 @@ public class Level implements org.parmentier.game.Scene {
         // Try loading saved state first, if it fails load the level data from the resource file
         
         boolean loadedFromSave = false;
+        InputStream input;
         try {
           java.nio.file.Path savePath = java.nio.file.Paths.get("saves/" + levelName + ".sav");
           if (java.nio.file.Files.exists(savePath)) {
               System.out.println("Chargement de la sauvegarde pour le niveau : " + levelName);
-              this.level = new GridData(savePath);
+              input = java.nio.file.Files.newInputStream(savePath);
+              this.level = new GridData(input, levelName);
               loadedFromSave = true;
           }
         } catch (Exception e) {
@@ -114,13 +123,12 @@ public class Level implements org.parmentier.game.Scene {
         }
         if (!loadedFromSave) {
           try {
-            URI levelURI = getClass().getResource("/levels/" + levelName + ".lvl").toURI();
-            java.nio.file.Path levelPath = java.nio.file.Paths.get(levelURI);
-            System.out.println("Chargement du niveau depuis le fichier : " + levelPath);
-            this.level = new GridData(levelPath);
+            input = getClass().getResourceAsStream("/levels/" + levelName + ".lvl");
+            this.level = new GridData(input, levelName);
           } catch (Exception e) {
             System.err.println("Erreur lors du chargement du niveau : " + e.getMessage());
             this.level = null;
+            throw new RuntimeException("Failed to load level: " + levelName);
           }
         }
     };
@@ -230,6 +238,59 @@ public class Level implements org.parmentier.game.Scene {
         int minutes = elapsedSeconds / 60;
         int seconds = elapsedSeconds % 60;
         return String.format("%02d:%02d", minutes, seconds);
+    }
+
+    private void calculateScore(){
+
+        int timeLow = this.timeLowMinutes * 60;
+
+        int timeHigh = this.timeHighMinutes * 60;
+
+        double timeBornedShifted = Math.clamp(elapsedSeconds, timeLow, timeHigh) - timeLow;
+
+        // We need a value between 0 et 1 to get our final coeff
+
+        double timeNormalized = timeBornedShifted / (timeHigh - timeLow);
+
+        // The coefficient of time is normalized between our minimal coefficient and our maximal coefficient.
+
+        double timeCoeff = (timeNormalized - timeCoeffMin) + timeCoeffMax;
+
+        // J'attends que le nombre de ponts attendus soit disponible.
+
+        //int score = (int)((this.activeBridges.stream().reduce(0, (a,b) -> , combiner) * 1000) * timeCoeff);
+
+        
+
+    }
+
+        
+        
+
+    private char calculateNote(){
+
+        char note;
+
+        int scoreMax = 25000;
+
+        double scoreMin = 25000 * timeCoeffMin;
+
+        double etendue = scoreMax - scoreMin;
+
+        if((scoreMax - score) >= (etendue * 0.90)) {note = 'S';}
+
+        else if (scoreMax - score >= (etendue * 0.80)) note = 'A';
+
+        else if (scoreMax - score >= (etendue * 0.70)) note = 'B';
+
+        else if (scoreMax - score >= (etendue * 0.60)) note = 'C';
+
+        else if (scoreMax - score >= etendue* 0.40) note = 'D';
+
+        else note = 'F';
+
+        return note;
+
     }
 
     private void helpButton(){
