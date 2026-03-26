@@ -56,7 +56,7 @@ public class HintBulb {
 
             new Hint("Une île placée dans un coin ne peut avoir que deux voisins." +
                 "Comme un lien ne peut contenir au plus que " + Bridge.MAX_STATE + " ponts, une île " + Bridge.MAX_STATE * 2 + " dans un coin doit envoyer deux ponts vers chacun de ses deux voisins." +
-                "L’île est alors complète.", 15, 3, (grid) -> {
+ b               "L’île est alors complète.", 15, 3, (grid) -> {
                 return grid.getNodes().stream()
                     .filter(node -> grid.isCorner(node) && node.getValue() == Bridge.MAX_STATE * 2) // Only consider islands in corners
                     .anyMatch(node -> {
@@ -470,7 +470,7 @@ public class HintBulb {
             if (hint.isAvailable(gridData) && hint.isEnabled()) {
                 cumulativeWeight += hint.getWeight();
                 if (randomWeight < cumulativeWeight) {
-                    hint.setEnabled(false); // Disable the hint after it's selected
+                    hint.useHint(); // Disable the hint after it's selected
                     return hint; // Return the selected hint
                 }
             }

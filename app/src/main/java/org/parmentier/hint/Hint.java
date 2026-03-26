@@ -24,12 +24,14 @@ import java.util.function.Function;
 public class Hint {
     /** The text of the hint */
     private String hintText;
+    /** The brief text of the hint */
+    private String hintBriefText;
     /** Cost in points or other in-game currency */
     private Integer hintCost; 
     /** Weight for random selection, higher means more likely to be selected */
     private Integer weight; 
-    /** Whether the hint is currently enabled or not */
-    private Boolean enabled;
+    /** Indicates whether the hint is currently enabled and can be used by the player */
+    private int remainingUses;
     /** Condition to determine if the hint is available */
     private Function<GridData, Boolean> condition; 
 
@@ -47,7 +49,7 @@ public class Hint {
         this.weight = weight;
         this.condition = condition;
         this.hintText = hintText;
-        this.enabled = true; // By default, hints are enabled
+        this.remainingUses = 2; // By default, hints are enabled
     }
 
     /**
@@ -65,7 +67,17 @@ public class Hint {
      * @param enabled A boolean value indicating whether the hint should be enabled (true) or disabled (false).
      */
     public void setEnabled(Boolean enabled) {
-        this.enabled = enabled;
+        this.remainingUses = enabled ? 2 : 0; // Reset remaining uses when enabled, set to 0 when disabled
+    }
+
+    /**
+     * Uses the hint, reducing the remaining uses by one.
+     * If the hint is used up (remaining uses reaches 0), it will be disabled.
+     */
+    public void useHint() {
+        if (remainingUses > 0) {
+            remainingUses--;
+        }
     }
 
     /**
@@ -73,7 +85,7 @@ public class Hint {
      * @return true if the hint is enabled, false otherwise.
      */
     public Boolean isEnabled() {
-        return enabled;
+        return remainingUses > 0;
     }
 
     /**
@@ -99,6 +111,6 @@ public class Hint {
      * @return The text of the hint, which provides clues or assistance to the player in solving the puzzle.
      */
     public String getHintText() {
-        return hintText;
+        return remainingUses == 1 ? hintText : hintBriefText; // Return full hint text if it's the first use, otherwise return brief text
     }
 }
