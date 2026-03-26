@@ -2,7 +2,7 @@ package org.parmentier.game;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.collections;
+import java.util.Collections;
 
 import org.parmentier.level.Bridge;
 import org.parmentier.level.GridData;
@@ -64,7 +64,7 @@ public class Leaderboard {
             // i + 1 pour que le premier soit au rang 1
             System.out.printf("%-4d | %-10s | %-5d | %-2c\n", 
                 (i + 1), 
-                p.getNameTage(), 
+                p.getNameTag(), 
                 p.getScore(), 
                 p.getNote());
         }

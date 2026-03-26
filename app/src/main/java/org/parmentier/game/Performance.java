@@ -44,8 +44,8 @@ public class Performance implements Comparable<Performance> {
         return this.nameTag;
     }
 
-    public void setNameTage(String nameTage) {
-        this.nameTag = nameTage;
+    public void setNameTag(String NameTag) {
+        this.nameTag = NameTag;
     }
 
     public int getTimeElapsedSeconds() {

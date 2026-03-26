@@ -200,6 +200,18 @@ public class GridData {
     }
 
     /**
+     * Returns a list of all the nodes in the level.
+     * This method iterates through the 2D array of nodes and collects all non-null nodes into a list, which is then returned to the caller.
+     * @return A list of all the nodes in the level.
+     */
+    public List<Node> getNodes() {
+        return java.util.Arrays.stream(levelArray)
+            .flatMap(java.util.Arrays::stream)
+            .filter(node -> node != null)
+            .toList();
+    }
+
+    /**
      * Returns whether the current state corresponds to the solution.
      */
     public boolean checkState() {
