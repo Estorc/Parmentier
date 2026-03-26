@@ -136,7 +136,7 @@ public class MainMenu implements org.parmentier.game.Scene {
         jouer.setOnMouseClicked( e -> Game.getInstance().getSceneManager().pushScene(new MenuChoiceLevel()));
         settings.setOnMouseClicked( e -> Game.getInstance().getSceneManager().pushScene(new Settings()));
         leave.setOnMouseClicked( e -> System.exit(0));
-        tutorial.setOnMouseClicked( e -> Game.getInstance().getSceneManager().pushScene(new Level("didacticiel")));
+        tutorial.setOnMouseClicked( e -> Game.getInstance().getSceneManager().pushScene(new Didacticiel()));
     }
 
     /**
