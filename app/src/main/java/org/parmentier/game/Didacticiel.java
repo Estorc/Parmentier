@@ -40,7 +40,6 @@ import javafx.scene.text.TextAlignment;
  * elements to guide the player through the tutorial experience.
  */
 public class Didacticiel implements org.parmentier.game.Scene {
-    
     /**
      * Default constructor for the Didacticiel class.
      * This constructor initializes the tutorial scene, setting up any necessary resources or state.
@@ -87,13 +86,15 @@ public class Didacticiel implements org.parmentier.game.Scene {
         intro.setWrapText(true);
         intro.setMaxWidth(600); 
         intro.setTextAlignment(TextAlignment.CENTER);
+        Button retour = new Button("Retour");
+        retour.getStyleClass().add("menu-button");
         buttonBox.setAlignment(Pos.CENTER);
         buttonBox.setPadding(new Insets(20, 0, 0, 0));
         Button tutorial = new Button("Didacticiel");
         tutorial.getStyleClass().add("menu-button");
         tutorial.setMaxWidth(320);
         tutorial.setMinWidth(320);
-        buttonBox.getChildren().addAll(tutorial);
+        buttonBox.getChildren().addAll(tutorial, retour);
 
         layout.setSpacing(8);
         layout.setAlignment(Pos.CENTER);
@@ -103,6 +104,7 @@ public class Didacticiel implements org.parmentier.game.Scene {
         uiLayer.getChildren().add(layout);
         uiLayer.getStylesheets().add(getClass().getResource("/app.css").toExternalForm());
         tutorial.setOnMouseClicked( e -> Game.getInstance().getSceneManager().pushScene(new Level("didacticiel")));
+        retour.setOnMouseClicked(e -> Game.getInstance().getSceneManager().popScene());
     }
 
     /**
