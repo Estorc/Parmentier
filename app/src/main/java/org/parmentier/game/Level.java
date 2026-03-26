@@ -14,6 +14,7 @@
 
 package org.parmentier.game;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -76,7 +77,6 @@ public class Level implements org.parmentier.game.Scene {
      */
     private GridData level;
 
-    private java.nio.file.Path levelPath;
     /**
      * The Timeline object used as a stopwatch to track the elapsed time since the level started.
      */
@@ -95,15 +95,34 @@ public class Level implements org.parmentier.game.Scene {
 
     private Button checkButton;
     private Button helpButton;
-    private Label hintLabel;
-    private Label checkLabel;
+    private Button backButton = new Button("Retour");
 
-    public Level() {}
-
-    public Level(java.nio.file.Path levelPath) {
-        System.out.println("Hello from Level constructor!");
-        this.levelPath = levelPath;
-    }
+    public Level(String levelName) {
+        // Try loading saved state first, if it fails load the level data from the resource file
+        
+        boolean loadedFromSave = false;
+        try {
+          java.nio.file.Path savePath = java.nio.file.Paths.get("saves/" + levelName + ".sav");
+          if (java.nio.file.Files.exists(savePath)) {
+              System.out.println("Chargement de la sauvegarde pour le niveau : " + levelName);
+              this.level = new GridData(savePath);
+              loadedFromSave = true;
+          }
+        } catch (Exception e) {
+          System.err.println("Erreur lors du chargement de la sauvegarde : " + e.getMessage());
+        }
+        if (!loadedFromSave) {
+          try {
+            URI levelURI = getClass().getResource("/levels/" + levelName + ".lvl").toURI();
+            java.nio.file.Path levelPath = java.nio.file.Paths.get(levelURI);
+            System.out.println("Chargement du niveau depuis le fichier : " + levelPath);
+            this.level = new GridData(levelPath);
+          } catch (Exception e) {
+            System.err.println("Erreur lors du chargement du niveau : " + e.getMessage());
+            this.level = null;
+          }
+        }
+    };
 
     /**
      * Attempts to connect two nodes with a bridge, checking for valid connections and potential intersections with existing bridges.
@@ -244,29 +263,23 @@ public class Level implements org.parmentier.game.Scene {
      */
     @Override
     public void initialize(StackPane uiLayer) {
-        if (levelPath != null) {
-            initialize(uiLayer, levelPath);
-            return;
-        }
         System.out.println("Initializing level scene...");
         uiLayer.getChildren().clear();
 
         this.nodes = new ArrayList<>();
         this.activeBridges = new ArrayList<>();
 
-        
-
-        java.nio.file.Path levelPath = java.nio.file.Paths.get("save.txt");
-
-        level = new GridData(levelPath);
        
         startStopwatch();
         helpButton();
 
         StackPane.setAlignment(stopwatchLabel, javafx.geometry.Pos.TOP_CENTER);
         StackPane.setAlignment(helpButton, javafx.geometry.Pos.TOP_RIGHT);
+        StackPane.setAlignment(backButton, javafx.geometry.Pos.BOTTOM_LEFT);
+        backButton.getStyleClass().add("button");
+        backButton.setOnMouseClicked(e -> Game.getInstance().getSceneManager().popScene());
         uiLayer.getChildren().add(helpButton);
-        uiLayer.getChildren().add(hintLabel);
+        uiLayer.getChildren().add(backButton);
         uiLayer.getChildren().add(stopwatchLabel);
 
         for (int i = 0; i < level.getWidth(); i++) {
@@ -326,81 +339,6 @@ public class Level implements org.parmentier.game.Scene {
                     else
                         err_msg = "Vous n'avez fait aucune erreur. Continuez comme ça !";
                     checkLabel.setText(err_msg);
-                    checkLabel.setVisible(true);
-                }
-            }
-        });
-    }
-
-    public void initialize(StackPane uiLayer, java.nio.file.Path levelPath) {
-        System.out.println("Initializing level scene...");
-        uiLayer.getChildren().clear();
-
-        this.nodes = new ArrayList<>();
-        this.activeBridges = new ArrayList<>();
-
-        level = new GridData(levelPath);
-       
-        startStopwatch();
-        helpButton();
-
-        StackPane.setAlignment(stopwatchLabel, javafx.geometry.Pos.TOP_CENTER);
-        StackPane.setAlignment(helpButton, javafx.geometry.Pos.TOP_RIGHT);
-        uiLayer.getChildren().add(helpButton);
-        uiLayer.getChildren().add(hintLabel);
-        uiLayer.getChildren().add(stopwatchLabel);
-
-        for (int i = 0; i < level.getWidth(); i++) {
-            for (int j = 0; j < level.getHeight(); j++) {
-                if (level.getNodeAt(i, j) != null) {
-                    Node node = level.getNodeAt(i, j);
-                    this.nodes.add(node);
-                    if (!node.getBridges().isEmpty()) {
-                        for (Bridge bridge : node.getBridges()) if (bridge.getState() > 0) activeBridges.add(bridge); 
-                    }
-                }
-            }
-        }
-
-
-        uiLayer.setOnMouseMoved(e -> {
-            tryConnectClosest((e.getX() - xShift)/scaleFactor, (e.getY() - yShift)/scaleFactor);
-        });
-
-
-        uiLayer.setOnMouseClicked(e -> {
-            selectedBridge.toggleState();
-            if (selectedBridge.getState() == 0) {
-                activeBridges.remove(selectedBridge);
-            } else if (!activeBridges.contains(selectedBridge)) {
-                activeBridges.add(selectedBridge);
-            }
-        });
-        // My work...
-        Button check = new Button("Check");
-        check.getStyleClass().add("menu-button");
-        StackPane.setAlignment(check, javafx.geometry.Pos.BOTTOM_CENTER);
-
-        checkLabel = new Label();
-        checkLabel.getStyleClass().add("hint-banner");
-        checkLabel.setVisible(false);
-        checkLabel.setWrapText(true);
-        checkLabel.setMaxWidth(500);
-        StackPane.setAlignment(checkLabel, javafx.geometry.Pos.BOTTOM_CENTER);
-        StackPane.setMargin(checkLabel, new javafx.geometry.Insets(0, 0, 60, 0));
-
-        uiLayer.getChildren().add(checkLabel);
-        uiLayer.getChildren().add(check);
-
-        check.setOnMouseClicked(e -> {
-            if (checkLabel.isVisible()) {
-                checkLabel.setVisible(false);
-            } else {
-                boolean status = level.checkState();
-                if (status) {
-                    Game.getInstance().getSceneManager().pushScene(new MenuFinNiveau(getStopwatchTime(), 42));
-                } else {
-                    checkLabel.setText("Le niveau n'est pas encore complété. Continuez à essayer !");
                     checkLabel.setVisible(true);
                 }
             }
