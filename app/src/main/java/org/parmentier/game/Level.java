@@ -14,6 +14,7 @@
 
 package org.parmentier.game;
 
+import java.io.InputStream;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
@@ -107,11 +108,13 @@ public class Level implements org.parmentier.game.Scene {
         // Try loading saved state first, if it fails load the level data from the resource file
         
         boolean loadedFromSave = false;
+        InputStream input;
         try {
           java.nio.file.Path savePath = java.nio.file.Paths.get("saves/" + levelName + ".sav");
           if (java.nio.file.Files.exists(savePath)) {
               System.out.println("Chargement de la sauvegarde pour le niveau : " + levelName);
-              this.level = new GridData(savePath);
+              input = java.nio.file.Files.newInputStream(savePath);
+              this.level = new GridData(input, levelName);
               loadedFromSave = true;
           }
         } catch (Exception e) {
@@ -119,13 +122,12 @@ public class Level implements org.parmentier.game.Scene {
         }
         if (!loadedFromSave) {
           try {
-            URI levelURI = getClass().getResource("/levels/" + levelName + ".lvl").toURI();
-            java.nio.file.Path levelPath = java.nio.file.Paths.get(levelURI);
-            System.out.println("Chargement du niveau depuis le fichier : " + levelPath);
-            this.level = new GridData(levelPath);
+            input = getClass().getResourceAsStream("/levels/" + levelName + ".lvl");
+            this.level = new GridData(input, levelName);
           } catch (Exception e) {
             System.err.println("Erreur lors du chargement du niveau : " + e.getMessage());
             this.level = null;
+            throw new RuntimeException("Failed to load level: " + levelName);
           }
         }
     };
