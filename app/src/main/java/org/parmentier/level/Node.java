@@ -189,6 +189,5 @@ public class Node {
         gc.setFill(javafx.scene.paint.Color.BLACK);
         gc.fillText(Integer.toString(value), x - 4, y + 4);
     }
-
     
 }

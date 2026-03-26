@@ -66,22 +66,31 @@ public class Settings implements org.parmentier.game.Scene {
     @Override
     public void initialize(StackPane uiLayer) {
         uiLayer.getChildren().clear();
+        if (!uiLayer.getStyleClass().contains("main-menu-bg")) {
+            uiLayer.getStyleClass().add("main-menu-bg");
+        }
+
         VBox layout = new VBox();
+        layout.setId("settingsBox");
         VBox buttonBox = new VBox();
-        
+
         layout.setSpacing(20);
         buttonBox.setSpacing(10);
         layout.setAlignment(javafx.geometry.Pos.TOP_CENTER);
         MenuButton themes = new MenuButton("Thèmes");
-        themes.getItems().addAll(new MenuItem("Clair"), new MenuItem("Sombre"));
+
+        MenuItem clair = new MenuItem("Clair");
+        MenuItem sombre = new MenuItem("Sombre");
+        themes.getItems().addAll(clair, sombre);
+
         MenuButton locale = new MenuButton("Langues");
         locale.getItems().addAll(new MenuItem("Français"), new MenuItem("English"));
         Button returnButton = new Button("Retour");
         Label titleLabel = new Label("Paramètres");
-        titleLabel.getStyleClass().add("title-label");
+        titleLabel.getStyleClass().add("title-label-settings");
         themes.getStyleClass().add("button-setting");
         locale.getStyleClass().add("button-setting");
-        returnButton.getStyleClass().add("button");
+        returnButton.getStyleClass().add("menu-button");
 
         buttonBox.getChildren().add(themes);
         buttonBox.getChildren().add(locale);
@@ -90,9 +99,28 @@ public class Settings implements org.parmentier.game.Scene {
         layout.getChildren().add(titleLabel);
         layout.getChildren().add(buttonBox);
         uiLayer.getChildren().add(layout);
-        uiLayer.getStylesheets().add(getClass().getResource("/app.css").toExternalForm());
 
-        returnButton.setOnMouseClicked( e -> Game.getInstance().getSceneManager().popScene());
+        if (!uiLayer.getStyleClass().contains("main-menu-bg")) {
+            uiLayer.getStyleClass().add("main-menu-bg");
+        }
+
+        if (uiLayer.getStylesheets().isEmpty()) {
+            uiLayer.getStylesheets().add(getClass().getResource("/lightMode.css").toExternalForm());
+        }
+
+        clair.setOnAction(e -> {
+            uiLayer.getStylesheets().clear();
+            uiLayer.getStylesheets().add(getClass().getResource("/lightMode.css").toExternalForm());
+        });
+
+        sombre.setOnAction(e -> {
+            uiLayer.getStylesheets().clear();
+            uiLayer.getStylesheets().add(getClass().getResource("/darkMode.css").toExternalForm());
+        });
+
+        returnButton.setOnMouseClicked(e -> {
+            Game.getInstance().getSceneManager().popScene();
+        });
     }
 
     /**

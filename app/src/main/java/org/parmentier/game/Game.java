@@ -53,6 +53,7 @@ public class Game {
      * of the game canvas.
      */
     private StackPane uiLayer;
+    private Canvas canvas;
 
     /**
      * The last time the game loop was updated, used to calculate the delta time for
@@ -64,12 +65,12 @@ public class Game {
     /**
      * The width of the game window, set to 300 pixels. 
      */
-    public static final int WIDTH = 800;
+    public static final int WIDTH = 1200;
 
     /**
-     * The height of the game window, set to 300 pixels.
+     * The height of the game window, set to 600 pixels.
      */
-    public static final int HEIGHT = 600;
+    public static final int HEIGHT = 700;
 
     private String currentUserName;
 
@@ -153,16 +154,17 @@ public class Game {
      * interactions based on the initial scene (e.g., main menu, level selection, or gameplay).
      */
     public void start(Stage stage) {
-        Canvas canvas = new Canvas(WIDTH, HEIGHT);
+        this.canvas = new Canvas(WIDTH, HEIGHT);
+        stage.setMinHeight(HEIGHT);
+        stage.setMinWidth(WIDTH);
         GraphicsContext gc = canvas.getGraphicsContext2D();
         StackPane root = new StackPane(canvas);
         root.getStyleClass().add("main-menu-bg");
-        root.getStylesheets().add(getClass().getResource("/app.css").toExternalForm());
+        root.getStylesheets().add(getClass().getResource("/lightMode.css").toExternalForm());
         uiLayer = new StackPane();
         
         canvas.widthProperty().bind(root.widthProperty());
         canvas.heightProperty().bind(root.heightProperty());
-        // Center the canvas in the stackpane
         StackPane.setAlignment(canvas, javafx.geometry.Pos.CENTER);
         root.getChildren().add(uiLayer);
 
@@ -211,5 +213,9 @@ public class Game {
      */
     public String getCurrentUserName() {
         return this.currentUserName;
+    }
+
+    public Canvas getCanvas() {
+        return this.canvas;
     }
 }

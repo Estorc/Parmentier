@@ -100,7 +100,7 @@ public class MainMenu implements org.parmentier.game.Scene {
         titleLabel.getStyleClass().add("title-label");
 
         // Subtitle
-        Label subtitleLabel = new Label("Hashiwokakero");
+        Label subtitleLabel = new Label("Hashi");
         subtitleLabel.getStyleClass().add("subtitle-label");
 
         // Buttons
@@ -128,10 +128,10 @@ public class MainMenu implements org.parmentier.game.Scene {
         layout.setSpacing(8);
         layout.setAlignment(Pos.CENTER);
         layout.setPadding(new Insets(40, 0, 40, 0));
-        layout.getChildren().addAll(logoGrid, titleLabel, subtitleLabel, buttonBox);
+        layout.getChildren().addAll(logoGrid, subtitleLabel, titleLabel, buttonBox);
 
         uiLayer.getChildren().add(layout);
-        uiLayer.getStylesheets().add(getClass().getResource("/app.css").toExternalForm());
+        uiLayer.getStylesheets().add(getClass().getResource("/lightMode.css").toExternalForm());
 
         jouer.setOnMouseClicked( e -> Game.getInstance().getSceneManager().pushScene(new MenuChoiceLevel()));
         settings.setOnMouseClicked( e -> Game.getInstance().getSceneManager().pushScene(new Settings()));

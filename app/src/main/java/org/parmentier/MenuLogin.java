@@ -145,7 +145,7 @@ public class MenuLogin extends Menu {
             loader.setController(this);
             Parent root = loader.load();
 
-            interfaceLogin.getStylesheets().add(getClass().getResource("/app.css").toExternalForm());
+            interfaceLogin.getStylesheets().add(getClass().getResource("/lightMode.css").toExternalForm());
 
             listView.setItems(logins);
 
