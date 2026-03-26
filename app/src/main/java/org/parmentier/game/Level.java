@@ -99,7 +99,9 @@ public class Level implements org.parmentier.game.Scene {
 
     public Level(String levelName) {
         // Try loading saved state first, if it fails load the level data from the resource file
-        
+
+	this.level = new GridData(levelName);
+	/*
         boolean loadedFromSave = false;
         try {
           java.nio.file.Path savePath = java.nio.file.Paths.get("saves/" + levelName + ".sav");
@@ -122,7 +124,8 @@ public class Level implements org.parmentier.game.Scene {
             this.level = null;
           }
         }
-    };
+	*/
+    }
 
     /**
      * Attempts to connect two nodes with a bridge, checking for valid connections and potential intersections with existing bridges.

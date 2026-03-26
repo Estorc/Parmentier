@@ -17,6 +17,9 @@ package org.parmentier.level;
 
 import java.io.IOException;
 import java.util.List;
+import java.nio.file.Path;
+
+import org.parmentier.Save;
 
 /**
  * Represents a level in the Parmentier puzzle game.
@@ -36,33 +39,66 @@ public class GridData {
      * The name of the level, which can be used for display purposes or to identify the level in a list of levels.
      */
     private String name;
+
+    /**
+     * Access to the save manager
+     */
+    private Save saveManager;
     
     /**
      * Constructs a Level object by loading the level data from the specified file.
      * 
      * @param path The path of the file containing the level data.
      */
-    public GridData(java.nio.file.Path path) {
-        levelArray = loadLevelFromFile(path);
+    public GridData(String idLevel) {
+	this.levelArray = null;
+        this.saveManager = new Save();
+	System.out.println(" ---- Save : Initialized ----");
+        String content = this.saveManager.openSave(idLevel);
+	System.out.println(" ---- Save : Opened ----");
+	Boolean exist = this.saveManager.lastLevelOpened();
+	System.out.println(" ---- Save : exist = " + exist.toString() + " ---- ");
+	System.out.println(" ---- Save : content = " + content + " ---- ");
+	this.loadLevelFromFile(content, exist);
     }
 
     /**
      * Loads the level data from a text file and constructs the 2D array of nodes.
      * 
-     * @param path The path of the file containing the level data.
-     * @return A 2D array of Node objects representing the level.
+     * @param level content or path of the level
+     * @param newLevel whether the 'level' has to be read as a new level or as a save 
+     * @return A 2D array of Node objects representing the level
      */
-    private Node[][] loadLevelFromFile(java.nio.file.Path path) {
-        try {
-            String fileName = path.getFileName().toString();
-            this.name = fileName.substring(0, fileName.lastIndexOf('.')); // extrait
-            String content = new String(java.nio.file.Files.readAllBytes(path));
-            content = content.replace("\r\n", "\n"); // règle les sauts de lignes sur windows
-            String[] parts = content.split("-\n"); // sépare la sauvegarde des noeuds et des ponts
-            String[] node_lines = parts[0].split("\n");
-            String[] bridge_lines = parts[1].split("\n");
-            Node[][] array = new Node[node_lines.length][];
+    public Node[][] loadLevelFromFile(String level, Boolean newLevel) {
+	
+	try {
+	
 
+	    String fileName = "";
+	    String[] parts = null;
+	    String[] node_lines = null;
+	    String[] bridge_lines = null;
+	    Node[][] array = null;
+	    
+	    if (newLevel){
+		// Path path = Path.get(level);
+                // String name = fileName.substring(0, fileName.lastIndexOf('.')); // extrait 
+		String content = new String(java.nio.file.Files.readAllBytes(java.nio.file.Paths.get(level)));
+		
+		content = content.replace("\r\n", "\n"); // règle les sauts de lignes sur windows
+	        parts = content.split("-\n"); // sépare la sauvegarde des noeuds et des ponts
+		node_lines = parts[0].split("\n");
+		bridge_lines = parts[1].split("\n");
+		array = new Node[node_lines.length][];
+	    } else {
+		String content = level;
+	        parts = content.split("-");
+		node_lines = parts[0].split("!");
+		bridge_lines = parts[1].split("!");
+		array = new Node[node_lines.length][];
+	    }
+
+	    System.out.println(" ---- Begin Lines ---- ");
             // chargement des nodes sauvegardés et des bridges possibles horizontalement
             for (int i = 0; i < node_lines.length; i++) {
                 Node lastNode = null;
@@ -80,7 +116,9 @@ public class GridData {
                     }
                 }
             }
+	    System.out.println(" ---- End Lines  ---- ");
 
+	    System.out.println(" ---- Begin Briges  ---- ");
             // chargement de tous les bridges possibles verticalement
             for (int j = 0; j < node_lines[0].length(); j++) {
                 Node lastNode = null;
@@ -94,8 +132,10 @@ public class GridData {
                 }
             }
 
+	    System.out.println(" ---- Begin Save ---- ");
             // chargement des bridges sauvegardés
             for (int i = 0; i < node_lines.length; i++) {
+		System.out.println(" ---- Loop " + Integer.toString(i)+ " ---- ");
                 for (int j = 0; j < bridge_lines[i].length(); j += 4) {
 
                     int col = j / 4;
@@ -118,12 +158,12 @@ public class GridData {
                     }
                 }
             }
-
+	    System.out.println(" ---- End Save ---- ");
             return array;
-        } catch (IOException e) {
-            System.err.println("Level file not found: " + path);
-            return new Node[0][0];
-        }
+	  } catch (IOException e) {
+	    System.err.println("Level file not found: ");
+	    return new Node[0][0];
+	  }
     }
 
     public List<Node> getNodes() {
@@ -165,12 +205,15 @@ public class GridData {
                 }
             }
 
-            nodeBuilder.append('\n');
-            bridgeBuilder.append('\n');
+            nodeBuilder.append("!"); 
+            bridgeBuilder.append("!"); // Creates "One Liner" data
         }
 
-        String saveData = nodeBuilder.toString() + "-\n" + bridgeBuilder.toString();
-        // Create the "saves" directory if it doesn't exists
+        String saveData = nodeBuilder.toString() + "-" + bridgeBuilder.toString();
+	this.saveManager.overwriteSave(saveData);
+	
+/*
+	// Create the "saves" directory if it doesn't exists
         java.nio.file.Path savesDir = java.nio.file.Paths.get("saves");
         try {
             if (!java.nio.file.Files.exists(savesDir)) {
@@ -191,6 +234,7 @@ public class GridData {
         } catch (java.io.IOException e) {
             System.err.println("Error saving game state: " + e.getMessage());
         }
+*/
     }
 
     /**
