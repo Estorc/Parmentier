@@ -17,15 +17,11 @@
 
 package org.parmentier.game;
 
-import org.parmentier.MenuChoiceLevel;
-
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.Menu;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
 
 /**
  * Represents the end of level menu in the Parmentier game.
@@ -136,10 +132,15 @@ public class MenuFinNiveau implements org.parmentier.game.Scene {
         uiLayer.getChildren().add(layout);
 
         nextLevelButton.setOnMouseClicked(e -> {
-            Game.getInstance().getSceneManager().pushScene(new MenuChoiceLevel());
+            // pop the current end of level menu
+            Game.getInstance().getSceneManager().popScene();
         });
         mainMenuButton.setOnMouseClicked(e -> {
-            Game.getInstance().getSceneManager().pushScene(new MainMenu());
+            // pop the current end of level menu
+            Game.getInstance().getSceneManager().popScene();
+            // pop the current level scene
+            Game.getInstance().getSceneManager().popScene();
+            
         });
     }
 

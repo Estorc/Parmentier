@@ -121,7 +121,7 @@ public class Level implements org.parmentier.game.Scene {
               this.level = new GridData(input, levelName);
               loadedFromSave = true;
           }
-        } catch (Exception e) {
+        } catch (IOException e) {
           System.err.println("Erreur lors du chargement de la sauvegarde : " + e.getMessage());
         }
         if (!loadedFromSave) {
@@ -334,6 +334,9 @@ public class Level implements org.parmentier.game.Scene {
     @Override
     public void initialize(StackPane uiLayer) {
         System.out.println("Initializing level scene...");
+        
+        org.parmentier.hint.HintBulb.get().RenableHints(); // reenable hints for new level
+        
         uiLayer.getChildren().clear();
         javafx.scene.canvas.Canvas canvas = Game.getInstance().getCanvas();
         if (!uiLayer.getChildren().contains(canvas)) {
@@ -408,6 +411,7 @@ public class Level implements org.parmentier.game.Scene {
                 boolean status = level.checkState();
                 if (status) {
                     isCompleted = true;
+                    Game.getInstance().getSceneManager().popScene();
                     Game.getInstance().getSceneManager().pushScene(new MenuFinNiveau(getStopwatchTime(), 42));
                     // supprimer save
                     java.nio.file.Path path = java.nio.file.Paths.get("saves/" + level.getName() + ".sav");
