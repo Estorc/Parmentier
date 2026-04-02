@@ -14,16 +14,16 @@
 
 package org.parmentier.game;
 
+import java.io.IOException;
 import java.io.InputStream;
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.parmentier.hint.Hint;
+import org.parmentier.hint.HintBulb;
 import org.parmentier.level.Bridge;
 import org.parmentier.level.GridData;
 import org.parmentier.level.Node;
-import org.parmentier.hint.HintBulb;
-import org.parmentier.hint.Hint;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -32,9 +32,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
-import javafx.scene.control.Button;
-import javafx.scene.control.Alert;
-import javafx.scene.layout.HBox;
 import javafx.util.Duration;
 
 
@@ -400,6 +397,13 @@ public class Level implements org.parmentier.game.Scene {
                 boolean status = level.checkState();
                 if (status) {
                     Game.getInstance().getSceneManager().pushScene(new MenuFinNiveau(getStopwatchTime(), 42));
+                    // supprimer save
+                    java.nio.file.Path path = java.nio.file.Paths.get("saves/" + level.getName() + ".sav");
+                    try {
+                        java.nio.file.Files.deleteIfExists(path);
+                    } catch (IOException ex) {
+                        System.err.println("Erreur lors de la suppression de la sauvegarde : " + ex.getMessage());
+                    }
                 } else {
                     String err_msg;
                     int err = level.countErrors();

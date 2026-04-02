@@ -220,6 +220,14 @@ public class GridData {
     }
 
     /**
+     * Returns the level name that was passed during loading.
+     * @return name of the level
+     */
+    public String getName() {
+        return this.name;
+    }
+
+    /**
      * Returns a list of all the nodes in the level.
      * This method iterates through the 2D array of nodes and collects all non-null nodes into a list, which is then returned to the caller.
      * @return A list of all the nodes in the level.
