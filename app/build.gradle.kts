@@ -47,7 +47,7 @@ java {
 
 javafx {
     version = "$javafxVersion"
-    modules = listOf("javafx.graphics", "javafx.controls", "javafx.base", "javafx.fxml")
+    modules = listOf("javafx.graphics", "javafx.controls", "javafx.base", "javafx.fxml","javafx.media")
 }
 
 var mainClassName = "org.parmentier.Parmentier"

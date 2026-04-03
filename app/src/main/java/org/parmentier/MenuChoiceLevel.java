@@ -88,6 +88,7 @@ public class MenuChoiceLevel extends Menu{
      */
     @FXML
     public void manageImageClick(MouseEvent event) {
+        org.parmentier.game.Audio.playClickSound();
         Game.getInstance().getSceneManager().pushScene(new Level(((javafx.scene.Node) event.getSource()).getId()));
     }
 
@@ -96,6 +97,7 @@ public class MenuChoiceLevel extends Menu{
      */
     @FXML
     public void handleBackButton() {
+        org.parmentier.game.Audio.playClickSound();
         Game.getInstance().getSceneManager().popScene(); 
     }
 

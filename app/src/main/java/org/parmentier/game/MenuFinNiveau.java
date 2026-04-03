@@ -132,10 +132,12 @@ public class MenuFinNiveau implements org.parmentier.game.Scene {
         uiLayer.getChildren().add(layout);
 
         nextLevelButton.setOnMouseClicked(e -> {
+            org.parmentier.game.Audio.playClickSound();
             // pop the current end of level menu
             Game.getInstance().getSceneManager().popScene();
         });
         mainMenuButton.setOnMouseClicked(e -> {
+            org.parmentier.game.Audio.playClickSound();
             // pop the current end of level menu
             Game.getInstance().getSceneManager().popScene();
             // pop the current level scene

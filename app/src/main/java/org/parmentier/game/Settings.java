@@ -24,6 +24,7 @@ import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.control.Slider;
 
 /**
  * Represents the settings scene of the Parmentier game, allowing players to customize
@@ -33,6 +34,8 @@ import javafx.scene.layout.VBox;
  * including buttons and menu items for theme and language selection.
  */
 public class Settings implements org.parmentier.game.Scene {
+    private Slider soundSlider;
+    public static javafx.scene.paint.Color currentStrokeColor = javafx.scene.paint.Color.BLACK;
 
     /**
      * Default constructor for the Settings class.
@@ -83,20 +86,30 @@ public class Settings implements org.parmentier.game.Scene {
         MenuItem sombre = new MenuItem("Sombre");
         themes.getItems().addAll(clair, sombre);
 
-        MenuButton locale = new MenuButton("Langues");
-        locale.getItems().addAll(new MenuItem("Français"), new MenuItem("English"));
+        // Sounds
+        Label soundLabel = new Label("Volume son");
+        soundLabel.getStyleClass().add("textUser");
+        
+        soundSlider = new Slider(0, 1, 0.5);
+        soundSlider.setMaxWidth(200);
+        soundSlider.getStyleClass().add("sound-slider");
+        
+        soundSlider.valueProperty().addListener((obs, oldVal, newVal) -> {
+            Audio.setVolume(newVal.doubleValue());
+        });
+
         Button returnButton = new Button("Retour");
         Label titleLabel = new Label("Paramètres");
         titleLabel.getStyleClass().add("title-label-settings");
         themes.getStyleClass().add("button-setting");
-        locale.getStyleClass().add("button-setting");
         returnButton.getStyleClass().add("menu-button");
 
         buttonBox.getChildren().add(themes);
-        buttonBox.getChildren().add(locale);
         buttonBox.getChildren().add(returnButton);
         buttonBox.setAlignment(javafx.geometry.Pos.CENTER);
         layout.getChildren().add(titleLabel);
+        layout.getChildren().add(soundLabel);
+        layout.getChildren().add(soundSlider);
         layout.getChildren().add(buttonBox);
         uiLayer.getChildren().add(layout);
 
@@ -109,16 +122,21 @@ public class Settings implements org.parmentier.game.Scene {
         }
 
         clair.setOnAction(e -> {
+            org.parmentier.game.Audio.playClickSound();
+            Settings.currentStrokeColor = javafx.scene.paint.Color.BLACK;
             uiLayer.getStylesheets().clear();
             uiLayer.getStylesheets().add(getClass().getResource("/lightMode.css").toExternalForm());
         });
 
         sombre.setOnAction(e -> {
+            org.parmentier.game.Audio.playClickSound();
+            Settings.currentStrokeColor = javafx.scene.paint.Color.WHITE;
             uiLayer.getStylesheets().clear();
             uiLayer.getStylesheets().add(getClass().getResource("/darkMode.css").toExternalForm());
         });
 
         returnButton.setOnMouseClicked(e -> {
+            org.parmentier.game.Audio.playClickSound();
             Game.getInstance().getSceneManager().popScene();
         });
     }

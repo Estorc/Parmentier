@@ -154,6 +154,7 @@ public class MenuLogin extends Menu {
             });
 
             btnValider.setOnAction(event -> {
+                org.parmentier.game.Audio.playClickSound();
                 handleValidation();
             });
 
