@@ -47,7 +47,7 @@ public class MenuLogin extends Menu {
     /**
      * The path to the JSON file that contains the usernames.
      */
-    private final String jsonPath = "src/main/resources/userName.json";
+    private final String jsonPath = "saves/logins.json";
     
     /**
      * A reference to the Game instance, allowing the menu to interact with the game state and transition to other scenes.

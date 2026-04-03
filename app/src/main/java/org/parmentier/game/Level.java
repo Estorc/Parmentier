@@ -114,7 +114,7 @@ public class Level implements org.parmentier.game.Scene {
         boolean loadedFromSave = false;
         InputStream input;
         try {
-          java.nio.file.Path savePath = java.nio.file.Paths.get("saves/" + levelName + ".sav");
+          java.nio.file.Path savePath = java.nio.file.Paths.get("saves/" + Game.getInstance().getCurrentUserName() + "_" + levelName + ".sav");
           if (java.nio.file.Files.exists(savePath)) {
               System.out.println("Chargement de la sauvegarde pour le niveau : " + levelName);
               input = java.nio.file.Files.newInputStream(savePath);
@@ -414,7 +414,7 @@ public class Level implements org.parmentier.game.Scene {
                     Game.getInstance().getSceneManager().popScene();
                     Game.getInstance().getSceneManager().pushScene(new MenuFinNiveau(getStopwatchTime(), 42));
                     // supprimer save
-                    java.nio.file.Path path = java.nio.file.Paths.get("saves/" + level.getName() + ".sav");
+                    java.nio.file.Path path = java.nio.file.Paths.get("saves/" + Game.getInstance().getCurrentUserName() + "_" + level.getName() + ".sav");
                     try {
                         java.nio.file.Files.deleteIfExists(path);
                     } catch (IOException ex) {

@@ -19,6 +19,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
+import org.parmentier.game.Game;
+
 /**
  * Represents a level in the Parmentier puzzle game.
  * A level consists of a grid of nodes, each potentially connected by bridges.
@@ -250,7 +252,7 @@ public class GridData {
             System.err.println("Error creating saves directory: " + e.getMessage());
         }
 
-        java.nio.file.Path path = java.nio.file.Paths.get("saves/" + this.name + ".sav");
+        java.nio.file.Path path = java.nio.file.Paths.get("saves/" + Game.getInstance().getCurrentUserName() + "_" + this.name + ".sav");
         try {
             if (!java.nio.file.Files.exists(path)) {
                 java.nio.file.Files.createFile(path);
