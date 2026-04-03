@@ -143,6 +143,12 @@ public class MenuFinNiveau implements org.parmentier.game.Scene {
             Game.getInstance().getSceneManager().popScene();
             
         });
+
+        sbButton.setOnMouseClicked(e -> {
+            org.parmentier.game.Audio.playClickSound();
+
+            Game.getInstance().getSceneManager().pushScene(new MenuLeaderboard("level aopkzaoifne"));
+        });
     }
 
     /**
