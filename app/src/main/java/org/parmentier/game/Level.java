@@ -112,6 +112,9 @@ public class Level implements org.parmentier.game.Scene {
         // Try loading saved state first, if it fails load the level data from the resource file
         
         boolean loadedFromSave = false;
+
+        this.level = new GridData(levelName);
+        /* 
         InputStream input;
         try {
           java.nio.file.Path savePath = java.nio.file.Paths.get("saves/" + Game.getInstance().getCurrentUserName() + "_" + levelName + ".sav");
@@ -134,6 +137,7 @@ public class Level implements org.parmentier.game.Scene {
             throw new RuntimeException("Failed to load level: " + levelName);
           }
         }
+        */
 
         // restore saved stopwatch time if present
         if (loadedFromSave && this.level != null) {
