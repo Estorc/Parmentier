@@ -14,16 +14,16 @@
 
 package org.parmentier.game;
 
+import java.io.IOException;
 import java.io.InputStream;
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.parmentier.hint.Hint;
+import org.parmentier.hint.HintBulb;
 import org.parmentier.level.Bridge;
 import org.parmentier.level.GridData;
 import org.parmentier.level.Node;
-import org.parmentier.hint.HintBulb;
-import org.parmentier.hint.Hint;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -32,9 +32,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
-import javafx.scene.control.Button;
-import javafx.scene.control.Alert;
-import javafx.scene.layout.HBox;
 import javafx.util.Duration;
 
 
@@ -87,13 +84,19 @@ public class Level implements org.parmentier.game.Scene {
     /**
      * The number of seconds that have elapsed since the level started, used to update the stopwatch label.
      */
-    private int elapsedSeconds = 0;
+    private int timeElapsed = 0;
 
     private int score = 0;
     private int timeLowMinutes = 5;
     private int timeHighMinutes = 30;
     private double timeCoeffMin = 0.67;
     private float timeCoeffMax = 1;
+
+    /**
+     * Flag to track whether the level has been completed, preventing the save file
+     * from being recreated when destroy() is called after level completion.
+     */
+    private boolean isCompleted = false;
 
     /**
      * The label used to display the elapsed time on the UI. This label is updated by the stopwatch Timeline to show
@@ -118,7 +121,7 @@ public class Level implements org.parmentier.game.Scene {
               this.level = new GridData(input, levelName);
               loadedFromSave = true;
           }
-        } catch (Exception e) {
+        } catch (IOException e) {
           System.err.println("Erreur lors du chargement de la sauvegarde : " + e.getMessage());
         }
         if (!loadedFromSave) {
@@ -130,6 +133,11 @@ public class Level implements org.parmentier.game.Scene {
             this.level = null;
             throw new RuntimeException("Failed to load level: " + levelName);
           }
+        }
+
+        // restore saved stopwatch time if present
+        if (loadedFromSave && this.level != null) {
+            this.timeElapsed = this.level.getsavedChrono();
         }
     };
 
@@ -215,18 +223,18 @@ public class Level implements org.parmentier.game.Scene {
 
     /**
      * Starts the stopwatch to track the elapsed time since the level started. This method initializes a Timeline that updates every second,
-     * incrementing the elapsedSeconds counter and updating the stopwatchLabel to display the current elapsed time in minutes and seconds format.
+     * incrementing the timeElapsed counter and updating the stopwatchLabel to display the current elapsed time in minutes and seconds format.
      */
     private void startStopwatch() {
-        stopwatchLabel = new Label("Temps écoulé: 00:00");
+        stopwatchLabel = new Label("Temps écoulé: " + getStopwatchTime());
         stopwatchLabel.setTextFill(Color.GRAY);
         stopwatchLabel.setStyle("-fx-font-size: 14px; -fx-font-weight: bold;");
 
         stopwatch = new Timeline(
             new KeyFrame(Duration.seconds(1), e -> {
-                elapsedSeconds++;
-                int minutes = elapsedSeconds / 60;
-                int seconds = elapsedSeconds % 60;
+                timeElapsed++;
+                int minutes = timeElapsed / 60;
+                int seconds = timeElapsed % 60;
                 stopwatchLabel.setText(String.format("Temps écoulé: %02d:%02d", minutes, seconds));
             })
         );
@@ -235,8 +243,8 @@ public class Level implements org.parmentier.game.Scene {
     }
 
     private String getStopwatchTime() {
-        int minutes = elapsedSeconds / 60;
-        int seconds = elapsedSeconds % 60;
+        int minutes = timeElapsed / 60;
+        int seconds = timeElapsed % 60;
         return String.format("%02d:%02d", minutes, seconds);
     }
 
@@ -246,7 +254,7 @@ public class Level implements org.parmentier.game.Scene {
 
         int timeHigh = this.timeHighMinutes * 60;
 
-        double timeBornedShifted = Math.clamp(elapsedSeconds, timeLow, timeHigh) - timeLow;
+        double timeBornedShifted = Math.clamp(timeElapsed, timeLow, timeHigh) - timeLow;
 
         // We need a value between 0 et 1 to get our final coeff
 
@@ -327,6 +335,9 @@ public class Level implements org.parmentier.game.Scene {
     @Override
     public void initialize(StackPane uiLayer) {
         System.out.println("Initializing level scene...");
+        
+        org.parmentier.hint.HintBulb.get().RenableHints(); // reenable hints for new level
+        
         uiLayer.getChildren().clear();
         javafx.scene.canvas.Canvas canvas = Game.getInstance().getCanvas();
         if (!uiLayer.getChildren().contains(canvas)) {
@@ -404,7 +415,16 @@ public class Level implements org.parmentier.game.Scene {
             } else {
                 boolean status = level.checkState();
                 if (status) {
+                    isCompleted = true;
+                    Game.getInstance().getSceneManager().popScene();
                     Game.getInstance().getSceneManager().pushScene(new MenuFinNiveau(getStopwatchTime(), 42));
+                    // supprimer save
+                    java.nio.file.Path path = java.nio.file.Paths.get("saves/" + level.getName() + ".sav");
+                    try {
+                        java.nio.file.Files.deleteIfExists(path);
+                    } catch (IOException ex) {
+                        System.err.println("Erreur lors de la suppression de la sauvegarde : " + ex.getMessage());
+                    }
                 } else {
                     String err_msg;
                     int err = level.countErrors();
@@ -430,7 +450,9 @@ public class Level implements org.parmentier.game.Scene {
         if (stopwatch != null) {
             stopwatch.stop();
         }
-        level.saveState();
+        if (!isCompleted) {
+            level.saveState(timeElapsed);
+        }
         level.checkState();
     }
 

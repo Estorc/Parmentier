@@ -37,6 +37,29 @@ public class GridData {
      * The name of the level, which can be used for display purposes or to identify the level in a list of levels.
      */
     private String name;
+
+    /**
+     * The elapsed seconds stored in the save file for this level.
+     */
+    private int savedChrono = 0;
+
+    /**
+     * Gets the elapsed seconds stored in the save file for this level.
+     * 
+     * @return the elapsed seconds stored in the save file
+     */
+    public int getsavedChrono() {
+        return savedChrono;
+    }
+
+    /**
+     * Sets the elapsed seconds stored in the save file for this level.
+     * 
+     * @param savedChrono the elapsed seconds to set
+     */
+    public void setsavedChrono(int savedChrono) {
+        this.savedChrono = savedChrono;
+    }
     
     /**
      * Constructs a Level object by loading the level data from the specified file.
@@ -79,6 +102,22 @@ public class GridData {
             this.name = fileName;
             String content = new String(fileStream.readAllBytes());
             content = content.replace("\r\n", "\n"); // règle les sauts de lignes sur windows
+
+            int savedTime = 0;
+            if (content.startsWith("TIME:")) {
+                int idx = content.indexOf('\n');
+                if (idx >= 0) {
+                    String timeLine = content.substring(0, idx).trim();
+                    try {
+                        savedTime = Integer.parseInt(timeLine.substring(5));
+                    } catch (NumberFormatException ignored) {
+                        savedTime = 0;
+                    }
+                    content = content.substring(idx + 1);
+                }
+            }
+            this.savedChrono = savedTime;
+
             String[] parts = content.split("-\n"); // sépare la sauvegarde des noeuds et des ponts
             String[] node_lines = parts[0].split("\n");
             String[] bridge_lines = parts[1].split("\n");
@@ -154,11 +193,16 @@ public class GridData {
 
     /**
      * Saves the current state of the level to a file.
-     * The state includes the value of each node and the state of each bridge.
+     * The state includes the elapsed time, value of each node and the state of each bridge.
      * The state is saved in a text format where the first part contains the node values and the second part contains the bridge states,
      * separated by a line with a single dash ("-").
      * The method creates a "saves" directory if it does not exist and saves the state to a file named after the level's name with a ".sav" extension.
      */
+    public void saveState(int elapsedSeconds) {
+        this.savedChrono = elapsedSeconds;
+        saveState();
+    }
+
     public void saveState() {
         StringBuilder nodeBuilder = new StringBuilder();
         StringBuilder bridgeBuilder = new StringBuilder();
@@ -195,7 +239,7 @@ public class GridData {
             bridgeBuilder.append('\n');
         }
 
-        String saveData = nodeBuilder.toString() + "-\n" + bridgeBuilder.toString();
+        String saveData = "TIME:" + this.savedChrono + "\n" + nodeBuilder.toString() + "-\n" + bridgeBuilder.toString();
         // Create the "saves" directory if it doesn't exists
         java.nio.file.Path savesDir = java.nio.file.Paths.get("saves");
         try {
@@ -217,6 +261,14 @@ public class GridData {
         } catch (java.io.IOException e) {
             System.err.println("Error saving game state: " + e.getMessage());
         }
+    }
+
+    /**
+     * Returns the level name that was passed during loading.
+     * @return name of the level
+     */
+    public String getName() {
+        return this.name;
     }
 
     /**

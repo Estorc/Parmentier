@@ -13,8 +13,15 @@
  ***********************************************************************************/
 
 package org.parmentier.hint;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Queue;
 import java.util.Random;
+import java.util.Set;
 
 import org.parmentier.level.Bridge;
 import org.parmentier.level.GridData;
@@ -50,14 +57,31 @@ public class HintBulb {
      */
     static private HintBulb create() {
        return new HintBulb(List.of(
-            /*
-             * Starting techniques
-             */
 
-            new Hint("Short",
+            // Case of 1 with only one neighbor
+            new Hint("Faites attention aux îles 1 et leur nombre de voisins.",
+                "Une île 1 avec un seul voisin atteignable doit forcément être reliée à ce voisin. L’île est alors complète.", 10, 5, (grid) -> {
+                return grid.getNodes().stream()
+                    .filter(node -> node.getValue() == 1) // Only consider islands with value 1
+                    .filter(node -> {
+                        // Count neighbors that can still accept more bridges
+                        long reachableNeighbors = node.getBridges().stream()
+                            .filter(bridge -> bridge.getState() < Bridge.MAX_STATE)
+                            .count();
+                        return reachableNeighbors == 1;
+                    })
+                    .anyMatch(node -> {
+                        int requiredBridges = node.getValue(); 
+                        int existingBridges = node.getBridges().stream().reduce(0, (sum, bridge) -> sum + bridge.getState(), Integer::sum); // Get the total number of existing bridges
+                        return existingBridges < requiredBridges; 
+                    });
+                }),
+
+            // 4 island in corner
+            new Hint("Faites attention aux îles dans les coins !",
                 "Une île placée dans un coin ne peut avoir que deux voisins." +
                 "Comme un lien ne peut contenir au plus que " + Bridge.MAX_STATE + " ponts, une île " + Bridge.MAX_STATE * 2 + " dans un coin doit envoyer deux ponts vers chacun de ses deux voisins." +
-                "L’île est alors complète.", 15, 3, (grid) -> {
+                " L’île est alors complète.", 15, 3, (grid) -> {
                 return grid.getNodes().stream()
                     .filter(node -> grid.isCorner(node) && node.getValue() == Bridge.MAX_STATE * 2) // Only consider islands in corners
                     .anyMatch(node -> {
@@ -66,7 +90,8 @@ public class HintBulb {
                         return existingBridges < requiredBridges; // Check if there are still bridges needed
                     });
                 }),
-            new Hint("Short",
+            // 6 island on edge
+            new Hint("Faites attention aux îles sur les bords !",
                 "Une île située sur un bord peut avoir trois voisins." +
                 "Une île " + Bridge.MAX_STATE * 3 + " sur un bord doit donc envoyer " + Bridge.MAX_STATE + " ponts vers chacun de ses trois voisins." +
                 "L’île est alors complète.", 20, 2, (grid) -> {
@@ -78,7 +103,8 @@ public class HintBulb {
                         return existingBridges < requiredBridges; // Check if there are still bridges needed
                     });
                 }),
-            new Hint("Short",
+            // 8 island in middle
+            new Hint("Repérez les îles " + Bridge.MAX_STATE * 4 + " au centre de la grille." ,
                 "Une île au centre peut avoir quatre voisins." +
                 "Une île " + Bridge.MAX_STATE * 4 + " doit donc envoyer " + Bridge.MAX_STATE + " ponts vers chacun de ses quatre voisins." +
                 "L’île est alors complète.", 25, 1, (grid) -> {
@@ -92,7 +118,7 @@ public class HintBulb {
                 }),
 
             //Special cases of 3 in the corner, 5 on the side and 7 in the middle
-            new Hint("Short",
+            new Hint("Faites attention aux îles dans les coins !",
                 "Une île " + (Bridge.MAX_STATE * 2 -1) + " placée au bord avec une île 1 comme voisin doit envoyer 1 pont vers le voisin d'indice 1 et" + Bridge.MAX_STATE + "ponts vers l'autre voisin. L’île est alors complète.", 
                 30, 1, (grid) -> {
                 return grid.getNodes().stream()
@@ -113,7 +139,7 @@ public class HintBulb {
                     });
                 }),
 
-            new Hint("Short",
+            new Hint("Repérez les îles " + (Bridge.MAX_STATE * 4 -1) + " au centre de la grille." ,
                 "Une île " + (Bridge.MAX_STATE * 4 - 1) + " placée au centre avec une île 1 comme voisin doit envoyer 1 pont vers le voisin d'indice 1 et " + Bridge.MAX_STATE + " ponts vers ses 3 autres voisins. L’île est alors complète.", 
                 35, 1, (grid) -> {
                 return grid.getNodes().stream()
@@ -134,7 +160,7 @@ public class HintBulb {
                     });
                 }),
 
-            new Hint("Short",
+            new Hint("Faites attention aux îles sur les bords !",
                 "Une île " + (Bridge.MAX_STATE * 3 -1) + " placée sur un bord avec une île 1 comme voisin doit envoyer 1 pont vers le voisin d'indice 1 et " + Bridge.MAX_STATE +  " ponts vers ses 2 autres voisins. L’île est alors complète.", 
                 40, 1, (grid) -> {
                 return grid.getNodes().stream()
@@ -156,7 +182,7 @@ public class HintBulb {
                 }),
 
             //Special case of 4 on the side
-            new Hint("Short",
+            new Hint("Cherchez une île " + Bridge.MAX_STATE * 2 + " sur les bords.",
                 "Une île " + Bridge.MAX_STATE * 2 + " placée sur un bord avec 2 îles 1 comme voisins doit envoyer 1 pont sur chaque voisin d'indice 1 et " + Bridge.MAX_STATE + " ponts vers son dernier voisin. L’île est alors complète.", 
                 45, 1, (grid) -> {
                 return grid.getNodes().stream()
@@ -176,7 +202,7 @@ public class HintBulb {
                 }),
 
             //Special case of 6 in the middle
-            new Hint("Short",
+            new Hint("Faites attentions aux îles" + (Bridge.MAX_STATE * 3) + " au centre de la grille !",
                 "Une île " + Bridge.MAX_STATE * 3 + " au centre avec 4 voisins (dont une île 1) doit envoyer au moins 1 pont sur chaque voisin.", 
                 50, 1, (grid) -> {
                 return grid.getNodes().stream()
@@ -197,7 +223,7 @@ public class HintBulb {
                 }),
 
             //Isolation of a two-island segment
-            new Hint("Short",
+            new Hint("Faites attention aux îles 1 voisines.",
                 "Une île " + (Bridge.MAX_STATE -1) + " ne peux pas être relié avec une autre île 1.", 
                 55, 1, (grid) -> {
                 return grid.getNodes().stream()
@@ -218,7 +244,7 @@ public class HintBulb {
                     });
                 }),
 
-            new Hint("Short",
+            new Hint("Faites attention aux îles " + Bridge.MAX_STATE + " voisines.",
                 "Une île " + Bridge.MAX_STATE + " ne peux pas être relié avec une autre île " + Bridge.MAX_STATE + ".", 
                 60, 1, (grid) -> {
                 return grid.getNodes().stream()
@@ -240,8 +266,8 @@ public class HintBulb {
                 }),
 
             //Isolation of a three-island segment
-            new Hint("Short",
-                "Une île " + Bridge.MAX_STATE + " avec deux voisins d'indice 1 ne peuvent pas être reliés comme ceci: 1 - 2 - 1.", 
+            new Hint("Faites attention aux îles 1 voisines d'une île " + Bridge.MAX_STATE + ".",
+                "Une île " + Bridge.MAX_STATE + " avec deux voisins d'indice 1 ne peuvent pas être reliés comme ceci: 1 - 2 - 1. Ils formeraient un segment de trois îles complètes isolé du reste de la grille.", 
                 65, 1, (grid) -> {
                 return grid.getNodes().stream()
                     .filter(node -> node.getBridges().size() == 3 && node.getValue() == Bridge.MAX_STATE) 
@@ -259,8 +285,8 @@ public class HintBulb {
                     });
                 }),
 
-            new Hint("Short",
-                "Une île " + (Bridge.MAX_STATE + 1) + " avec un voisin d'indice 1 et un voisin d'indice 2 ne peuvent pas être reliés comme ceci: 1 - 3 - 2 ou 2 - 3 - 1.", 
+            new Hint("Faites attention aux îles 1, 2 et 3 voisines ; il ne faut pas les isoler du reste de la grille.",
+                "Une île " + (Bridge.MAX_STATE + 1) + " avec un voisin d'indice 1 et un voisin d'indice 2 ne peuvent pas être reliés comme ceci: 1 - 3 = 2 ou 2 = 3 - 1. Ils formeraient un segment de trois îles complètes isolé du reste de la grille.", 
                 75, 1, (grid) -> {
                 return grid.getNodes().stream()
                     .filter(node -> node.getBridges().size() == 3 && node.getValue() == Bridge.MAX_STATE) 
@@ -289,7 +315,7 @@ public class HintBulb {
                 }),
 
             //Isolation when a segment connects to an island
-            new Hint("Short",
+            new Hint("Faites attention ; la grille doit être connexe.",
                 "Un segment d'îles presque complet ne peut pas connecter son dernier pont vers une île si cela isole le segment du reste de la grille.", 
                 80, 6, (grid) -> {
                 List<Node> allNodes = grid.getNodes();
@@ -356,7 +382,7 @@ public class HintBulb {
             }),
 
             // Isolation when a segment connects to another segment
-            new Hint("Short",
+            new Hint("Faites attention ; la grille doit être connexe.",
                 "Deux segments d'îles presque complets ne peuvent pas se connecter entre eux avec leurs deux ponts manquants si cela isolerait le groupe du reste de la grille.",
                 85, 5, (grid) -> {
                 List<Node> allNodes = grid.getNodes();
