@@ -94,6 +94,14 @@ public class Didacticiel implements org.parmentier.game.Scene {
         tutorial.getStyleClass().add("menu-button");
         tutorial.setMaxWidth(320);
         tutorial.setMinWidth(320);
+        tutorial.setOnMouseClicked( e -> {
+            org.parmentier.game.Audio.playClickSound();
+            Game.getInstance().getSceneManager().pushScene(new Level("didacticiel"));
+        });
+        retour.setOnMouseClicked(e -> {
+            org.parmentier.game.Audio.playClickSound();
+            Game.getInstance().getSceneManager().popScene();
+        });
         buttonBox.getChildren().addAll(tutorial, retour);
 
         layout.setSpacing(8);
@@ -103,14 +111,6 @@ public class Didacticiel implements org.parmentier.game.Scene {
 
         uiLayer.getChildren().add(layout);
         uiLayer.getStylesheets().add(getClass().getResource("/app.css").toExternalForm());
-        tutorial.setOnMouseClicked( e -> {
-            org.parmentier.game.Audio.playClickSound();
-            Game.getInstance().getSceneManager().pushScene(new Level("didacticiel"));
-        });
-        retour.setOnMouseClicked(e -> {
-            org.parmentier.game.Audio.playClickSound();
-            Game.getInstance().getSceneManager().popScene();
-        });
     }
 
     /**
