@@ -38,6 +38,9 @@ public class HintBulb {
      */
     private List<Hint> hints;
 
+    /** The last hint that was offered to the player. */
+    private Hint lastHint;
+
     /** Instance of the HintBulb */
     private static HintBulb instance;
 
@@ -485,37 +488,50 @@ public class HintBulb {
         if (hints.isEmpty()) {
             return null; // No hints available
         }
-        Random random = new Random();
+        Hint selectedHint = null;
+        if (lastHint != null && lastHint.isAvailable(gridData) && lastHint.isEnabled()) {
+            selectedHint = lastHint; // Offer the last hint again if it's still available and enabled
+        } else {
+          Random random = new Random();
+          System.out.println("Checking available hints...");
+          
+          // Calculate the total weight of all available hints
+          int totalWeight = hints.stream()
+              .filter(hint -> hint.isAvailable(gridData)) // Only consider available hints
+              .filter(Hint::isEnabled)
+              .mapToInt(Hint::getWeight)
+              .sum();
+          
+          if (totalWeight == 0) {
+              return null; // No available hints
+          }
 
-        System.out.println("Checking available hints...");
-        
-        // Calculate the total weight of all available hints
-        int totalWeight = hints.stream()
-            .filter(hint -> hint.isAvailable(gridData)) // Only consider available hints
-            .filter(Hint::isEnabled)
-            .mapToInt(Hint::getWeight)
-            .sum();
-        
-        if (totalWeight == 0) {
-            return null; // No available hints
+          System.out.println("Total weight of available hints: " + totalWeight);
+
+          // Generate a random number between 0 and totalWeight
+          int randomWeight = random.nextInt(totalWeight);
+
+          int cumulativeWeight = 0;
+          for (Hint hint : hints) {
+              if (hint.isAvailable(gridData) && hint.isEnabled()) {
+                  cumulativeWeight += hint.getWeight();
+                  if (randomWeight < cumulativeWeight) {
+                      selectedHint = hint;
+                      break;
+                  }
+              }
+          }
         }
 
-        System.out.println("Total weight of available hints: " + totalWeight);
-
-        // Generate a random number between 0 and totalWeight
-        int randomWeight = random.nextInt(totalWeight);
-
-        int cumulativeWeight = 0;
-        for (Hint hint : hints) {
-            if (hint.isAvailable(gridData) && hint.isEnabled()) {
-                cumulativeWeight += hint.getWeight();
-                if (randomWeight < cumulativeWeight) {
-                    hint.useHint(); // Disable the hint after it's selected
-                    System.out.println("Selected hint: " + hint.getHintText());
-                    return hint; // Return the selected hint
-                }
+        if (selectedHint != null) {
+            selectedHint.useHint(); // Disable the hint after it's selected
+            if (selectedHint.isEnabled()) {
+                lastHint = selectedHint; // Update the last hint only if it is still enabled (has uses left)
+            } else {
+                lastHint = null; // If the hint is now disabled, reset lastHint to null
             }
+            System.out.println("Selected hint: " + selectedHint.getHintText());
         }
-        return null; // Fallback, should not reach here
+        return selectedHint; // Fallback, should not reach here
     }
 }

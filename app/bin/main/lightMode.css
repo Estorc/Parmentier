@@ -103,10 +103,6 @@
     -fx-padding: 10 40 10 40;
 }
 
-.cachemisere {
-    -fx-background-color: #faf9f7;
-}
-
 /* Level choice menu */
 .level-title {
     -fx-font-family: 'Lexend Medium';

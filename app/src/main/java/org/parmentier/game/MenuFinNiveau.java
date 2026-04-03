@@ -98,7 +98,6 @@ public class MenuFinNiveau implements org.parmentier.game.Scene {
         uiLayer.getChildren().clear();
 
         GridPane layout = new GridPane();
-        layout.getStyleClass().add("cachemisere");
         layout.setHgap(20);
         layout.setVgap(10);
 
