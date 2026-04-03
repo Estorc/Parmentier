@@ -182,11 +182,21 @@ public class Node {
         long x = getCanvasPosition().getX();
         long y = getCanvasPosition().getY();
         gc.setLineWidth(2);
-        gc.setFill(javafx.scene.paint.Color.WHITE);
+
+        boolean isDarkMode = org.parmentier.game.Settings.currentStrokeColor.equals(javafx.scene.paint.Color.WHITE);
+
+        if (isDarkMode) {
+            gc.setFill(javafx.scene.paint.Color.BLACK);
+            gc.setStroke(javafx.scene.paint.Color.GRAY);
+        } else {
+            gc.setFill(javafx.scene.paint.Color.WHITE);
+            gc.setStroke(javafx.scene.paint.Color.BLACK);
+        }
+        
         gc.fillOval(x - SIZE/2, y - SIZE/2, SIZE, SIZE);
-        gc.setStroke(javafx.scene.paint.Color.BLACK);
         gc.strokeOval(x - SIZE/2, y - SIZE/2, SIZE, SIZE);
-        gc.setFill(javafx.scene.paint.Color.BLACK);
+        
+        gc.setFill(org.parmentier.game.Settings.currentStrokeColor);
         gc.fillText(Integer.toString(value), x - 4, y + 4);
     }
     

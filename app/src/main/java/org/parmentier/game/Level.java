@@ -307,6 +307,7 @@ public class Level implements org.parmentier.game.Scene {
         StackPane.setMargin(hintLabel, new javafx.geometry.Insets(0, 30, 0, 0));
 
         helpButton.setOnMouseClicked(e -> {
+            org.parmentier.game.Audio.playClickSound();
             if (hintLabel.isVisible()) {
                 hintLabel.setVisible(false);
             } else {
@@ -345,7 +346,10 @@ public class Level implements org.parmentier.game.Scene {
         StackPane.setAlignment(backButton, javafx.geometry.Pos.BOTTOM_RIGHT);
         StackPane.setMargin(backButton, new javafx.geometry.Insets(10));
         backButton.getStyleClass().add("menu-button");
-        backButton.setOnMouseClicked(e -> Game.getInstance().getSceneManager().popScene());
+        backButton.setOnMouseClicked(e -> {
+            org.parmentier.game.Audio.playClickSound();
+            Game.getInstance().getSceneManager().popScene();
+        });
         uiLayer.getChildren().add(helpButton);
         uiLayer.getChildren().add(backButton);
         uiLayer.getChildren().add(stopwatchLabel);
@@ -394,6 +398,7 @@ public class Level implements org.parmentier.game.Scene {
         uiLayer.getChildren().add(check);
 
         check.setOnMouseClicked(e -> {
+            org.parmentier.game.Audio.playClickSound();
             if (checkLabel.isVisible()) {
                 checkLabel.setVisible(false);
             } else {

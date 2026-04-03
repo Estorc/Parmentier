@@ -103,8 +103,14 @@ public class Didacticiel implements org.parmentier.game.Scene {
 
         uiLayer.getChildren().add(layout);
         uiLayer.getStylesheets().add(getClass().getResource("/app.css").toExternalForm());
-        tutorial.setOnMouseClicked( e -> Game.getInstance().getSceneManager().pushScene(new Level("didacticiel")));
-        retour.setOnMouseClicked(e -> Game.getInstance().getSceneManager().popScene());
+        tutorial.setOnMouseClicked( e -> {
+            org.parmentier.game.Audio.playClickSound();
+            Game.getInstance().getSceneManager().pushScene(new Level("didacticiel"));
+        });
+        retour.setOnMouseClicked(e -> {
+            org.parmentier.game.Audio.playClickSound();
+            Game.getInstance().getSceneManager().popScene();
+        });
     }
 
     /**

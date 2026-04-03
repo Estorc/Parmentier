@@ -133,10 +133,22 @@ public class MainMenu implements org.parmentier.game.Scene {
         uiLayer.getChildren().add(layout);
         uiLayer.getStylesheets().add(getClass().getResource("/lightMode.css").toExternalForm());
 
-        jouer.setOnMouseClicked( e -> Game.getInstance().getSceneManager().pushScene(new MenuChoiceLevel()));
-        settings.setOnMouseClicked( e -> Game.getInstance().getSceneManager().pushScene(new Settings()));
-        leave.setOnMouseClicked( e -> System.exit(0));
-        tutorial.setOnMouseClicked( e -> Game.getInstance().getSceneManager().pushScene(new Didacticiel()));
+        jouer.setOnMouseClicked( e -> {
+            org.parmentier.game.Audio.playClickSound();
+            Game.getInstance().getSceneManager().pushScene(new MenuChoiceLevel());
+        });
+        settings.setOnMouseClicked( e -> {
+            org.parmentier.game.Audio.playClickSound();
+            Game.getInstance().getSceneManager().pushScene(new Settings());
+        });
+        leave.setOnMouseClicked( e -> {
+            org.parmentier.game.Audio.playClickSound();
+            System.exit(0);
+        });
+        tutorial.setOnMouseClicked( e -> {
+            org.parmentier.game.Audio.playClickSound();
+            Game.getInstance().getSceneManager().pushScene(new Didacticiel());
+        });
     }
 
     /**

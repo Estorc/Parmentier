@@ -180,7 +180,13 @@ public class Bridge {
      * If the current state is the maximum state, it wraps around to 0.
      */
     public void toggleState() {
+        int oldState = this.state;
         this.state = (this.state + 1) % (MAX_STATE+1);
+        if (this.state > oldState) {
+            org.parmentier.game.Audio.playAddBridgeSound();
+        }else if (this.state == 0 && oldState > 0) {
+            org.parmentier.game.Audio.playRemoveBridgeSound(); 
+        }
     }
 
     /**
@@ -214,7 +220,7 @@ public class Bridge {
             gc.setStroke(javafx.scene.paint.Color.GRAY);
             gc.setLineWidth(4);
         } else {
-            gc.setStroke(javafx.scene.paint.Color.BLACK);
+            gc.setStroke(org.parmentier.game.Settings.currentStrokeColor);
             gc.setLineWidth(2);
         }
         long fromX = from.getCanvasPosition().getX();
