@@ -110,7 +110,6 @@ public class Didacticiel implements org.parmentier.game.Scene {
         layout.getChildren().addAll(titleLabel, intro, buttonBox);
 
         uiLayer.getChildren().add(layout);
-        uiLayer.getStylesheets().add(getClass().getResource("/app.css").toExternalForm());
     }
 
     /**
