@@ -1,27 +1,35 @@
 package org.parmentier.game;
-
+import org.parmentier.game.Leaderboard;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.layout.StackPane;
 
 public class MenuLeaderboard implements org.parmentier.game.Scene {
     String level;
-
-    MenuLeaderboard(String level){
-
+    Leaderboard leaderboard;
+    public MenuLeaderboard(String level){
         this.level = level;
-
+        leaderboard = new Leaderboard();
+        
     }
 
-
+    public void leaderboardPlaceHolder(){
+        for(int i = 0; i < 20; i++){
+            Performance temp = new Performance();
+            temp.setPlaceHolder();
+            this.leaderboard.addPerformance(temp);
+        }
+        this.leaderboard.afficherLeaderboard();
+    }
 
     @Override
     public void initialize(StackPane uiLayer){
         uiLayer.getChildren().clear();
-
+        leaderboardPlaceHolder();
         GridPane layout = new GridPane();
         layout.getStyleClass().add("cachemisere");
         layout.setHgap(20);
@@ -40,6 +48,15 @@ public class MenuLeaderboard implements org.parmentier.game.Scene {
         GridPane.setHalignment(closeLeaderboardButton, javafx.geometry.HPos.CENTER);
         GridPane.setHalignment(mainMenuButton, javafx.geometry.HPos.CENTER);
         //GridPane.setHalignment(sbButton, javafx.geometry.HPos.CENTER);
+
+
+        VBox leaderboardVBox = new VBox(10);
+        leaderboardVBox.setAlignment(javafx.geometry.Pos.CENTER);
+
+        for(Performance p : leaderboard.getPerformances()){
+            leaderboardVBox.getChildren().add(p.affichagePerformance());
+        }
+        layout.add(leaderboardVBox, 2, 2);
 
 
         titleLabel.getStyleClass().add("title-label");
