@@ -15,15 +15,20 @@ L'objectif était de créer un un jeu en Java et utilisant javaFx et devait poss
 ## Construire depuis la source
 Si vous voulez construire le jeu depuis la source, il sera nécessaire d'installer Java et Gradle.
 
-Une fois que c'est installer, il faut juste écrire dans un terminal situé à la racine de ce projet
+NOTE : Si vous avez Minecraft d'installé, vous avez probalement déjà Java d'installé, il n'est pas nécessaire de réinstaller une version plus récente
+
+Une fois que c'est installé, il faut juste écrire dans un terminal situé à la racine de ce projet
 ```sh
 ./gradlew run
 ```
 
-et voilà!
+Il est aussi possible de créer un .jar contenant tout le jeu et ses dépendances (afin d'avoir une version "portable")
+```sh
+./gradlew assembleShadowDist
+``` 
+Ensuite dans `app/build/distributions` il y aura un "app-shadow.zip". Une fois ce .zip décompressé, le dossier "lib" contiendra le .jar voulu.
 
-NOTE : Si vous avez Minecraft d'installer, vous avez probalement déjà Java d'installer, il n'est pas nécessaire de réinstaller une version plus récente
-
+NOTE : Si le terme de "portable" est entre guillement, c'est parce qu'à l'opposé de la phylosophie de son langage d'implémentation, JavaFX  n'est pas fait pour être executable partout. Il sera portable uniquement si vous l'utilisez sur le même système d'exploitation.
 
 # Parmentier - English 
 Parmentier is an implementation of the japanese game named 'Hashi'.
@@ -42,6 +47,8 @@ The goal was to create that game in Java and using javaFX, and required to featu
 ## Build from source
 If you want to build it from source, you'll need first to install Java and Gradle.
 
+NOTE : If you have Minecraft installed, you probably already have Java installed, and it is not necessairy to reinstall a newer version.
+
 Once those are installed, you only need to write in a terminal at the root of this project
 ```sh
 ./gradlew run
@@ -49,7 +56,14 @@ Once those are installed, you only need to write in a terminal at the root of th
 
 and Voilà!
 
-NOTE : If you have Minecraft installed, you probably already have Java installed, and it is not necessairy to reinstall a newer version.
+It is also possible to create a .jar file containing the game and its dependencies to have a "portable" version.
+```sh
+./gradlew assembleShadowDist
+```
+
+In the `app/build/distribution` folder, you should see a "app-shadow.zip" file. Once this file decompressed, you may find the final .jar in the "lib" folder. 
+
+NOTE : if the "portable" word is between quotes it's because javaFX, unlike the philosphy of its programming language, is not meant to run everywhere. It will be portable only if you use it on the same operatin system.
 
 # Licensing
 Copyright (C) 2026 Estorc
