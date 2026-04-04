@@ -1,11 +1,11 @@
-# Parmentier (Fr)
+# Parmentier - Français
 Parmentier est une implémentation du jeu japonais "Hashi"
 
 ## Contexte
 Ce jeu a été crée pendant la troisième année à l'université de l'équipe de Parmentier, en tant que devoir.
 L'objectif était de créer un un jeu en Java et utilisant javaFx et devait posséder la caratéristique d'avoir des aides à la résolution.
 
-## Caractéristique
+## Caractéristiques
 - Didacticiel
 - Aides à la résolution intégrées
 - Support de plusieurs utilisateurs et leurs données
@@ -17,19 +17,16 @@ Si vous voulez construire le jeu depuis la source, il sera nécessaire d'install
 
 Une fois que c'est installer, il faut juste écrire dans un terminal situé à la racine de ce projet
 ```sh
-.\gradlew run
+./gradlew run
 ```
 
 et voilà!
 
 NOTE : Si vous avez Minecraft d'installer, vous avez probalement déjà Java d'installer, il n'est pas nécessaire de réinstaller une version plus récente
 
-## Licence
 
-
-
-# Parmentier (En)
-Parmentier is an implementation of the japanese game called Hashi.
+# Parmentier - English 
+Parmentier is an implementation of the japanese game named 'Hashi'.
 
 ## Context
 This game has been created during the Parmentier team's third year of computer science at University, as an assignment.
@@ -47,12 +44,12 @@ If you want to build it from source, you'll need first to install Java and Gradl
 
 Once those are installed, you only need to write in a terminal at the root of this project
 ```sh
-.\gradlew run
+./gradlew run
 ```
 
 and Voilà!
 
-NOTE : If tou have Minecraft installed, you probably already have Java installed, and it is not necessairy to reinstall a newer version.
+NOTE : If you have Minecraft installed, you probably already have Java installed, and it is not necessairy to reinstall a newer version.
 
 # Licensing
 Copyright (C) 2026 Estorc
