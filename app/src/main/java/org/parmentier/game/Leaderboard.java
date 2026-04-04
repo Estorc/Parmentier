@@ -23,6 +23,7 @@ import javafx.scene.layout.HBox;
 import javafx.util.Duration;
 
 
+
 public class Leaderboard {
 
     // Liste qui stocke toutes les performances
