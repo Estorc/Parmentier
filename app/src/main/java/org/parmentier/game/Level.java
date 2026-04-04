@@ -472,6 +472,23 @@ public class Level implements org.parmentier.game.Scene {
                 }
             }
         });
+
+        // Reset grid button
+        Button resetButton = new Button("Réinitialiser grille");
+        resetButton.getStyleClass().add("menu-button");
+        StackPane.setAlignment(resetButton, javafx.geometry.Pos.TOP_LEFT);
+        StackPane.setMargin(resetButton, new javafx.geometry.Insets(10));
+
+        resetButton.setOnMouseClicked(e -> {
+            org.parmentier.game.Audio.playClickSound();
+            for (Bridge bridge : activeBridges) {
+                bridge.setState(0);
+            }
+            activeBridges.clear();
+            selectedBridge = null;
+        });
+
+        uiLayer.getChildren().add(resetButton);
     }
 
     /**
