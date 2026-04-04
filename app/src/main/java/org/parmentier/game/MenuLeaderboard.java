@@ -6,7 +6,9 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.StackPane;
+
 
 public class MenuLeaderboard implements org.parmentier.game.Scene {
     String level;
@@ -56,7 +58,11 @@ public class MenuLeaderboard implements org.parmentier.game.Scene {
         for(Performance p : leaderboard.getPerformances()){
             leaderboardVBox.getChildren().add(p.affichagePerformance());
         }
-        layout.add(leaderboardVBox, 2, 2);
+
+        ScrollPane scrollPane = new ScrollPane(leaderboardVBox);
+        scrollPane.setFitToWidth(true);
+        scrollPane.setPrefHeight(400);
+        scrollPane.setStyle("-fx-background-color: transparent;"); 
 
 
         titleLabel.getStyleClass().add("title-label");
@@ -64,6 +70,8 @@ public class MenuLeaderboard implements org.parmentier.game.Scene {
         scoreLabel.getStyleClass().add("textUser");
         closeLeaderboardButton.getStyleClass().add("button");
         mainMenuButton.getStyleClass().add("button");
+
+        layout.add(scrollPane, 2, 2);
         //sbButton.getStyleClass().add("button");
         layout.add(titleLabel, 2, 1);
         layout.add(leaderboardLabel, 2, 2);

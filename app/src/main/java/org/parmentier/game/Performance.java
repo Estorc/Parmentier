@@ -122,6 +122,7 @@ import javafx.geometry.Pos;public class Performance implements Comparable<Perfor
 
     public HBox affichagePerformance(){
         HBox temp = new HBox(20);
+        HBox stats = new HBox(20);
         Label nameTagLabel = new Label(this.nameTag);
         
         // Calcul simple et propre du temps
@@ -136,7 +137,8 @@ import javafx.geometry.Pos;public class Performance implements Comparable<Perfor
         Label noteLabel = new Label("" + this.note);
 
         temp.setAlignment(Pos.CENTER);
-        temp.getChildren().addAll(nameTagLabel, timeLabel, helpUsedLabel, checkUsedLabel, scoreLabel, clicsLabel, noteLabel);
+        stats.getChildren().addAll(nameTagLabel, timeLabel, helpUsedLabel, checkUsedLabel, scoreLabel, clicsLabel);
+        temp.getChildren().addAll(stats, noteLabel);
         return temp;
     }
 
