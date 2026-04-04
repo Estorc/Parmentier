@@ -98,7 +98,6 @@ public class MenuFinNiveau implements org.parmentier.game.Scene {
         uiLayer.getChildren().clear();
 
         GridPane layout = new GridPane();
-        layout.getStyleClass().add("cachemisere");
         layout.setHgap(20);
         layout.setVgap(10);
 
@@ -143,6 +142,12 @@ public class MenuFinNiveau implements org.parmentier.game.Scene {
             // pop the current level scene
             Game.getInstance().getSceneManager().popScene();
             
+        });
+
+        sbButton.setOnMouseClicked(e -> {
+            org.parmentier.game.Audio.playClickSound();
+
+            Game.getInstance().getSceneManager().pushScene(new MenuLeaderboard("level aopkzaoifne"));
         });
     }
 

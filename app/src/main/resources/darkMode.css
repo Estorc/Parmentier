@@ -108,10 +108,6 @@
     -fx-text-fill: white;
 }
 
-.cachemisere {
-    -fx-background-color: #1a1a1a;
-}
-
 /* Level choice menu */
 .level-title {
     -fx-font-family: 'Lexend Medium';

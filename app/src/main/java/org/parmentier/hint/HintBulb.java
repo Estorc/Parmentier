@@ -38,6 +38,9 @@ public class HintBulb {
      */
     private List<Hint> hints;
 
+    /** The last hint that was offered to the player. */
+    private Hint lastHint;
+
     /** Instance of the HintBulb */
     private static HintBulb instance;
 
@@ -60,7 +63,7 @@ public class HintBulb {
 
             // Case of 1 with only one neighbor
             new Hint("Faites attention aux îles 1 et leur nombre de voisins.",
-                "Une île 1 avec un seul voisin atteignable doit forcément être reliée à ce voisin. L’île est alors complète.", 10, 5, (grid) -> {
+                "Une île 1 avec un seul voisin atteignable doit forcément être reliée à ce voisin. L’île est alors complète.", 10, 7, (grid) -> {
                 return grid.getNodes().stream()
                     .filter(node -> node.getValue() == 1) // Only consider islands with value 1
                     .filter(node -> {
@@ -81,7 +84,7 @@ public class HintBulb {
             new Hint("Faites attention aux îles dans les coins !",
                 "Une île placée dans un coin ne peut avoir que deux voisins." +
                 "Comme un lien ne peut contenir au plus que " + Bridge.MAX_STATE + " ponts, une île " + Bridge.MAX_STATE * 2 + " dans un coin doit envoyer deux ponts vers chacun de ses deux voisins." +
-                " L’île est alors complète.", 15, 3, (grid) -> {
+                " L’île est alors complète.", 15, 6, (grid) -> {
                 return grid.getNodes().stream()
                     .filter(node -> grid.isCorner(node) && node.getValue() == Bridge.MAX_STATE * 2) // Only consider islands in corners
                     .anyMatch(node -> {
@@ -94,7 +97,7 @@ public class HintBulb {
             new Hint("Faites attention aux îles sur les bords !",
                 "Une île située sur un bord peut avoir trois voisins." +
                 "Une île " + Bridge.MAX_STATE * 3 + " sur un bord doit donc envoyer " + Bridge.MAX_STATE + " ponts vers chacun de ses trois voisins." +
-                "L’île est alors complète.", 20, 2, (grid) -> {
+                "L’île est alors complète.", 20, 6, (grid) -> {
                 return grid.getNodes().stream()
                     .filter(node -> grid.isEdge(node) && node.getValue() == Bridge.MAX_STATE * 3) // Only consider islands in corners
                     .anyMatch(node -> {
@@ -107,7 +110,7 @@ public class HintBulb {
             new Hint("Repérez les îles " + Bridge.MAX_STATE * 4 + " au centre de la grille." ,
                 "Une île au centre peut avoir quatre voisins." +
                 "Une île " + Bridge.MAX_STATE * 4 + " doit donc envoyer " + Bridge.MAX_STATE + " ponts vers chacun de ses quatre voisins." +
-                "L’île est alors complète.", 25, 1, (grid) -> {
+                "L’île est alors complète.", 25, 6, (grid) -> {
                 return grid.getNodes().stream()
                     .filter(node -> grid.isCenter(node) && node.getValue() == Bridge.MAX_STATE * 4) // Only consider islands in corners
                     .anyMatch(node -> {
@@ -120,7 +123,7 @@ public class HintBulb {
             //Special cases of 3 in the corner, 5 on the side and 7 in the middle
             new Hint("Faites attention aux îles dans les coins !",
                 "Une île " + (Bridge.MAX_STATE * 2 -1) + " placée au bord avec une île 1 comme voisin doit envoyer 1 pont vers le voisin d'indice 1 et" + Bridge.MAX_STATE + "ponts vers l'autre voisin. L’île est alors complète.", 
-                30, 1, (grid) -> {
+                30, 5, (grid) -> {
                 return grid.getNodes().stream()
                     .filter(node -> grid.isCorner(node) && node.getValue() == Bridge.MAX_STATE *2-1) // Only consider islands in corners
                     .anyMatch(node -> {
@@ -141,7 +144,7 @@ public class HintBulb {
 
             new Hint("Repérez les îles " + (Bridge.MAX_STATE * 4 -1) + " au centre de la grille." ,
                 "Une île " + (Bridge.MAX_STATE * 4 - 1) + " placée au centre avec une île 1 comme voisin doit envoyer 1 pont vers le voisin d'indice 1 et " + Bridge.MAX_STATE + " ponts vers ses 3 autres voisins. L’île est alors complète.", 
-                35, 1, (grid) -> {
+                35, 5, (grid) -> {
                 return grid.getNodes().stream()
                     .filter(node -> grid.isCenter(node) && node.getValue() == Bridge.MAX_STATE * 4-1) // Only consider islands in corners
                     .anyMatch(node -> {
@@ -162,7 +165,7 @@ public class HintBulb {
 
             new Hint("Faites attention aux îles sur les bords !",
                 "Une île " + (Bridge.MAX_STATE * 3 -1) + " placée sur un bord avec une île 1 comme voisin doit envoyer 1 pont vers le voisin d'indice 1 et " + Bridge.MAX_STATE +  " ponts vers ses 2 autres voisins. L’île est alors complète.", 
-                40, 1, (grid) -> {
+                40, 5, (grid) -> {
                 return grid.getNodes().stream()
                     .filter(node -> grid.isEdge(node) && node.getValue() == Bridge.MAX_STATE * 3-1) // Only consider islands in corners
                     .anyMatch(node -> {
@@ -184,7 +187,7 @@ public class HintBulb {
             //Special case of 4 on the side
             new Hint("Cherchez une île " + Bridge.MAX_STATE * 2 + " sur les bords.",
                 "Une île " + Bridge.MAX_STATE * 2 + " placée sur un bord avec 2 îles 1 comme voisins doit envoyer 1 pont sur chaque voisin d'indice 1 et " + Bridge.MAX_STATE + " ponts vers son dernier voisin. L’île est alors complète.", 
-                45, 1, (grid) -> {
+                45, 5, (grid) -> {
                 return grid.getNodes().stream()
                     .filter(node -> node.getBridges().size() == 3 && node.getValue() == Bridge.MAX_STATE * 2) 
                     .anyMatch(node -> {
@@ -204,7 +207,7 @@ public class HintBulb {
             //Special case of 6 in the middle
             new Hint("Faites attentions aux îles" + (Bridge.MAX_STATE * 3) + " au centre de la grille !",
                 "Une île " + Bridge.MAX_STATE * 3 + " au centre avec 4 voisins (dont une île 1) doit envoyer au moins 1 pont sur chaque voisin.", 
-                50, 1, (grid) -> {
+                50, 5, (grid) -> {
                 return grid.getNodes().stream()
                     .filter(node -> grid.isCenter(node) && node.getValue() == Bridge.MAX_STATE * 3) 
                     .anyMatch(node -> {
@@ -225,7 +228,7 @@ public class HintBulb {
             //Isolation of a two-island segment
             new Hint("Faites attention aux îles 1 voisines.",
                 "Une île " + (Bridge.MAX_STATE -1) + " ne peux pas être relié avec une autre île 1.", 
-                55, 1, (grid) -> {
+                55, 4, (grid) -> {
                 return grid.getNodes().stream()
                     .filter(node -> node.getValue() == Bridge.MAX_STATE -1) 
                     .anyMatch(node -> {
@@ -246,7 +249,7 @@ public class HintBulb {
 
             new Hint("Faites attention aux îles " + Bridge.MAX_STATE + " voisines.",
                 "Une île " + Bridge.MAX_STATE + " ne peux pas être relié avec une autre île " + Bridge.MAX_STATE + ".", 
-                60, 1, (grid) -> {
+                60, 3, (grid) -> {
                 return grid.getNodes().stream()
                     .filter(node -> node.getValue() == Bridge.MAX_STATE) 
                     .anyMatch(node -> {
@@ -268,7 +271,7 @@ public class HintBulb {
             //Isolation of a three-island segment
             new Hint("Faites attention aux îles 1 voisines d'une île " + Bridge.MAX_STATE + ".",
                 "Une île " + Bridge.MAX_STATE + " avec deux voisins d'indice 1 ne peuvent pas être reliés comme ceci: 1 - 2 - 1. Ils formeraient un segment de trois îles complètes isolé du reste de la grille.", 
-                65, 1, (grid) -> {
+                65, 3, (grid) -> {
                 return grid.getNodes().stream()
                     .filter(node -> node.getBridges().size() == 3 && node.getValue() == Bridge.MAX_STATE) 
                     .anyMatch(node -> {
@@ -287,7 +290,7 @@ public class HintBulb {
 
             new Hint("Faites attention aux îles 1, 2 et 3 voisines ; il ne faut pas les isoler du reste de la grille.",
                 "Une île " + (Bridge.MAX_STATE + 1) + " avec un voisin d'indice 1 et un voisin d'indice 2 ne peuvent pas être reliés comme ceci: 1 - 3 = 2 ou 2 = 3 - 1. Ils formeraient un segment de trois îles complètes isolé du reste de la grille.", 
-                75, 1, (grid) -> {
+                75, 3, (grid) -> {
                 return grid.getNodes().stream()
                     .filter(node -> node.getBridges().size() == 3 && node.getValue() == Bridge.MAX_STATE) 
                     .anyMatch(node -> {
@@ -317,7 +320,7 @@ public class HintBulb {
             //Isolation when a segment connects to an island
             new Hint("Faites attention ; la grille doit être connexe.",
                 "Un segment d'îles presque complet ne peut pas connecter son dernier pont vers une île si cela isole le segment du reste de la grille.", 
-                80, 6, (grid) -> {
+                80, 2, (grid) -> {
                 List<Node> allNodes = grid.getNodes();
                 int totalNodes = allNodes.size();
                 if (totalNodes <= 2) return false;
@@ -384,7 +387,7 @@ public class HintBulb {
             // Isolation when a segment connects to another segment
             new Hint("Faites attention ; la grille doit être connexe.",
                 "Deux segments d'îles presque complets ne peuvent pas se connecter entre eux avec leurs deux ponts manquants si cela isolerait le groupe du reste de la grille.",
-                85, 5, (grid) -> {
+                85, 1, (grid) -> {
                 List<Node> allNodes = grid.getNodes();
                 int totalNodes = allNodes.size();
                 if (totalNodes <= 2) return false;
@@ -485,37 +488,50 @@ public class HintBulb {
         if (hints.isEmpty()) {
             return null; // No hints available
         }
-        Random random = new Random();
+        Hint selectedHint = null;
+        if (lastHint != null && lastHint.isAvailable(gridData) && lastHint.isEnabled()) {
+            selectedHint = lastHint; // Offer the last hint again if it's still available and enabled
+        } else {
+          Random random = new Random();
+          System.out.println("Checking available hints...");
+          
+          // Calculate the total weight of all available hints
+          int totalWeight = hints.stream()
+              .filter(hint -> hint.isAvailable(gridData)) // Only consider available hints
+              .filter(Hint::isEnabled)
+              .mapToInt(Hint::getWeight)
+              .sum();
+          
+          if (totalWeight == 0) {
+              return null; // No available hints
+          }
 
-        System.out.println("Checking available hints...");
-        
-        // Calculate the total weight of all available hints
-        int totalWeight = hints.stream()
-            .filter(hint -> hint.isAvailable(gridData)) // Only consider available hints
-            .filter(Hint::isEnabled)
-            .mapToInt(Hint::getWeight)
-            .sum();
-        
-        if (totalWeight == 0) {
-            return null; // No available hints
+          System.out.println("Total weight of available hints: " + totalWeight);
+
+          // Generate a random number between 0 and totalWeight
+          int randomWeight = random.nextInt(totalWeight);
+
+          int cumulativeWeight = 0;
+          for (Hint hint : hints) {
+              if (hint.isAvailable(gridData) && hint.isEnabled()) {
+                  cumulativeWeight += hint.getWeight();
+                  if (randomWeight < cumulativeWeight) {
+                      selectedHint = hint;
+                      break;
+                  }
+              }
+          }
         }
 
-        System.out.println("Total weight of available hints: " + totalWeight);
-
-        // Generate a random number between 0 and totalWeight
-        int randomWeight = random.nextInt(totalWeight);
-
-        int cumulativeWeight = 0;
-        for (Hint hint : hints) {
-            if (hint.isAvailable(gridData) && hint.isEnabled()) {
-                cumulativeWeight += hint.getWeight();
-                if (randomWeight < cumulativeWeight) {
-                    hint.useHint(); // Disable the hint after it's selected
-                    System.out.println("Selected hint: " + hint.getHintText());
-                    return hint; // Return the selected hint
-                }
+        if (selectedHint != null) {
+            selectedHint.useHint(); // Disable the hint after it's selected
+            if (selectedHint.isEnabled()) {
+                lastHint = selectedHint; // Update the last hint only if it is still enabled (has uses left)
+            } else {
+                lastHint = null; // If the hint is now disabled, reset lastHint to null
             }
+            System.out.println("Selected hint: " + selectedHint.getHintText());
         }
-        return null; // Fallback, should not reach here
+        return selectedHint; // Fallback, should not reach here
     }
 }

@@ -112,8 +112,12 @@ public class Game {
      * such as completing a level or returning to the main menu.
      */
     public void refresh() {
-        if (this.uiLayer != null && !sceneManager.isEmpty())
+        if (this.uiLayer != null && !sceneManager.isEmpty()) {
+            // Destroy events and listeners
+            uiLayer.setOnMouseMoved(null);
+            uiLayer.setOnMouseClicked(null);
             sceneManager.activeScene().initialize(uiLayer);
+        }
     }
 
     /**
