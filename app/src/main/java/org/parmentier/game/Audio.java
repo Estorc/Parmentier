@@ -10,39 +10,45 @@ public class Audio {
     private static double volume = 0.5;
 
     static {
-        URL resource = Audio.class.getResource("/sounds/bridge_add.wav");
-        if (resource != null) {
-            addBridgeSound = new AudioClip(resource.toExternalForm());
-        }
+        URL resAdd = Audio.class.getResource("/sounds/bridge_add.wav");
         URL resRemove = Audio.class.getResource("/sounds/bridge_remove.wav");
-        if (resRemove != null) {
-            removeBridgeSound = new AudioClip(resRemove.toExternalForm());
-        }
         URL resClick = Audio.class.getResource("/sounds/clic.wav");
-        if (resClick != null) {
-            clickSound = new AudioClip(resClick.toExternalForm());
-        }
+
+        addBridgeSound = new AudioClip(resAdd.toExternalForm());
+        removeBridgeSound = new AudioClip(resRemove.toExternalForm());
+        clickSound = new AudioClip(resClick.toExternalForm());
+        
     }
 
     public static void playAddBridgeSound() {
         if (addBridgeSound != null) {
+            addBridgeSound.setVolume(volume);
             addBridgeSound.play(volume);
         }
     }
 
     public static void playRemoveBridgeSound() {
         if (removeBridgeSound != null) {
+            removeBridgeSound.setVolume(volume);
             removeBridgeSound.play(volume);
         }
     }
 
     public static void playClickSound() {
         if (clickSound != null) {
+            clickSound.setVolume(volume);
             clickSound.play(volume);
         }
     }
 
     public static void setVolume(double newVolume) {
         volume = newVolume;
+        addBridgeSound.setVolume(newVolume);
+        removeBridgeSound.setVolume(newVolume);
+        clickSound.setVolume(newVolume);
+    }
+
+    public static double getVolume() {
+        return volume;
     }
 }
