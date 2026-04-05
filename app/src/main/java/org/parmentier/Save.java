@@ -27,7 +27,7 @@ public class Save {
 
     public Save () {
 	// DECLARATION 
-        this.filePath = "saves/" + Game.getInstance().getCurrentUserName() + ".sav";
+		this.filePath = org.parmentier.Parmentier.SAVES_DIR + Game.getInstance().getCurrentUserName() + ".sav";
 		this.newLevel = false;
 		this.currentLevel = "";
 	// BEGIN
@@ -72,7 +72,7 @@ public class Save {
 						System.out.println(" ---- save : " + save + " ---- ");
 						save = save.trim();
 						//$$
-						String momPath = "saves/momentanous.txt";
+						String momPath = org.parmentier.Parmentier.SAVES_DIR + "momentanous.txt";
 						File mom = new File(momPath); // Create File object
 
 						try{

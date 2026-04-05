@@ -23,21 +23,21 @@ public class Audio {
     public static void playAddBridgeSound() {
         if (addBridgeSound != null) {
             addBridgeSound.setVolume(volume);
-            addBridgeSound.play(volume);
+            addBridgeSound.play();
         }
     }
 
     public static void playRemoveBridgeSound() {
         if (removeBridgeSound != null) {
             removeBridgeSound.setVolume(volume);
-            removeBridgeSound.play(volume);
+            removeBridgeSound.play();
         }
     }
 
     public static void playClickSound() {
         if (clickSound != null) {
             clickSound.setVolume(volume);
-            clickSound.play(volume);
+            clickSound.play();
         }
     }
 

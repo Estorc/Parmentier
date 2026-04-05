@@ -357,11 +357,23 @@ package org.parmentier;
  * Main application class for the Parmentier puzzle game.
  */
 public class Parmentier {
+    public static String SAVES_DIR;
     /**
      * The main entry point of the Parmentier application.
      * @param args Command-line arguments passed to the application (not used in this implementation).
      */
     public static void main(String[] args) {
-      App.main(args); 
+        // find the folder where the jar file is located
+        try {
+            java.io.File jarDir = new java.io.File(Parmentier.class.getProtectionDomain().getCodeSource().getLocation().toURI()).getParentFile();
+            SAVES_DIR = jarDir.getAbsolutePath() + "/saves/";
+        } catch (Exception e) {
+            SAVES_DIR = "saves/";
+        }
+
+        // create the save folder
+        new java.io.File(SAVES_DIR).mkdirs();
+
+        App.main(args);
     }
 }
