@@ -56,6 +56,16 @@ application {
     mainClass = "$mainClassName"
 }
 
+tasks.withType<Jar> {
+    manifest {
+        attributes["Main-Class"] = mainClassName
+    }
+}
+tasks.named("shadowJar") {
+    (this as AbstractArchiveTask).archiveFileName.set("Groupe1.jar")
+    (this as AbstractArchiveTask).destinationDirectory.set(file("$rootDir"))
+}
+
 tasks.named<Test>("test") {
     // Use JUnit Platform for unit tests.
     useJUnitPlatform()

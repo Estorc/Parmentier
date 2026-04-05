@@ -47,7 +47,7 @@ public class MenuLogin extends Menu {
     /**
      * The path to the JSON file that contains the usernames.
      */
-    private final String jsonPath = "saves/logins.json";
+    private final String jsonPath =  org.parmentier.Parmentier.SAVES_DIR + "logins.json";
     
     /**
      * A reference to the Game instance, allowing the menu to interact with the game state and transition to other scenes.
@@ -256,6 +256,12 @@ public class MenuLogin extends Menu {
 
             String finalName = selected.replace("Créer : ", "").trim();
             this.game.setCurrentUserName(finalName);
+
+            // Create saves folder if it doesn't exist
+            java.io.File savesFolder = new java.io.File("saves");
+            if (!savesFolder.exists()) {
+                savesFolder.mkdir();
+            }
 
             this.game.getSceneManager().pushScene(new MainMenu());
         }
