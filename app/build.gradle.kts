@@ -9,6 +9,7 @@ plugins {
     // Apply the application plugin to add support for building a CLI application in Java.
     application
     id("org.openjfx.javafxplugin") version "0.1.0"
+    //id("com.gradleup.shadow") version "9.4.0"
     id("com.gradleup.shadow") version "9.4.0"
 }
 
@@ -54,6 +55,16 @@ var mainClassName = "org.parmentier.Parmentier"
 application {
     // Define the main class for the application.
     mainClass = "$mainClassName"
+}
+
+tasks.withType<Jar> {
+    manifest {
+        attributes["Main-Class"] = mainClassName
+    }
+}
+tasks.named("shadowJar") {
+    (this as AbstractArchiveTask).archiveFileName.set("Groupe1.jar")
+    (this as AbstractArchiveTask).destinationDirectory.set(file("$rootDir"))
 }
 
 tasks.named<Test>("test") {
