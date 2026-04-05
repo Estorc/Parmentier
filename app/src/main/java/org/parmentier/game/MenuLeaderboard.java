@@ -1,27 +1,37 @@
 package org.parmentier.game;
-
+import org.parmentier.game.Leaderboard;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.StackPane;
+
 
 public class MenuLeaderboard implements org.parmentier.game.Scene {
     String level;
-
-    MenuLeaderboard(String level){
-
+    Leaderboard leaderboard;
+    public MenuLeaderboard(String level){
         this.level = level;
-
+        leaderboard = new Leaderboard();
+        
     }
 
-
+    public void leaderboardPlaceHolder(){
+        for(int i = 0; i < 20; i++){
+            Performance temp = new Performance();
+            temp.setPlaceHolder();
+            this.leaderboard.addPerformance(temp);
+        }
+        this.leaderboard.afficherLeaderboard();
+    }
 
     @Override
     public void initialize(StackPane uiLayer){
         uiLayer.getChildren().clear();
-
+        leaderboardPlaceHolder();
         GridPane layout = new GridPane();
         layout.getStyleClass().add("cachemisere");
         layout.setHgap(20);
@@ -42,11 +52,26 @@ public class MenuLeaderboard implements org.parmentier.game.Scene {
         //GridPane.setHalignment(sbButton, javafx.geometry.HPos.CENTER);
 
 
+        VBox leaderboardVBox = new VBox(10);
+        leaderboardVBox.setAlignment(javafx.geometry.Pos.CENTER);
+
+        for(Performance p : leaderboard.getPerformances()){
+            leaderboardVBox.getChildren().add(p.affichagePerformance());
+        }
+
+        ScrollPane scrollPane = new ScrollPane(leaderboardVBox);
+        scrollPane.setFitToWidth(true);
+        scrollPane.setPrefHeight(400);
+        scrollPane.setStyle("-fx-background-color: transparent;"); 
+
+
         titleLabel.getStyleClass().add("title-label");
         leaderboardLabel.getStyleClass().add("textUser");
         scoreLabel.getStyleClass().add("textUser");
         closeLeaderboardButton.getStyleClass().add("button");
         mainMenuButton.getStyleClass().add("button");
+
+        layout.add(scrollPane, 2, 2);
         //sbButton.getStyleClass().add("button");
         layout.add(titleLabel, 2, 1);
         layout.add(leaderboardLabel, 2, 2);

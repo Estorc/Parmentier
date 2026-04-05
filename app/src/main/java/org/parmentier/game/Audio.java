@@ -9,6 +9,17 @@ public class Audio {
     private static AudioClip clickSound;
     private static double volume = 0.5;
 
+
+
+    static boolean isLinux(){
+        String os = System.getProperty("os.name").toLowerCase();
+        if (os.contains("nix") || os.contains("nux")){
+            return true;
+        } else{
+            return false;
+        }
+    }
+
     static {
         URL resAdd = Audio.class.getResource("/sounds/bridge_add.wav");
         URL resRemove = Audio.class.getResource("/sounds/bridge_remove.wav");
@@ -17,27 +28,33 @@ public class Audio {
         addBridgeSound = new AudioClip(resAdd.toExternalForm());
         removeBridgeSound = new AudioClip(resRemove.toExternalForm());
         clickSound = new AudioClip(resClick.toExternalForm());
-        
+
     }
 
     public static void playAddBridgeSound() {
-        if (addBridgeSound != null) {
-            addBridgeSound.setVolume(volume);
-            addBridgeSound.play();
+        if (! isLinux()){
+            if (addBridgeSound != null) {
+                addBridgeSound.setVolume(volume);
+                addBridgeSound.play(volume);
+            }
         }
     }
 
     public static void playRemoveBridgeSound() {
-        if (removeBridgeSound != null) {
-            removeBridgeSound.setVolume(volume);
-            removeBridgeSound.play();
+        if (! isLinux()){
+            if (removeBridgeSound != null) {
+                removeBridgeSound.setVolume(volume);
+                removeBridgeSound.play(volume);
+            }
         }
     }
 
     public static void playClickSound() {
-        if (clickSound != null) {
-            clickSound.setVolume(volume);
-            clickSound.play();
+        if (! isLinux()){
+            if (clickSound != null) {
+                clickSound.setVolume(volume);
+                clickSound.play(volume);
+            }
         }
     }
 
