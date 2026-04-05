@@ -30,6 +30,9 @@ import javafx.animation.Timeline;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.shape.Line;
+import javafx.scene.layout.HBox;
+import javafx.geometry.Pos;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
@@ -112,6 +115,9 @@ public class Level implements org.parmentier.game.Scene {
         // Try loading saved state first, if it fails load the level data from the resource file
         
         boolean loadedFromSave = false;
+
+        this.level = new GridData(levelName);
+        /* 
         InputStream input;
         try {
           java.nio.file.Path savePath = java.nio.file.Paths.get("saves/" + Game.getInstance().getCurrentUserName() + "_" + levelName + ".sav");
@@ -134,6 +140,7 @@ public class Level implements org.parmentier.game.Scene {
             throw new RuntimeException("Failed to load level: " + levelName);
           }
         }
+        */
 
         // restore saved stopwatch time if present
         if (loadedFromSave && this.level != null) {
@@ -301,29 +308,55 @@ public class Level implements org.parmentier.game.Scene {
 
     }
 
-    private void helpButton(){
+    private StackPane hintBanner;
+
+    private void helpButton(StackPane uiLayer) {
         helpButton = new Button("Aide");
         helpButton.getStyleClass().add("menu-button");
         StackPane.setMargin(helpButton, new javafx.geometry.Insets(10));
 
+        // Label help text
         hintLabel = new Label();
-        hintLabel.getStyleClass().add("hint-banner");
-        hintLabel.setVisible(false);
         hintLabel.setWrapText(true);
-        hintLabel.setMaxWidth(300);
-        StackPane.setAlignment(hintLabel, javafx.geometry.Pos.CENTER_RIGHT);
-        StackPane.setMargin(hintLabel, new javafx.geometry.Insets(0, 30, 0, 0));
+        hintLabel.setTextFill(Color.WHITE);
+        hintLabel.setMaxWidth(240);
+
+        // Cross to close help
+        Line cross1 = new Line(0, 0, 14, 14);
+        Line cross2 = new Line(0, 14, 14, 0);
+        cross1.setStrokeWidth(2);
+        cross2.setStrokeWidth(2);
+        cross1.setStroke(Color.WHITE);
+        cross2.setStroke(Color.WHITE);
+        StackPane closeButton = new StackPane(cross1, cross2);
+        closeButton.setStyle("-fx-cursor: hand; -fx-background-color: transparent;");
+        closeButton.setMaxSize(18, 18);
+
+        // Banner
+        HBox hintBanner = new javafx.scene.layout.HBox(10, hintLabel, closeButton);
+        hintBanner.getStyleClass().add("hint-banner");
+        hintBanner.setMaxWidth(300);
+        hintBanner.setMaxHeight(javafx.scene.layout.Region.USE_PREF_SIZE);
+        hintBanner.setAlignment(Pos.TOP_LEFT);
+        HBox.setHgrow(hintLabel, javafx.scene.layout.Priority.ALWAYS);
+        hintBanner.setVisible(false);
+        StackPane.setAlignment(hintBanner, Pos.CENTER_RIGHT);
+        StackPane.setMargin(hintBanner, new javafx.geometry.Insets(0, 40, 0, 0));
+        hintBanner.setPickOnBounds(false);
+        uiLayer.getChildren().add(hintBanner);
+
+        closeButton.setOnMouseClicked(ev -> hintBanner.setVisible(false));
 
         helpButton.setOnMouseClicked(e -> {
             org.parmentier.game.Audio.playClickSound();
-            if (hintLabel.isVisible()) {
-                hintLabel.setVisible(false);
+            if (hintBanner.isVisible()) {
+                hintBanner.setVisible(false);
             } else {
                 HintBulb hintBulb = org.parmentier.hint.HintBulb.get();
                 Hint hint = hintBulb.getRandomHint(level);
                 String text = (hint != null) ? hint.getHintText() : "Aucune aide disponible.";
                 hintLabel.setText(text);
-                hintLabel.setVisible(true);
+                hintBanner.setVisible(true);
             }
         });
     }
@@ -349,8 +382,7 @@ public class Level implements org.parmentier.game.Scene {
 
        
         startStopwatch();
-        helpButton();
-        uiLayer.getChildren().add(hintLabel);
+        helpButton(uiLayer);
 
         StackPane.setAlignment(stopwatchLabel, javafx.geometry.Pos.TOP_CENTER);
         StackPane.setAlignment(helpButton, javafx.geometry.Pos.TOP_RIGHT);
@@ -440,6 +472,23 @@ public class Level implements org.parmentier.game.Scene {
                 }
             }
         });
+
+        // Reset grid button
+        Button resetButton = new Button("Réinitialiser grille");
+        resetButton.getStyleClass().add("menu-button");
+        StackPane.setAlignment(resetButton, javafx.geometry.Pos.TOP_LEFT);
+        StackPane.setMargin(resetButton, new javafx.geometry.Insets(10));
+
+        resetButton.setOnMouseClicked(e -> {
+            org.parmentier.game.Audio.playClickSound();
+            for (Bridge bridge : activeBridges) {
+                bridge.setState(0);
+            }
+            activeBridges.clear();
+            selectedBridge = null;
+        });
+
+        uiLayer.getChildren().add(resetButton);
     }
 
     /**

@@ -90,7 +90,7 @@ public class Settings implements org.parmentier.game.Scene {
         Label soundLabel = new Label("Volume son");
         soundLabel.getStyleClass().add("textUser");
         
-        soundSlider = new Slider(0, 1, 0.5);
+        soundSlider = new Slider(0, 1, Audio.getVolume());
         soundSlider.setMaxWidth(200);
         soundSlider.getStyleClass().add("sound-slider");
         

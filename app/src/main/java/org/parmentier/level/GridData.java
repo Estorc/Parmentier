@@ -15,11 +15,13 @@
 
 package org.parmentier.level;
 
+import org.parmentier.Save;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
-import org.parmentier.game.Game;
+//import org.parmentier.game.Game;
 
 /**
  * Represents a level in the Parmentier puzzle game.
@@ -39,6 +41,11 @@ public class GridData {
      * The name of the level, which can be used for display purposes or to identify the level in a list of levels.
      */
     private String name;
+
+    /**
+     * The Save Manager, which will filter the data coming int and out. 
+     */
+    private Save saveManager;
 
     /**
      * The elapsed seconds stored in the save file for this level.
@@ -70,7 +77,13 @@ public class GridData {
      * a specific way, where the first part contains the node values and the second part contains the bridge states,
      * separated by a line with a single dash ("-").
      */
-    public GridData(InputStream fileStream, String fileName) {
+    public GridData(String fileName) {
+        this.saveManager = new Save();
+        InputStream fileStream = this.saveManager.openSave(fileName);
+        if (fileStream == null){
+            System.out.println("---- Failed2 ----");
+        }
+
         levelArray = loadLevel(fileStream, fileName);
     }
 
@@ -80,6 +93,8 @@ public class GridData {
      * @param path The path of the file containing the level data.
      * @return A 2D array of Node objects representing the level.
      */
+
+    /* // This function is not used.
     private Node[][] loadLevelFromFile(java.nio.file.Path path) {
       try {
             return loadLevel(java.nio.file.Files.newInputStream(path), path.getFileName().toString().replaceFirst("[.][^.]+$", ""));
@@ -87,7 +102,7 @@ public class GridData {
             System.err.println("Level file not found: " + path);
             return new Node[0][0];
         }
-    }
+    */
 
     /**
      * Loads the level data from an InputStream and constructs the 2D array of nodes.
@@ -101,13 +116,15 @@ public class GridData {
      */
     private Node[][] loadLevel(InputStream fileStream, String fileName) {
         try {
-            this.name = fileName;
+
             String content = new String(fileStream.readAllBytes());
             content = content.replace("\r\n", "\n"); // règle les sauts de lignes sur windows
+            
+            System.out.println(" ---- content : " + content +" ---- ");
 
             int savedTime = 0;
             if (content.startsWith("TIME:")) {
-                int idx = content.indexOf('\n');
+                int idx = content.indexOf(';');
                 if (idx >= 0) {
                     String timeLine = content.substring(0, idx).trim();
                     try {
@@ -120,10 +137,15 @@ public class GridData {
             }
             this.savedChrono = savedTime;
 
-            String[] parts = content.split("-\n"); // sépare la sauvegarde des noeuds et des ponts
-            String[] node_lines = parts[0].split("\n");
-            String[] bridge_lines = parts[1].split("\n");
-            Node[][] array = new Node[node_lines.length][];
+            String[] parts;
+            String[] node_lines;
+            String[] bridge_lines;
+            Node[][] array;
+
+            parts = content.split("-\n"); // sépare la sauvegarde des noeuds et des ponts
+            node_lines = parts[0].split("\n");
+            bridge_lines = parts[1].split("\n");
+            array = new Node[node_lines.length][];
 
             // chargement des nodes sauvegardés et des bridges possibles horizontalement
             for (int i = 0; i < node_lines.length; i++) {
@@ -237,11 +259,14 @@ public class GridData {
                 }
             }
 
-            nodeBuilder.append('\n');
-            bridgeBuilder.append('\n');
+            nodeBuilder.append('!');
+            bridgeBuilder.append('!');
         }
 
-        String saveData = "TIME:" + this.savedChrono + "\n" + nodeBuilder.toString() + "-\n" + bridgeBuilder.toString();
+        String saveData = "TIME:" + this.savedChrono + ";" + nodeBuilder.toString() + "-" + bridgeBuilder.toString() + "\n";
+        
+        this.saveManager.overwriteSave(saveData);
+        /* 
         // Create the "saves" directory if it doesn't exists
         java.nio.file.Path savesDir = java.nio.file.Paths.get("saves");
         try {
@@ -263,6 +288,7 @@ public class GridData {
         } catch (java.io.IOException e) {
             System.err.println("Error saving game state: " + e.getMessage());
         }
+        */
     }
 
     /**

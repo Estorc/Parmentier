@@ -1,0 +1,75 @@
+# Parmentier - Français
+Parmentier est une implémentation du jeu japonais "Hashi".
+
+## Contexte
+Ce jeu a été créé pendant la troisième année à l'université de l'équipe de Parmentier, en tant que projet universitaire.
+L'objectif était de créer un puzzle en Java qui devait posséder la caratéristique d'offrir des aides à la résolution.
+
+## Caractéristiques
+- Didacticiel
+- Aides à la résolution intégrées
+- Support de plusieurs utilisateurs et leurs données
+- Mode sombre
+
+## Compilation et éxécution depuis la source
+Si vous voulez construire le jeu depuis la source, il sera nécessaire d'installer Java 21 : https://adoptium.net/fr
+
+Une fois que c'est installé, placez vous dans un terminal situé à la racine de ce projet et lancez :
+```sh
+./gradlew run
+```
+
+## Construction du .jar
+Il est aussi possible de créer un .jar contenant tout le jeu et ses dépendances. Lancez depuis un terminal à la racine :
+```sh
+./gradlew assembleShadowDist
+```
+Dans `app/build/distributions`, il y aura un fichier nommé "app-shadow.zip". Une fois ce .zip décompressé, le dossier "lib" contiendra le .jar voulu.
+
+# Parmentier - English 
+Parmentier is an implementation of the japanese game named 'Hashi'.
+
+## Context
+This game has been created during the Parmentier team's third year of their computer science degree at university as part of an assignment.
+The goal was to create a puzzle game in Java, Using javaFX. The puzzle is required to feature hints.
+
+## Features
+- Tutorial
+- Built-in hints to complete the levels
+- Multiple users support
+- Dark mode
+- Sound and visual feedback
+
+## Build from source
+If you want to build it from the source, you'll need to install Java 21 first : https://adoptium.net/fr
+
+Once those are installed, run this in a terminal at the root of this project :
+```sh
+./gradlew run
+```
+and Voilà!
+
+# Build .jar
+It is also possible to create a .jar file containing the game and its dependencies. Run :
+```sh
+./gradlew assembleShadowDist
+```
+
+In the `app/build/distribution` folder, you should see a file named "app-shadow.zip". Once this file decompressed, you may find the final .jar in the "lib" folder. 
+
+# Licensing
+Copyright (C) 2026 Estorc
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, see
+<https://www.gnu.org/licenses/>.
