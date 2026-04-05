@@ -257,6 +257,12 @@ public class MenuLogin extends Menu {
             String finalName = selected.replace("Créer : ", "").trim();
             this.game.setCurrentUserName(finalName);
 
+            // Create saves folder if it doesn't exist
+            java.io.File savesFolder = new java.io.File("saves");
+            if (!savesFolder.exists()) {
+                savesFolder.mkdir();
+            }
+
             this.game.getSceneManager().pushScene(new MainMenu());
         }
     }
