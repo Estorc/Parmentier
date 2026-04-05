@@ -1,70 +1,61 @@
-# Parmentier - Français
-Parmentier est une implémentation du jeu japonais "Hashi"
+x# Parmentier - Français
+Parmentier est une implémentation du jeu japonais "Hashi".
 
 ## Contexte
-Ce jeu a été crée pendant la troisième année à l'université de l'équipe de Parmentier, en tant que devoir.
-L'objectif était de créer un un jeu en Java et utilisant javaFx et devait posséder la caratéristique d'avoir des aides à la résolution.
+Ce jeu a été créé pendant la troisième année à l'université de l'équipe de Parmentier, en tant que projet universitaire.
+L'objectif était de créer un puzzle en Java qui devait posséder la caratéristique d'offrir des aides à la résolution.
 
 ## Caractéristiques
 - Didacticiel
 - Aides à la résolution intégrées
 - Support de plusieurs utilisateurs et leurs données
 - Mode sombre
-- Expériences sonores et graphiques
 
-## Construire depuis la source
-Si vous voulez construire le jeu depuis la source, il sera nécessaire d'installer Java.
+## Compilation et éxécution depuis la source
+Si vous voulez construire le jeu depuis la source, il sera nécessaire d'installer Java 21 : https://adoptium.net/fr
 
-NOTE : Si vous avez Minecraft d'installé, vous avez probalement déjà Java d'installé, il n'est pas nécessaire de réinstaller une version plus récente
-
-Une fois que c'est installé, il faut juste écrire dans un terminal situé à la racine de ce projet
+Une fois que c'est installé, placez vous dans un terminal situé à la racine de ce projet et lancez :
 ```sh
 ./gradlew run
 ```
 
-Il est aussi possible de créer un .jar contenant tout le jeu et ses dépendances (afin d'avoir une version "portable")
+## Construction du .jar
+Il est aussi possible de créer un .jar contenant tout le jeu et ses dépendances. Lancez depuis un terminal à la racine :
 ```sh
 ./gradlew assembleShadowDist
 ```
-
-Ensuite dans `app/build/distributions` il y aura un "app-shadow.zip". Une fois ce .zip décompressé, le dossier "lib" contiendra le .jar voulu.
-
-NOTE : Si le terme de "portable" est entre guillement, c'est parce qu'à l'opposé de la phylosophie de son langage d'implémentation, JavaFX  n'est pas fait pour être executable partout. Il sera portable uniquement si vous l'utilisez sur le même système d'exploitation.
+Dans `app/build/distributions`, il y aura un fichier nommé "app-shadow.zip". Une fois ce .zip décompressé, le dossier "lib" contiendra le .jar voulu.
 
 # Parmentier - English 
 Parmentier is an implementation of the japanese game named 'Hashi'.
 
 ## Context
-This game has been created during the Parmentier team's third year of computer science at University, as an assignment.
-The goal was to create that game in Java and using javaFX, and required to feature hints.
-## Features
+This game has been created during the Parmentier team's third year of their computer science degree at university as part of an assignment.
+The goal was to create a puzzle game in Java, Using javaFX. The puzzle is required to feature hints.
 
+## Features
 - Tutorial
-- Built-in hints to complete the grid
-- Multiple users and data support
-- Dark Mode
-- Sound and graphical feedback
+- Built-in hints to complete the levels
+- Multiple users support
+- Dark mode
+- Sound and visual feedback
 
 ## Build from source
-If you want to build it from source, you'll need first to install Java. It has to be Java 21 (mini)
+If you want to build it from the source, you'll need to install Java 21 first : https://adoptium.net/fr
 
-NOTE : If you have Minecraft installed, you probably already have Java installed, and it is not necessairy to reinstall a newer version.
-
-Once those are installed, you only need to write in a terminal at the root of this project
+Once those are installed, run this in a terminal at the root of this project :
 ```sh
 ./gradlew run
 ```
-
 and Voilà!
 
-It is also possible to create a .jar file containing the game and its dependencies to have a "portable" version.
+# Build .jar
+It is also possible to create a .jar file containing the game and its dependencies. Run :
 ```sh
 ./gradlew assembleShadowDist
 ```
 
-In the `app/build/distribution` folder, you should see a "app-shadow.zip" file. Once this file decompressed, you may find the final .jar in the "lib" folder. 
-
-NOTE : if the "portable" word is between quotes it's because javaFX, unlike the philosphy of its programming language, is not meant to run everywhere. It will be portable only if you use it on the same operatin system.
+In the `app/build/distribution` folder, you should see a file named "app-shadow.zip". Once this file decompressed, you may find the final .jar in the "lib" folder. 
 
 # Licensing
 Copyright (C) 2026 Estorc

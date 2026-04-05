@@ -59,19 +59,13 @@ public class Save {
 			int countSemiColon = 0;
 			Boolean time = false; 
 		    // BEGIN
-		    System.out.println(" ---- Loop ---- ");
-
-		    for (int i = fr.read() ; i != -1  ; i = fr.read()) {
-				//System.out.println("---- Save : "+ save +" ---- ");
+       		    for (int i = fr.read() ; i != -1  ; i = fr.read()) {
 
 				c = (char) i;
 				if (c == '\n') {
 				    if (match) {
 						this.newLevel = false;
-						System.out.println(" ---- FOUND ---- ");
-						System.out.println(" ---- save : " + save + " ---- ");
 						save = save.trim();
-						//$$
 						String momPath = org.parmentier.Parmentier.SAVES_DIR + "momentanous.txt";
 						File mom = new File(momPath); // Create File object
 
