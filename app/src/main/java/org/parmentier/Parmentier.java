@@ -365,10 +365,15 @@ public class Parmentier {
     public static void main(String[] args) {
         // find the folder where the jar file is located
         try {
-            java.io.File jarDir = new java.io.File(Parmentier.class.getProtectionDomain().getCodeSource().getLocation().toURI()).getParentFile();
-            SAVES_DIR = jarDir.getAbsolutePath() + "/saves/";
+          java.io.File jarFile = new java.io.File(Parmentier.class.getProtectionDomain().getCodeSource().getLocation().toURI()).getParentFile();
+          //Check if it's a gradle run folder or a jar for the save folder
+          if (jarFile.isFile()) {
+              SAVES_DIR = jarFile.getParentFile().getAbsolutePath() + "/saves/";
+          } else {
+              SAVES_DIR = "saves/";
+          }
         } catch (Exception e) {
-            SAVES_DIR = "saves/";
+          SAVES_DIR = "saves/";
         }
 
         // create the save folder
