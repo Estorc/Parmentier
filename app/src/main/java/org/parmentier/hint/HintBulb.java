@@ -205,7 +205,7 @@ public class HintBulb {
                 }),
 
             //Special case of 6 in the middle
-            new Hint("Faites attentions aux îles" + (Bridge.MAX_STATE * 3) + " au centre de la grille !",
+            new Hint("Faites attentions aux îles " + (Bridge.MAX_STATE * 3) + " au centre de la grille !",
                 "Une île " + Bridge.MAX_STATE * 3 + " au centre avec 4 voisins (dont une île 1) doit envoyer au moins 1 pont sur chaque voisin.", 
                 50, 5, (grid) -> {
                 return grid.getNodes().stream()
@@ -227,7 +227,7 @@ public class HintBulb {
 
             //Isolation of a two-island segment
             new Hint("Faites attention aux îles 1 voisines.",
-                "Une île " + (Bridge.MAX_STATE -1) + " ne peux pas être relié avec une autre île 1.", 
+                "Une île " + (Bridge.MAX_STATE -1) + " ne peux pas être relié avec une autre île 1. Il faut donc envoyer un pont vers un autre voisin.", 
                 55, 4, (grid) -> {
                 return grid.getNodes().stream()
                     .filter(node -> node.getValue() == Bridge.MAX_STATE -1) 
@@ -248,7 +248,7 @@ public class HintBulb {
                 }),
 
             new Hint("Faites attention aux îles " + Bridge.MAX_STATE + " voisines.",
-                "Une île " + Bridge.MAX_STATE + " ne peux pas être relié avec une autre île " + Bridge.MAX_STATE + ".", 
+                "Une île " + Bridge.MAX_STATE + " ne peux pas envoyer " + Bridge.MAX_STATE + " ponts vers une autre île " + Bridge.MAX_STATE + ", sinon elles seraient isolées du reste de la grille. Il faut donc envoyer au moins 1 pont vers un autre voisin.", 
                 60, 3, (grid) -> {
                 return grid.getNodes().stream()
                     .filter(node -> node.getValue() == Bridge.MAX_STATE) 
