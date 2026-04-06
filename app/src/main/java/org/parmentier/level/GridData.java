@@ -78,6 +78,7 @@ public class GridData {
      * separated by a line with a single dash ("-").
      */
     public GridData(String fileName) {
+        this.name = fileName;
         this.saveManager = new Save();
         InputStream fileStream = this.saveManager.openSave(fileName);
         if (fileStream == null){

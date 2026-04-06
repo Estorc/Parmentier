@@ -37,25 +37,28 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
 
-
 /**
- * Represents a level in the Parmentier puzzle game, managing the game state, user interactions,
+ * Represents a level in the Parmentier puzzle game, managing the game state,
+ * user interactions,
  * and rendering of the level.
  */
 public class Level implements org.parmentier.game.Scene {
     private Label hintLabel;
     /**
-     * The horizontal shift applied to the level's rendering, used to center the level on the canvas.
+     * The horizontal shift applied to the level's rendering, used to center the
+     * level on the canvas.
      */
     private int xShift = 0;
 
     /**
-     * The vertical shift applied to the level's rendering, used to center the level on the canvas.
+     * The vertical shift applied to the level's rendering, used to center the level
+     * on the canvas.
      */
     private int yShift = 0;
 
-    /** 
-     * The scale factor applied to the level's rendering, used to scale the level to fit the canvas size.
+    /**
+     * The scale factor applied to the level's rendering, used to scale the level to
+     * fit the canvas size.
      */
     private double scaleFactor = 1.0;
 
@@ -65,35 +68,40 @@ public class Level implements org.parmentier.game.Scene {
     private Bridge selectedBridge = null;
 
     /**
-     * The list of active bridges in the level, representing the current state of the puzzle.
+     * The list of active bridges in the level, representing the current state of
+     * the puzzle.
      */
     private ArrayList<Bridge> activeBridges;
 
     /**
-     * The list of nodes in the level, representing the key elements of the puzzle that must be connected by bridges.
+     * The list of nodes in the level, representing the key elements of the puzzle
+     * that must be connected by bridges.
      */
     private ArrayList<Node> nodes;
 
     /**
-     * The grid data representing the layout of the level, including the nodes and potential bridges.
+     * The grid data representing the layout of the level, including the nodes and
+     * potential bridges.
      */
     private GridData level;
 
     /**
-     * The Timeline object used as a stopwatch to track the elapsed time since the level started.
+     * The Timeline object used as a stopwatch to track the elapsed time since the
+     * level started.
      */
     private Timeline stopwatch;
 
     /**
-     * The number of seconds that have elapsed since the level started, used to update the stopwatch label.
+     * The number of seconds that have elapsed since the level started, used to
+     * update the stopwatch label.
      */
     private int timeElapsed = 0;
 
     private int score = 0;
-    private int timeLowMinutes = 5;
-    private int timeHighMinutes = 30;
+    private double timeLowMinutes;
+    private double timeHighMinutes;
     private double timeCoeffMin = 0.67;
-    private float timeCoeffMax = 1;
+    private double timeCoeffMax = 1;
 
     /**
      * Flag to track whether the level has been completed, preventing the save file
@@ -102,7 +110,8 @@ public class Level implements org.parmentier.game.Scene {
     private boolean isCompleted = false;
 
     /**
-     * The label used to display the elapsed time on the UI. This label is updated by the stopwatch Timeline to show
+     * The label used to display the elapsed time on the UI. This label is updated
+     * by the stopwatch Timeline to show
      * the current elapsed time in minutes and seconds.
      */
     private Label stopwatchLabel;
@@ -112,35 +121,40 @@ public class Level implements org.parmentier.game.Scene {
     private Button backButton = new Button("Retour");
 
     public Level(String levelName) {
-        // Try loading saved state first, if it fails load the level data from the resource file
-        
+        // Try loading saved state first, if it fails load the level data from the
+        // resource file
+
         boolean loadedFromSave = false;
 
         this.level = new GridData(levelName);
-        /* 
-        InputStream input;
-        try {
-          java.nio.file.Path savePath = java.nio.file.Paths.get("saves/" + Game.getInstance().getCurrentUserName() + "_" + levelName + ".sav");
-          if (java.nio.file.Files.exists(savePath)) {
-              System.out.println("Chargement de la sauvegarde pour le niveau : " + levelName);
-              input = java.nio.file.Files.newInputStream(savePath);
-              this.level = new GridData(input, levelName);
-              loadedFromSave = true;
-          }
-        } catch (IOException e) {
-          System.err.println("Erreur lors du chargement de la sauvegarde : " + e.getMessage());
-        }
-        if (!loadedFromSave) {
-          try {
-            input = getClass().getResourceAsStream("/levels/" + levelName + ".lvl");
-            this.level = new GridData(input, levelName);
-          } catch (Exception e) {
-            System.err.println("Erreur lors du chargement du niveau : " + e.getMessage());
-            this.level = null;
-            throw new RuntimeException("Failed to load level: " + levelName);
-          }
-        }
-        */
+        /*
+         * InputStream input;
+         * try {
+         * java.nio.file.Path savePath = java.nio.file.Paths.get("saves/" +
+         * Game.getInstance().getCurrentUserName() + "_" + levelName + ".sav");
+         * if (java.nio.file.Files.exists(savePath)) {
+         * System.out.println("Chargement de la sauvegarde pour le niveau : " +
+         * levelName);
+         * input = java.nio.file.Files.newInputStream(savePath);
+         * this.level = new GridData(input, levelName);
+         * loadedFromSave = true;
+         * }
+         * } catch (IOException e) {
+         * System.err.println("Erreur lors du chargement de la sauvegarde : " +
+         * e.getMessage());
+         * }
+         * if (!loadedFromSave) {
+         * try {
+         * input = getClass().getResourceAsStream("/levels/" + levelName + ".lvl");
+         * this.level = new GridData(input, levelName);
+         * } catch (Exception e) {
+         * System.err.println("Erreur lors du chargement du niveau : " +
+         * e.getMessage());
+         * this.level = null;
+         * throw new RuntimeException("Failed to load level: " + levelName);
+         * }
+         * }
+         */
 
         // restore saved stopwatch time if present
         if (loadedFromSave && this.level != null) {
@@ -149,9 +163,11 @@ public class Level implements org.parmentier.game.Scene {
     };
 
     /**
-     * Attempts to connect two nodes with a bridge, checking for valid connections and potential intersections with existing bridges.
+     * Attempts to connect two nodes with a bridge, checking for valid connections
+     * and potential intersections with existing bridges.
+     * 
      * @param from The starting node of the bridge.
-     * @param to The ending node of the bridge.
+     * @param to   The ending node of the bridge.
      * @return true if the connection is valid and has been made, false otherwise.
      */
     public boolean tryConnect(Node from, Node to) {
@@ -170,11 +186,12 @@ public class Level implements org.parmentier.game.Scene {
                 if (from == fromActive || from == toActive || to == fromActive || to == toActive) {
                     continue;
                 }
-                if (org.parmentier.math.Segment.isIntersecting(from.getPosition(), to.getPosition(), fromActive.getPosition(), toActive.getPosition())) {
+                if (org.parmentier.math.Segment.isIntersecting(from.getPosition(), to.getPosition(),
+                        fromActive.getPosition(), toActive.getPosition())) {
                     return false;
                 }
             }
-                
+
         }
         Bridge bridgeBetween = from.getBridge(to);
         if (selectedBridge != bridgeBetween) {
@@ -184,7 +201,9 @@ public class Level implements org.parmentier.game.Scene {
     }
 
     /**
-     * Attempts to connect the closest node to the given coordinates with a bridge, based on the user's mouse position.
+     * Attempts to connect the closest node to the given coordinates with a bridge,
+     * based on the user's mouse position.
+     * 
      * @param x The x-coordinate of the mouse position.
      * @param y The y-coordinate of the mouse position.
      */
@@ -229,8 +248,10 @@ public class Level implements org.parmentier.game.Scene {
     }
 
     /**
-     * Starts the stopwatch to track the elapsed time since the level started. This method initializes a Timeline that updates every second,
-     * incrementing the timeElapsed counter and updating the stopwatchLabel to display the current elapsed time in minutes and seconds format.
+     * Starts the stopwatch to track the elapsed time since the level started. This
+     * method initializes a Timeline that updates every second,
+     * incrementing the timeElapsed counter and updating the stopwatchLabel to
+     * display the current elapsed time in minutes and seconds format.
      */
     private void startStopwatch() {
         stopwatchLabel = new Label("Temps écoulé: " + getStopwatchTime());
@@ -238,13 +259,12 @@ public class Level implements org.parmentier.game.Scene {
         stopwatchLabel.setStyle("-fx-font-size: 14px; -fx-font-weight: bold;");
 
         stopwatch = new Timeline(
-            new KeyFrame(Duration.seconds(1), e -> {
-                timeElapsed++;
-                int minutes = timeElapsed / 60;
-                int seconds = timeElapsed % 60;
-                stopwatchLabel.setText(String.format("Temps écoulé: %02d:%02d", minutes, seconds));
-            })
-        );
+                new KeyFrame(Duration.seconds(1), e -> {
+                    timeElapsed++;
+                    int minutes = timeElapsed / 60;
+                    int seconds = timeElapsed % 60;
+                    stopwatchLabel.setText(String.format("Temps écoulé: %02d:%02d", minutes, seconds));
+                }));
         stopwatch.setCycleCount(Timeline.INDEFINITE);
         stopwatch.play();
     }
@@ -255,11 +275,32 @@ public class Level implements org.parmentier.game.Scene {
         return String.format("%02d:%02d", minutes, seconds);
     }
 
-    private void calculateScore(){
+    private void calculateBornes() {
+        String numberOnly = level.getName().replaceAll("[^0-9]", "");
+        int levelNumber = Integer.parseInt(numberOnly);
 
-        int timeLow = this.timeLowMinutes * 60;
+        if (levelNumber >= 1 && levelNumber <= 4) {
+            this.timeLowMinutes = 15.0 / 60.0;
+            this.timeHighMinutes = 45.0 / 60.0;
+        } else if (levelNumber >= 5 && levelNumber <= 8) {
+            this.timeLowMinutes = 1;
+            this.timeHighMinutes = 5;
+        } else if (levelNumber >= 9 && levelNumber <= 12) {
+            this.timeLowMinutes = 7.5;
+            this.timeHighMinutes = 12;
+        } else if (levelNumber >= 13 && levelNumber <= 16) {
+            this.timeLowMinutes = 10;
+            this.timeHighMinutes = 20;
+        }
 
-        int timeHigh = this.timeHighMinutes * 60;
+    }
+
+    private void calculateScore() {
+
+        this.calculateBornes();
+        double timeLow = this.timeLowMinutes * 60;
+
+        double timeHigh = this.timeHighMinutes * 60;
 
         double timeBornedShifted = Math.clamp(timeElapsed, timeLow, timeHigh) - timeLow;
 
@@ -267,42 +308,47 @@ public class Level implements org.parmentier.game.Scene {
 
         double timeNormalized = timeBornedShifted / (timeHigh - timeLow);
 
-        // The coefficient of time is normalized between our minimal coefficient and our maximal coefficient.
+        // The coefficient of time is normalized between our minimal coefficient and our
+        // maximal coefficient.
 
-        double timeCoeff = (timeNormalized - timeCoeffMin) + timeCoeffMax;
+        double timeCoeff = timeCoeffMax - (timeNormalized * (timeCoeffMax - timeCoeffMin));
 
         // J'attends que le nombre de ponts attendus soit disponible.
 
-        //int score = (int)((this.activeBridges.stream().reduce(0, (a,b) -> , combiner) * 1000) * timeCoeff);
-
-        
+        int totalBridges = this.activeBridges.stream().mapToInt(bridge -> bridge.getState()).sum();
+        this.score = (int) ((totalBridges * 1000) * timeCoeff);
 
     }
 
-        
-        
-
-    private char calculateNote(){
+    private char calculateNote() {
 
         char note;
 
-        int scoreMax = 25000;
+        int totalBridges = this.activeBridges.stream().mapToInt(bridge -> bridge.getState()).sum();
+        int scoreMax = (totalBridges * 1000);
 
-        double scoreMin = 25000 * timeCoeffMin;
+        double scoreMin = scoreMax * timeCoeffMin;
 
         double etendue = scoreMax - scoreMin;
+        // 9000 - 6030 = 1970 * 0.90 = 1773;
+        if (this.score >= scoreMax - (etendue * 0.10)) {
+            note = 'S';
+        }
 
-        if((scoreMax - score) >= (etendue * 0.90)) {note = 'S';}
+        else if (this.score >= scoreMax - (etendue * 0.20))
+            note = 'A';
 
-        else if (scoreMax - score >= (etendue * 0.80)) note = 'A';
+        else if (this.score >= scoreMax - (etendue * 0.30))
+            note = 'B';
 
-        else if (scoreMax - score >= (etendue * 0.70)) note = 'B';
+        else if (this.score >= scoreMax - (etendue * 0.40))
+            note = 'C';
 
-        else if (scoreMax - score >= (etendue * 0.60)) note = 'C';
+        else if (this.score >= scoreMax - (etendue * 0.60))
+            note = 'D';
 
-        else if (scoreMax - score >= etendue* 0.40) note = 'D';
-
-        else note = 'F';
+        else
+            note = 'F';
 
         return note;
 
@@ -361,16 +407,49 @@ public class Level implements org.parmentier.game.Scene {
         });
     }
 
+    public void savePerformance(Performance p) {
+        String filename = org.parmentier.Parmentier.SAVES_DIR + this.level.getName() + "_leaderboard.sav";
+        java.io.File file = new java.io.File(filename);
+        try {
+            if (!file.exists()) {
+                if (file.getParentFile() != null)
+                    file.getParentFile().mkdirs();
+                file.createNewFile();
+            } else {
+                java.io.BufferedReader reader = new java.io.BufferedReader(new java.io.FileReader(file));
+                String line;
+                boolean exists = false;
+                while ((line = reader.readLine()) != null) {
+                    String[] parts = line.split(";");
+                    if (parts.length > 0 && parts[0].equals(p.getNameTag())) {
+                        exists = true;
+                        break;
+                    }
+                }
+                reader.close();
+                if (exists)
+                    return; // Pas de doublons
+            }
+            java.io.FileWriter fw = new java.io.FileWriter(file, true);
+            fw.write(p.getNameTag() + ";" + p.getTimeElapsedSeconds() + ";" + p.getScore() + ";" + p.getNote() + "\n");
+            fw.close();
+        } catch (java.io.IOException e) {
+            System.err.println("Erreur lors de la sauvegarde du leaderboard : " + e.getMessage());
+        }
+    }
+
     /**
-     * Initializes the level scene by setting up the UI elements, loading the level data, and configuring user interactions.
+     * Initializes the level scene by setting up the UI elements, loading the level
+     * data, and configuring user interactions.
+     * 
      * @param uiLayer The StackPane that serves as the UI layer for the level scene.
      */
     @Override
     public void initialize(StackPane uiLayer) {
         System.out.println("Initializing level scene...");
-        
+
         org.parmentier.hint.HintBulb.get().RenableHints(); // reenable hints for new level
-        
+
         uiLayer.getChildren().clear();
         javafx.scene.canvas.Canvas canvas = Game.getInstance().getCanvas();
         if (!uiLayer.getChildren().contains(canvas)) {
@@ -380,7 +459,6 @@ public class Level implements org.parmentier.game.Scene {
         this.nodes = new ArrayList<>();
         this.activeBridges = new ArrayList<>();
 
-       
         startStopwatch();
         helpButton(uiLayer);
 
@@ -397,24 +475,23 @@ public class Level implements org.parmentier.game.Scene {
         uiLayer.getChildren().add(backButton);
         uiLayer.getChildren().add(stopwatchLabel);
 
-
         for (int i = 0; i < level.getWidth(); i++) {
             for (int j = 0; j < level.getHeight(); j++) {
                 if (level.getNodeAt(i, j) != null) {
                     Node node = level.getNodeAt(i, j);
                     this.nodes.add(node);
                     if (!node.getBridges().isEmpty()) {
-                        for (Bridge bridge : node.getBridges()) if (bridge.getState() > 0) activeBridges.add(bridge); 
+                        for (Bridge bridge : node.getBridges())
+                            if (bridge.getState() > 0)
+                                activeBridges.add(bridge);
                     }
                 }
             }
         }
 
-
         uiLayer.setOnMouseMoved(e -> {
-            tryConnectClosest((e.getX() - xShift)/scaleFactor, (e.getY() - yShift)/scaleFactor);
+            tryConnectClosest((e.getX() - xShift) / scaleFactor, (e.getY() - yShift) / scaleFactor);
         });
-
 
         uiLayer.setOnMouseClicked(e -> {
             selectedBridge.toggleState();
@@ -447,11 +524,23 @@ public class Level implements org.parmentier.game.Scene {
             } else {
                 boolean status = level.checkState();
                 if (status) {
+
+                    Performance temp = new Performance();
+                    temp.setPlaceHolder();
+                    temp.setNameTag(Game.getInstance().getCurrentUserName());
+                    temp.setTimeElapsedSeconds(timeElapsed);
+                    this.calculateScore();
+                    temp.setScore(this.score);
+                    temp.setNote(this.calculateNote());
+                    savePerformance(temp);
+
                     isCompleted = true;
                     Game.getInstance().getSceneManager().popScene();
-                    Game.getInstance().getSceneManager().pushScene(new MenuFinNiveau(getStopwatchTime(), 42));
+                    Game.getInstance().getSceneManager()
+                            .pushScene(new MenuFinNiveau(level.getName(), getStopwatchTime(), this.score));
                     // supprimer save
-                    java.nio.file.Path path = java.nio.file.Paths.get("saves/" + Game.getInstance().getCurrentUserName() + "_" + level.getName() + ".sav");
+                    java.nio.file.Path path = java.nio.file.Paths
+                            .get("saves/" + Game.getInstance().getCurrentUserName() + "_" + level.getName() + ".sav");
                     try {
                         java.nio.file.Files.deleteIfExists(path);
                     } catch (IOException ex) {
@@ -466,7 +555,8 @@ public class Level implements org.parmentier.game.Scene {
                         err_msg = "Vous n'avez fait aucune erreur. Continuez comme ça !";
                     checkLabel.setText(err_msg);
                     checkLabel.setVisible(true);
-                    Timeline hideTimeline = new Timeline(new KeyFrame(Duration.seconds(3), ev -> checkLabel.setVisible(false)));
+                    Timeline hideTimeline = new Timeline(
+                            new KeyFrame(Duration.seconds(3), ev -> checkLabel.setVisible(false)));
                     hideTimeline.setCycleCount(1);
                     hideTimeline.play();
                 }
@@ -514,11 +604,12 @@ public class Level implements org.parmentier.game.Scene {
     }
 
     /**
-     * Renders the level scene on the canvas, drawing the background, nodes, and bridges based on the current game state.
+     * Renders the level scene on the canvas, drawing the background, nodes, and
+     * bridges based on the current game state.
      */
     @Override
     public void render(GraphicsContext gc, StackPane uiLayer) {
-        gc.clearRect(-Game.WIDTH, -Game.HEIGHT, Game.WIDTH*3, Game.HEIGHT*3);
+        gc.clearRect(-Game.WIDTH, -Game.HEIGHT, Game.WIDTH * 3, Game.HEIGHT * 3);
         scaleFactor = gc.getCanvas().getHeight() / Game.HEIGHT;
         this.xShift = (int) (gc.getCanvas().getWidth() - level.getWidth() * Node.SIZE * scaleFactor) / 2;
         this.yShift = (int) (gc.getCanvas().getHeight() - level.getHeight() * Node.SIZE * scaleFactor) / 2;
@@ -534,5 +625,5 @@ public class Level implements org.parmentier.game.Scene {
             node.draw(gc);
         }
     }
-    
+
 }

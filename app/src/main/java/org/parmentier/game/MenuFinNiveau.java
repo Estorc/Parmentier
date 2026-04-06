@@ -26,39 +26,69 @@ import javafx.scene.layout.StackPane;
 /**
  * Represents the end of level menu in the Parmentier game.
  * This class is responsible for displaying the player's performance, including
- * the time taken and score achieved, and providing options to proceed to the next level or return to the main menu.
- * The menu is designed to be visually appealing and user-friendly, with clear labels and buttons for navigation.
- * It implements the Scene interface, allowing it to be integrated seamlessly into the game's scene management system.
+ * the time taken and score achieved, and providing options to proceed to the
+ * next level or return to the main menu.
+ * The menu is designed to be visually appealing and user-friendly, with clear
+ * labels and buttons for navigation.
+ * It implements the Scene interface, allowing it to be integrated seamlessly
+ * into the game's scene management system.
  */
 public class MenuFinNiveau implements org.parmentier.game.Scene {
 
-    /** The time taken by the player to complete the level, displayed in the end of level menu. */
+    /**
+     * The time taken by the player to complete the level, displayed in the end of
+     * level menu.
+     */
     private String deltaTime;
 
-    /** The score achieved by the player for completing the level, displayed in the end of level menu. */
+    /**
+     * The score achieved by the player for completing the level, displayed in the
+     * end of level menu.
+     */
     private Integer score;
 
+    /** The name of the level */
+    private String levelName;
+
     /**
-     * Constructor for the MenuFinNiveau class, initializing the end of level menu with the player's performance data.
-     * @param time  The time taken by the player to complete the level, which will be displayed in the end of level menu.
-     * @param score The score achieved by the player for completing the level, which will be displayed in the end of level menu.
+     * Constructor for the MenuFinNiveau class, initializing the end of level menu
+     * with the player's performance data.
+     * 
+     * @param time  The time taken by the player to complete the level, which will
+     *              be displayed in the end of level menu.
+     * @param score The score achieved by the player for completing the level, which
+     *              will be displayed in the end of level menu.
      */
-    public MenuFinNiveau(String time, Integer score) {
+    public MenuFinNiveau(String levelName, String time, Integer score) {
+        this.levelName = levelName;
         this.deltaTime = time;
         this.score = score;
     }
 
     /**
-     * Updates the end of level menu based on the elapsed time and user interactions.
-     * This method is called at each frame of the game loop to allow the menu to update its state, handle user input,
-     * and perform any necessary logic. In this implementation, the update method is currently empty, as the end of level
-     * menu does not require dynamic updates or interactions beyond the initial display of the player's performance data and navigation options.
-     * @param deltaTime The time elapsed since the last update, used to ensure smooth animations and consistent game
-     * behavior regardless of frame rate. In this implementation, the deltaTime parameter is not utilized, as the end
-     * of level menu does not have any time-based animations or updates.
-     * @param uiLayer   The StackPane that serves as the UI layer for the scene, allowing the menu to modify or update
-     * UI elements based on user interactions or game state changes. In this implementation, the uiLayer parameter is not
-     * utilized in the update method, as the end of level menu does not have any dynamic UI elements that require updates after the initial display.
+     * Updates the end of level menu based on the elapsed time and user
+     * interactions.
+     * This method is called at each frame of the game loop to allow the menu to
+     * update its state, handle user input,
+     * and perform any necessary logic. In this implementation, the update method is
+     * currently empty, as the end of level
+     * menu does not require dynamic updates or interactions beyond the initial
+     * display of the player's performance data and navigation options.
+     * 
+     * @param deltaTime The time elapsed since the last update, used to ensure
+     *                  smooth animations and consistent game
+     *                  behavior regardless of frame rate. In this implementation,
+     *                  the deltaTime parameter is not utilized, as the end
+     *                  of level menu does not have any time-based animations or
+     *                  updates.
+     * @param uiLayer   The StackPane that serves as the UI layer for the scene,
+     *                  allowing the menu to modify or update
+     *                  UI elements based on user interactions or game state
+     *                  changes. In this implementation, the uiLayer parameter is
+     *                  not
+     *                  utilized in the update method, as the end of level menu does
+     *                  not have any dynamic UI elements that require updates after
+     *                  the initial display.
      */
     @Override
     public void update(double deltaTime, StackPane uiLayer) {
@@ -66,17 +96,29 @@ public class MenuFinNiveau implements org.parmentier.game.Scene {
     }
 
     /**
-     * Renders the end of level menu on the canvas, drawing all visual elements based on the current game state.
-     * This method is called at each frame of the game loop to ensure that the menu is visually updated in response to changes
-     * in the game state, user interactions, and animations. In this implementation, the render method is currently empty, as
-     * the end of level menu does not require dynamic rendering or animations beyond the initial display of the player's performance
+     * Renders the end of level menu on the canvas, drawing all visual elements
+     * based on the current game state.
+     * This method is called at each frame of the game loop to ensure that the menu
+     * is visually updated in response to changes
+     * in the game state, user interactions, and animations. In this implementation,
+     * the render method is currently empty, as
+     * the end of level menu does not require dynamic rendering or animations beyond
+     * the initial display of the player's performance
      * data and navigation options.
-     * @param gc The GraphicsContext used to draw on the canvas, allowing the menu to render its visual elements such as backgrounds,
-     * nodes, bridges, and other game components. In this implementation, the gc parameter is not utilized in the render method,
-     * as the end of level menu does not have any canvas-based visual elements that require rendering.
-     * @param uiLayer The StackPane that serves as the UI layer for the scene, allowing the menu to render or update UI elements in 
-     * conjunction with the canvas rendering. In this implementation, the uiLayer parameter is not utilized in the render method,
-     * as the end of level menu does not have any dynamic UI elements that require updates after the initial display.
+     * 
+     * @param gc      The GraphicsContext used to draw on the canvas, allowing the
+     *                menu to render its visual elements such as backgrounds,
+     *                nodes, bridges, and other game components. In this
+     *                implementation, the gc parameter is not utilized in the render
+     *                method,
+     *                as the end of level menu does not have any canvas-based visual
+     *                elements that require rendering.
+     * @param uiLayer The StackPane that serves as the UI layer for the scene,
+     *                allowing the menu to render or update UI elements in
+     *                conjunction with the canvas rendering. In this implementation,
+     *                the uiLayer parameter is not utilized in the render method,
+     *                as the end of level menu does not have any dynamic UI elements
+     *                that require updates after the initial display.
      */
     @Override
     public void render(GraphicsContext gc, StackPane uiLayer) {
@@ -84,14 +126,22 @@ public class MenuFinNiveau implements org.parmentier.game.Scene {
     }
 
     /**
-     * Initializes the end of level menu, setting up the user interface elements such as labels for the player's
+     * Initializes the end of level menu, setting up the user interface elements
+     * such as labels for the player's
      * performance data and buttons for navigation.
-     * This method is called when the end of level menu is first loaded, allowing it to prepare the UI layer with the
-     * necessary components for user interaction. The menu displays the time taken and score achieved by the player,
+     * This method is called when the end of level menu is first loaded, allowing it
+     * to prepare the UI layer with the
+     * necessary components for user interaction. The menu displays the time taken
+     * and score achieved by the player,
      * and provides buttons to proceed to the next level or return to the main menu.
-     * @param uiLayer The StackPane that serves as the UI layer for the scene, allowing the menu to add interactive elements
-     * such as buttons and labels. In this implementation, the uiLayer is cleared and populated with a GridPane layout containing
-     * labels for the player's performance data and buttons for navigation.
+     * 
+     * @param uiLayer The StackPane that serves as the UI layer for the scene,
+     *                allowing the menu to add interactive elements
+     *                such as buttons and labels. In this implementation, the
+     *                uiLayer is cleared and populated with a GridPane layout
+     *                containing
+     *                labels for the player's performance data and buttons for
+     *                navigation.
      */
     @Override
     public void initialize(StackPane uiLayer) {
@@ -114,7 +164,6 @@ public class MenuFinNiveau implements org.parmentier.game.Scene {
         GridPane.setHalignment(nextLevelButton, javafx.geometry.HPos.CENTER);
         GridPane.setHalignment(mainMenuButton, javafx.geometry.HPos.CENTER);
         GridPane.setHalignment(sbButton, javafx.geometry.HPos.CENTER);
-
 
         titleLabel.getStyleClass().add("title-label");
         timeLabel.getStyleClass().add("textUser");
@@ -141,18 +190,19 @@ public class MenuFinNiveau implements org.parmentier.game.Scene {
             Game.getInstance().getSceneManager().popScene();
             // pop the current level scene
             Game.getInstance().getSceneManager().popScene();
-            
+
         });
 
         sbButton.setOnMouseClicked(e -> {
             org.parmentier.game.Audio.playClickSound();
 
-            Game.getInstance().getSceneManager().pushScene(new MenuLeaderboard("level aopkzaoifne"));
+            Game.getInstance().getSceneManager().pushScene(new MenuLeaderboard(this.levelName));
         });
     }
 
     /**
-     * Default destructor for the MainMenu class. Since there are no specific resources to clean up, this method is left empty.
+     * Default destructor for the MainMenu class. Since there are no specific
+     * resources to clean up, this method is left empty.
      */
     @Override
     public void destroy() {

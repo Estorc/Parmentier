@@ -1,11 +1,15 @@
 @font-face {
-    font-family: 'LexendStd';  /* Le nom que vous utiliserez plus bas */
-    src: url('./fonts/Lexend-Light.ttf'); /* Chemin RELATIF au fichier CSS */
+    font-family: 'LexendStd';
+    /* Le nom que vous utiliserez plus bas */
+    src: url('./fonts/Lexend-Light.ttf');
+    /* Chemin RELATIF au fichier CSS */
 }
 
 @font-face {
-    font-family: 'LexendTitle';  /* Le nom que vous utiliserez plus bas */
-    src: url('./fonts/Lexend-Medium.ttf'); /* Chemin RELATIF au fichier CSS */
+    font-family: 'LexendTitle';
+    /* Le nom que vous utiliserez plus bas */
+    src: url('./fonts/Lexend-Medium.ttf');
+    /* Chemin RELATIF au fichier CSS */
 }
 
 .root {
@@ -13,7 +17,7 @@
     -fx-font-size: 18px;
 }
 
-.title-label{
+.title-label {
     -fx-font-family: 'Lexend Medium';
     -fx-font-size: 42px;
     -fx-padding: 0 0 10 0;
@@ -64,7 +68,7 @@
 
 /* settings menu*/
 
-.title-label-settings{
+.title-label-settings {
     -fx-font-family: 'Lexend Medium';
     -fx-font-size: 42px;
     -fx-padding: 40 0 0 0;
@@ -72,7 +76,7 @@
 }
 
 .button-setting {
-    -fx-background-color: transparent; 
+    -fx-background-color: transparent;
     -fx-text-fill: black;
     -fx-font-family: 'Lexend Light';
     -fx-font-size: 16px;
@@ -103,17 +107,18 @@
     -fx-background-radius: 10;
 }
 
-.textUser{
-    -fx-font-family: 'Lexend Light'; 
+.textUser {
+    -fx-font-family: 'Lexend Light';
     -fx-font-size: 16px;
     -fx-text-fill: #2c3e50;
 }
 
-.textIntro{
+.textIntro {
     -fx-font-family: 'Lexend Light';
     -fx-font-size: 16px;
     -fx-text-fill: #2c3e50;
-    -fx-text-alignment: center; /* Centre les lignes de texte entre elles */
+    -fx-text-alignment: center;
+    /* Centre les lignes de texte entre elles */
     -fx-padding: 10 40 10 40;
 }
 
@@ -153,7 +158,7 @@
     -fx-font-size: 14px;
 }
 
-.level-titled-pane > .title {
+.level-titled-pane>.title {
     -fx-background-color: white;
     -fx-background-radius: 10;
     -fx-border-radius: 10;
@@ -162,7 +167,7 @@
     -fx-padding: 6 12 6 12;
 }
 
-.level-titled-pane > .content {
+.level-titled-pane>.content {
     -fx-background-color: transparent;
     -fx-border-color: transparent;
 }
@@ -230,6 +235,7 @@
     -fx-stroke: black;
     -fx-stroke-width: 2;
 }
+
 .node-label {
     -fx-text-fill: black;
     -fx-font-size: 18px;
@@ -237,6 +243,19 @@
 }
 
 /* Brigdes */
-.bridge{
-     -fx-fill: black;
+.bridge {
+    -fx-fill: black;
+}
+
+.border-bottom-only {
+    -fx-border-color: transparent transparent #cccccc transparent;
+    /* Couleur : Haut, Droite, BAS, Gauche */
+    -fx-border-width: 0 0 1 0;
+    /* Épaisseur : 0 en haut, 0 à droite, 1px en bas, 0 à gauche */
+    -fx-border-style: solid;
+}
+
+.performance-highlight {
+    -fx-background-color: #3498db;
+    -fx-border-width: 1 0 1 0;
 }

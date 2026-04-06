@@ -104,7 +104,67 @@ public class Settings implements org.parmentier.game.Scene {
         themes.getStyleClass().add("button-setting");
         returnButton.getStyleClass().add("menu-button");
 
+        Button resetLeaderboardButton = new Button("Réinitialiser les classements");
+        resetLeaderboardButton.getStyleClass().add("menu-button");
+
+        resetLeaderboardButton.setOnAction(e -> {
+            org.parmentier.game.Audio.playClickSound();
+
+            javafx.scene.layout.VBox modal = new javafx.scene.layout.VBox(30);
+            modal.setAlignment(javafx.geometry.Pos.CENTER);
+            modal.getStyleClass().add("main-menu-bg");
+            modal.setStyle("-fx-padding: 40; -fx-border-color: " + (Settings.currentStrokeColor == javafx.scene.paint.Color.WHITE ? "white" : "black") + "; -fx-border-width: 2;");
+            modal.setMaxSize(600, 300);
+
+            Label warningLabel = new Label("Attention, vous vous apprêtez à supprimer les classements enregistrés pour tous les utilisateurs, ce choix est irrévocable, en êtes-vous absolument sûr ?");
+            warningLabel.setWrapText(true);
+            warningLabel.getStyleClass().add("textUser");
+            warningLabel.setStyle("-fx-font-size: 18px; -fx-text-alignment: center; -fx-opacity: 1;");
+            
+            Button confirmBtn = new Button("Oui, supprimer les classements");
+            confirmBtn.getStyleClass().add("menu-button");
+            // Set base styles to prevent inheriting the generic blue background
+            confirmBtn.setStyle("-fx-border-color: #ff4444; -fx-text-fill: #ff4444; -fx-background-color: transparent;");
+            
+            // Hover states to emulate the menu-button hover but with red tint
+            confirmBtn.setOnMouseEntered(ev -> {
+                confirmBtn.setStyle("-fx-border-color: #ff6666; -fx-text-fill: #ff6666; -fx-background-color: rgba(255, 68, 68, 0.2);");
+            });
+            confirmBtn.setOnMouseExited(ev -> {
+                confirmBtn.setStyle("-fx-border-color: #ff4444; -fx-text-fill: #ff4444; -fx-background-color: transparent;");
+            });
+            Button cancelBtn = new Button("Annuler");
+            cancelBtn.getStyleClass().add("menu-button");
+            cancelBtn.setStyle("");
+
+            confirmBtn.setOnAction(ev -> {
+                org.parmentier.game.Audio.playClickSound();
+                java.io.File dir = new java.io.File(org.parmentier.Parmentier.SAVES_DIR);
+                if (dir.exists() && dir.isDirectory()) {
+                    java.io.File[] files = dir.listFiles((d, name) -> name.matches(".*leaderboard\\.sav"));
+                    if (files != null) {
+                        for (java.io.File f : files) {
+                            f.delete();
+                        }
+                    }
+                }
+                uiLayer.getChildren().remove(modal);
+            });
+
+            cancelBtn.setOnAction(ev -> {
+                org.parmentier.game.Audio.playClickSound();
+                uiLayer.getChildren().remove(modal);
+            });
+
+            javafx.scene.layout.HBox btnRow = new javafx.scene.layout.HBox(20, confirmBtn, cancelBtn);
+            btnRow.setAlignment(javafx.geometry.Pos.CENTER);
+
+            modal.getChildren().addAll(warningLabel, btnRow);
+            uiLayer.getChildren().add(modal);
+        });
+
         buttonBox.getChildren().add(themes);
+        buttonBox.getChildren().add(resetLeaderboardButton);
         buttonBox.getChildren().add(returnButton);
         buttonBox.setAlignment(javafx.geometry.Pos.CENTER);
         layout.getChildren().add(titleLabel);
