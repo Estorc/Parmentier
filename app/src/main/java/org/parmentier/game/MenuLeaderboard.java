@@ -1,5 +1,7 @@
 package org.parmentier.game;
 
+import java.util.Collections;
+
 import org.parmentier.game.Leaderboard;
 
 import javafx.scene.canvas.GraphicsContext;
@@ -36,6 +38,7 @@ public class MenuLeaderboard implements org.parmentier.game.Scene {
             uiLayer.getStyleClass().add("main-menu-bg");
         }
         this.leaderboard = loadLeaderBoard();
+        Collections.sort(leaderboard.getPerformances());
         GridPane layout = new GridPane();
         layout.getStyleClass().add("cachemisere");
         layout.setHgap(20);
@@ -48,13 +51,11 @@ public class MenuLeaderboard implements org.parmentier.game.Scene {
 
         Label titleLabel = new Label("Niveau " + levelNumber);
         Label leaderboardLabel = new Label("CLASSEMENT DES MEILLEURS JOUEURS");
-        Label scoreLabel = new Label("Score : ");
         Button closeLeaderboardButton = new Button("Fermer le classement");
         Button mainMenuButton = new Button("Menu principal");
         // Button sbButton = new Button("Classement");
         GridPane.setHalignment(titleLabel, javafx.geometry.HPos.CENTER);
         GridPane.setHalignment(leaderboardLabel, javafx.geometry.HPos.CENTER);
-        GridPane.setHalignment(scoreLabel, javafx.geometry.HPos.CENTER);
         GridPane.setHalignment(closeLeaderboardButton, javafx.geometry.HPos.CENTER);
         GridPane.setHalignment(mainMenuButton, javafx.geometry.HPos.CENTER);
         // GridPane.setHalignment(sbButton, javafx.geometry.HPos.CENTER);
@@ -67,7 +68,7 @@ public class MenuLeaderboard implements org.parmentier.game.Scene {
         header.getStyleClass().add("border-bottom-only");
 
         Label nomH = new Label("Nom");
-        nomH.setPrefWidth(120);
+        nomH.setPrefWidth(180);
         nomH.setAlignment(javafx.geometry.Pos.CENTER);
         nomH.getStyleClass().add("textUser");
 
@@ -101,11 +102,11 @@ public class MenuLeaderboard implements org.parmentier.game.Scene {
         ScrollPane scrollPane = new ScrollPane(leaderboardVBox);
         scrollPane.setFitToWidth(true);
         scrollPane.setPrefHeight(400);
-        scrollPane.setStyle("-fx-background: transparent; -fx-background-color: transparent; -fx-control-inner-background: transparent; -fx-padding: 0;");
+        scrollPane.setStyle(
+                "-fx-background: transparent; -fx-background-color: transparent; -fx-control-inner-background: transparent; -fx-padding: 0;");
 
         titleLabel.getStyleClass().add("title-label");
         leaderboardLabel.getStyleClass().add("textUser");
-        scoreLabel.getStyleClass().add("textUser");
         closeLeaderboardButton.getStyleClass().add("button");
         mainMenuButton.getStyleClass().add("button");
 
@@ -114,7 +115,6 @@ public class MenuLeaderboard implements org.parmentier.game.Scene {
         layout.add(scrollPane, 2, 3);
         // sbButton.getStyleClass().add("button");
 
-        layout.add(scoreLabel, 2, 4);
         layout.add(closeLeaderboardButton, 2, 5);
         layout.add(mainMenuButton, 2, 6);
         // layout.add(nextLevelButton, 3, 4);
@@ -173,6 +173,9 @@ public class MenuLeaderboard implements org.parmentier.game.Scene {
                         p.setScore(Integer.parseInt(parts[2]));
                         if (parts.length >= 4 && parts[3].length() > 0) {
                             p.setNote(parts[3].charAt(0));
+                        }
+                        if (parts.length >= 5 && parts[4].length() > 0) {
+                            p.setHelpUsed(Integer.parseInt(parts[4]));
                         }
                     } catch (NumberFormatException nfe) {
                     }

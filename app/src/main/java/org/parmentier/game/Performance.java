@@ -28,7 +28,7 @@ public class Performance implements Comparable<Performance> {
         // score en premier)
         // Pour un ordre croissant, inversez simplement : Integer.compare(this.score,
         // perf.score)
-        int comparison = Integer.compare(this.score, perf.getScore());
+        int comparison = Integer.compare(perf.getScore(), this.score);
 
         // Si les scores sont identiques, on peut départager avec le temps (le plus
         // rapide gagne)
@@ -128,7 +128,7 @@ public class Performance implements Comparable<Performance> {
         HBox temp = new HBox(30); // Espace plus large pour le confort visuel
 
         Label nameTagLabel = new Label(this.nameTag);
-        nameTagLabel.setPrefWidth(120);
+        nameTagLabel.setPrefWidth(180);
         nameTagLabel.setAlignment(Pos.CENTER);
         nameTagLabel.getStyleClass().add("textUser");
 

@@ -102,6 +102,7 @@ public class Level implements org.parmentier.game.Scene {
     private double timeHighMinutes;
     private double timeCoeffMin = 0.67;
     private double timeCoeffMax = 1;
+    private int helpUsed;
 
     /**
      * Flag to track whether the level has been completed, preventing the save file
@@ -316,11 +317,14 @@ public class Level implements org.parmentier.game.Scene {
         // J'attends que le nombre de ponts attendus soit disponible.
 
         int totalBridges = this.activeBridges.stream().mapToInt(bridge -> bridge.getState()).sum();
-        this.score = (int) ((totalBridges * 1000) * timeCoeff);
-
+        int scoreMax = totalBridges * 1000;
+        this.score = ((int) ((totalBridges * 1000) * timeCoeff));
+        int etendue = (int) (scoreMax - scoreMax * timeCoeffMin);
+        System.out.println(etendue);
+        this.score = score - (this.helpUsed * (etendue / 19));
     }
 
-    private char calculateNote() {
+    char calculateNote() {
 
         char note;
 
@@ -331,7 +335,11 @@ public class Level implements org.parmentier.game.Scene {
 
         double etendue = scoreMax - scoreMin;
         // 9000 - 6030 = 1970 * 0.90 = 1773;
-        if (this.score >= scoreMax - (etendue * 0.10)) {
+        if (this.score >= scoreMax - (etendue * 0.05)) {
+            note = 'Z';
+        }
+
+        else if (this.score >= scoreMax - (etendue * 0.10)) {
             note = 'S';
         }
 
@@ -398,6 +406,7 @@ public class Level implements org.parmentier.game.Scene {
             if (hintBanner.isVisible()) {
                 hintBanner.setVisible(false);
             } else {
+                this.helpUsed++;
                 HintBulb hintBulb = org.parmentier.hint.HintBulb.get();
                 Hint hint = hintBulb.getRandomHint(level);
                 String text = (hint != null) ? hint.getHintText() : "Aucune aide disponible.";
@@ -431,7 +440,8 @@ public class Level implements org.parmentier.game.Scene {
                     return; // Pas de doublons
             }
             java.io.FileWriter fw = new java.io.FileWriter(file, true);
-            fw.write(p.getNameTag() + ";" + p.getTimeElapsedSeconds() + ";" + p.getScore() + ";" + p.getNote() + "\n");
+            fw.write(p.getNameTag() + ";" + p.getTimeElapsedSeconds() + ";" + p.getScore() + ";" + p.getNote() + ";"
+                    + p.getHelpUsed() + "\n");
             fw.close();
         } catch (java.io.IOException e) {
             System.err.println("Erreur lors de la sauvegarde du leaderboard : " + e.getMessage());
@@ -494,11 +504,13 @@ public class Level implements org.parmentier.game.Scene {
         });
 
         uiLayer.setOnMouseClicked(e -> {
-            selectedBridge.toggleState();
-            if (selectedBridge.getState() == 0) {
-                activeBridges.remove(selectedBridge);
-            } else if (!activeBridges.contains(selectedBridge)) {
-                activeBridges.add(selectedBridge);
+            if (selectedBridge != null) {
+                selectedBridge.toggleState();
+                if (selectedBridge.getState() == 0) {
+                    activeBridges.remove(selectedBridge);
+                } else if (!activeBridges.contains(selectedBridge)) {
+                    activeBridges.add(selectedBridge);
+                }
             }
         });
         Button check = new Button("Vérifier");
@@ -532,6 +544,7 @@ public class Level implements org.parmentier.game.Scene {
                     this.calculateScore();
                     temp.setScore(this.score);
                     temp.setNote(this.calculateNote());
+                    temp.setHelpUsed(this.helpUsed);
                     savePerformance(temp);
 
                     isCompleted = true;
