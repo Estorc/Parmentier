@@ -45,6 +45,41 @@ public class Save {
 		}
 	//END
     }
+
+	private InputStream createSave (String save){
+		System.out.println("---- Sending this to GridData ---- ");
+		this.newLevel = false;
+		save = save.trim();
+
+		String momPath = org.parmentier.Parmentier.SAVES_DIR + "momentanous.txt";
+		File mom = new File(momPath); // Create File object
+
+		try{
+			if (mom.createNewFile()) {
+				System.out.println("File created: " + mom.getName());
+			} else {
+				System.out.println("Transfert File already exists. Deletion");
+				mom.delete();
+				mom.createNewFile();
+			}
+		} catch (IOException e) {
+			System.out.println("An error occurred.");
+			e.printStackTrace();
+		}
+		
+		try {
+			FileWriter fw = new FileWriter(mom, false);
+			save = save.replace("!", "\n");
+			save = save.replace("-", "-\n");
+			fw.write(save);
+			fw.close();
+			return java.nio.file.Files.newInputStream(java.nio.file.Paths.get(momPath));
+	    } catch (IOException e) {
+			System.out.println("yeet");
+			System.out.println(e.getMessage());
+			return null;
+		}
+	}
     
     public InputStream openSave (String idLevel) {
 		this.currentLevel = idLevel;
@@ -56,52 +91,28 @@ public class Save {
 
 			char c = '\0';
 			String save = "";
-			int countSemiColon = 0;
-			Boolean time = false; 
+			Boolean newLine = true;
 		    // BEGIN
        		    for (int i = fr.read() ; i != -1  ; i = fr.read()) {
-
 				c = (char) i;
 				if (c == '\n') {
 				    if (match) {
-						this.newLevel = false;
-						save = save.trim();
-						String momPath = org.parmentier.Parmentier.SAVES_DIR + "momentanous.txt";
-						File mom = new File(momPath); // Create File object
-
-						try{
-							if (mom.createNewFile()) {
-								System.out.println("File created: " + mom.getName());
-							} else {
-								System.out.println("File already exists. Deletion");
-								mom.delete();
-								mom.createNewFile();
-							}
-						} catch (IOException e) {
-							    System.out.println("An error occurred.");
-							    e.printStackTrace(); 
-						}
-
-						FileWriter fw = new FileWriter(mom, false);
-						save = save.replace("!", "\n");
-						save = save.replace("-", "-\n");
-						fw.write(save);
-						fw.close();
-						return java.nio.file.Files.newInputStream(java.nio.file.Paths.get(momPath));
-
+						return createSave(save);
 				    } else {
 						save = "";
+						newLine = true;
 					}
 				}
-				else if (c == ';' || time) {
-					countSemiColon++;
-					if (countSemiColon == 1){
+				else if (c == ';') {
+					//System.out.println("---- Save content ';' : " + save + " ----" );
+					if (newLine){
 						if (idLevel.equals(save)){
-							System.out.println("---- Match ----");
+							//System.out.println("---- Match | level Name : " + save + "----");
 							match = true;
 							save = "";
 						}
-					} else if (countSemiColon == 2){
+						newLine = false;
+					} else {
 						save = save + c;
 					}
 				} else {
@@ -110,7 +121,10 @@ public class Save {
 		    }
 			fr.close();
 			file.close();
+
 		    // if it reached that point, no save could be found. Return the original save file.
+			
+
 			InputStream input; 
 		    try {
             	input = getClass().getResourceAsStream("/levels/" + this.currentLevel + ".lvl");
@@ -149,6 +163,7 @@ public class Save {
 			    	if (this.currentLevel.equals(str)){ // we found the specific save of the level	        
 						RandomAccessFile raf = new RandomAccessFile(this.file, "rw");
 						raf.seek(pos);
+						//save = save.trim();
 						raf.writeBytes(save);
 						raf.close();
 						return;
@@ -161,6 +176,7 @@ public class Save {
 			fr.close();
 		    //  if it reaches that point, no save could be found. Appending that new save
 		    FileWriter fw = new FileWriter(this.file, true);
+			//save = save.trim();
 		    fw.write(this.currentLevel + ";" + save);
 		    fw.close();
 		} catch (java.lang.Exception e) {
